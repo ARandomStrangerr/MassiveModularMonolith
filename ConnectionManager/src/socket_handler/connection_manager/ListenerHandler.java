@@ -68,13 +68,16 @@ public class ListenerHandler extends socket_handler.ListenerHandler {
                     }
                 } else { // set the name of the socket if the string is done
                     socket.setName(authenticationJson.get("macAddress").getAsString());
-                    System.out.printf("Client with mac address %s has connected to the network", socket.getName());
+                    System.out.printf("Client with mac address %s has connected to the network\n", socket.getName());
                 }
                 return authenticate;
             }
 
             public void cleanup(){
-                if (socket.getName() != null) ConnectionManager.getInstance().listenerWrapper.removeSocket(socket.getName());
+                if (socket.getName() != null) {
+                    ConnectionManager.getInstance().listenerWrapper.removeSocket(socket.getName());
+                    System.out.printf("Client with mac address %s has disconnected\n",socket.getName());
+                }
             }
         };
     }

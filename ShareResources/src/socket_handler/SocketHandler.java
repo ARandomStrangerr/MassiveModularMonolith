@@ -61,7 +61,6 @@ public abstract class SocketHandler implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println(socket.getName() + " has disconnected");
         cleanup();
     }
 

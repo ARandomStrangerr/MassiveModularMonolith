@@ -77,12 +77,15 @@ public class ListenerHandler extends socket_handler.ListenerHandler {
                 // set the name for the socket
                 socket.setName(authenticateJson.get("moduleName").getAsString());
                 // print out the socket accepted
-                System.out.println("Accepted a socket under the name of " + authenticateJson.get("moduleName").getAsString());
+                System.out.printf("Accepted a socket from module with name of %s\n",socket.getName());
                 return true;
             }
 
             public void cleanup(){
-                DataStream.getInstance().getListener().removeSocket(socket.getName());
+                if (socket.getName() != null) {
+                    System.out.printf("Socket from module with name of %s disconnected\n",socket.getName());
+                    DataStream.getInstance().getListener().removeSocket(socket.getName());
+                }
             }
         };
     }
