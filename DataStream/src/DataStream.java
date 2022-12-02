@@ -6,7 +6,7 @@ public class DataStream {
         int port = 9999;
         int timeout = 5000;
         String keyStorePassword = "hungcom23";
-        String keyStorePath = "/Users/thanhdo/tlskey.jks";
+        String keyStorePath = "key.jks";
         String moduleName = "DataStream";
         JsonObject information = new JsonObject();
         information.addProperty("port",port);

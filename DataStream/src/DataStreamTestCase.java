@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 
 /**
- * test case where the to module does not exits
+ * test case where the to module does not exit
  */
 class TestCase1 {
     public static void main(String[] args) throws Exception {

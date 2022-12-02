@@ -11,8 +11,8 @@ public class ConnectionManager extends ConnectionPool{
 
     public boolean getLoginInfo(String macAddress) throws SQLException {
         PrepareStatementInterface prepareStatementInterface = connection -> {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM mac_address WHERE mac_address=?");
-            statement.setString(1, macAddress);
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM authentication WHERE mac=?");
+            statement.setString(1, macAddress.toUpperCase());
             return statement;
         };
         ResultSet result = super.executePreparedStatement(prepareStatementInterface);
