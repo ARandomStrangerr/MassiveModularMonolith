@@ -23,7 +23,7 @@ public class SocketHandler extends socket_handler.SocketHandler {
     }
 
     @Override
-    public boolean handleAuthentication(SocketWrapper socket) {
+    public boolean handleAuthentication() {
         // write the name of this module to the DataStream module
         try {
             socket.write("{moduleName:\"" + ConnectionManager.getInstance().moduleName + "\"}");

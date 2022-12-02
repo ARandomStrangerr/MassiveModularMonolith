@@ -35,7 +35,7 @@ public class ListenerHandler extends socket_handler.ListenerHandler {
             }
 
             @Override
-            public boolean handleAuthentication(SocketWrapper socket) {
+            public boolean handleAuthentication() {
                 // set the timeout for the socket
                 try {
                     socket.setTimeout(timeout);

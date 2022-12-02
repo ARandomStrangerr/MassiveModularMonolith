@@ -33,7 +33,7 @@ public class ListenerHandler extends socket_handler.ListenerHandler {
             }
 
             @Override
-            public boolean handleAuthentication(SocketWrapper socket) {
+            public boolean handleAuthentication() {
                 // set timeout for the chain
                 try {
                     socket.setTimeout(timeout);
@@ -58,7 +58,7 @@ public class ListenerHandler extends socket_handler.ListenerHandler {
                 }
                 // convert the string into json object
                 JsonObject authenticationJson = new Gson().fromJson(authenticationString, JsonObject.class);
-                // execute the authentication string
+                // execute the authentication chain
                 boolean authenticate = new ChainAuthentication(authenticationJson).execute();
                 if (!authenticate) { // if fail to authenticate, send a message to client.
                     try {
@@ -68,12 +68,13 @@ public class ListenerHandler extends socket_handler.ListenerHandler {
                     }
                 } else { // set the name of the socket if the string is done
                     socket.setName(authenticationJson.get("macAddress").getAsString());
+                    System.out.printf("Client with mac address %s has connected to the network", socket.getName());
                 }
                 return authenticate;
             }
 
             public void cleanup(){
-                ConnectionManager.getInstance().listenerWrapper.removeSocket(socket.getName());
+                if (socket.getName() != null) ConnectionManager.getInstance().listenerWrapper.removeSocket(socket.getName());
             }
         };
     }

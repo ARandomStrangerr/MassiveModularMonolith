@@ -14,7 +14,7 @@ public class SocketHandler extends socket_handler.SocketHandler {
     }
 
     @Override
-    public boolean handleAuthentication(SocketWrapper socket) {
+    public boolean handleAuthentication() {
         try {
             socket.write("{moduleName:\""+ moduleName +"\"}");
         } catch (IOException e){

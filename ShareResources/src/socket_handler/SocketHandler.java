@@ -13,14 +13,13 @@ public abstract class SocketHandler implements Runnable {
 
     public SocketHandler(SocketWrapper socket) {
         this.socket = socket;
-
     }
 
     public void run() {
         // resolve the authentication
         boolean authenticate;
         try {
-            authenticate = handleAuthentication(socket);
+            authenticate = handleAuthentication();
         } catch (Exception e) {
             e.printStackTrace();
             authenticate = false;
@@ -70,7 +69,7 @@ public abstract class SocketHandler implements Runnable {
 
     public abstract Chain handleFailure(JsonObject request);
 
-    public abstract boolean handleAuthentication(SocketWrapper socket);
+    public abstract boolean handleAuthentication();
 
     public abstract void cleanup();
 }
