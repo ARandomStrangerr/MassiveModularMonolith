@@ -2,6 +2,7 @@ package socket_handler.connection_manager;
 
 import chain.Chain;
 import chain.connection_manager.request_handler.ChainAuthentication;
+import chain.connection_manager.request_handler.ChainProcessRequest;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import memorable.ConnectionManager;
@@ -24,7 +25,7 @@ public class ListenerHandler extends socket_handler.ListenerHandler {
         return new SocketHandler(socket) {
             @Override
             public Chain handleRequest(JsonObject request) {
-                return null;
+                return new ChainProcessRequest(request);
             }
 
             @Override
@@ -67,16 +68,29 @@ public class ListenerHandler extends socket_handler.ListenerHandler {
                         e.printStackTrace();
                     }
                 } else { // set the name of the socket if the string is done
+                    // check if there is already socket under this nameConnectionManager.getInstance().listenerWrapper.getSocket(socket.getName())
+                    if (ConnectionManager.getInstance().listenerWrapper.getSocket(authenticationJson.get("macAddress").getAsString()) != null) {
+                        try {
+                            socket.write("{error: \"Có kết nối khác đã được thiết lập với máy chủ\"}");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        return false;
+                    }
+                    // set the name of the socket
                     socket.setName(authenticationJson.get("macAddress").getAsString());
+                    // put socket into the storage
+                    ConnectionManager.getInstance().listenerWrapper.putSocket(socket.getName(), socket);
+                    // print out message
                     System.out.printf("Client with mac address %s has connected to the network\n", socket.getName());
                 }
                 return authenticate;
             }
 
-            public void cleanup(){
+            public void cleanup() {
                 if (socket.getName() != null) {
                     ConnectionManager.getInstance().listenerWrapper.removeSocket(socket.getName());
-                    System.out.printf("Client with mac address %s has disconnected\n",socket.getName());
+                    System.out.printf("Client with mac address %s has disconnected\n", socket.getName());
                 }
             }
         };
