@@ -1,7 +1,6 @@
 package socket_handler.connection_manager;
 
 import chain.Chain;
-import chain.connection_manager.request_handler.ChainAuthentication;
 import chain.connection_manager.request_handler.ChainProcessRequest;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -25,7 +24,7 @@ public class ListenerHandler extends socket_handler.ListenerHandler {
         return new SocketHandler(socket) {
             @Override
             public Chain handleRequest(JsonObject request) {
-                return new ChainProcessRequest(request);
+                return new ChainProcessRequest(request, socket.getName());
             }
 
             @Override
@@ -59,32 +58,22 @@ public class ListenerHandler extends socket_handler.ListenerHandler {
                 }
                 // convert the string into json object
                 JsonObject authenticationJson = new Gson().fromJson(authenticationString, JsonObject.class);
-                // execute the authentication chain
-                boolean authenticate = new ChainAuthentication(authenticationJson).execute();
-                if (!authenticate) { // if fail to authenticate, send a message to client.
+                // check if there is already socket under this nameConnectionManager.getInstance().listenerWrapper.getSocket(socket.getName())
+                if (ConnectionManager.getInstance().listenerWrapper.getSocket(authenticationJson.get("macAddress").getAsString()) != null) {
                     try {
-                        socket.write("{error: \"Người dùng không có quyền được sử dụng phần mềm\"}");
+                        socket.write("{error: \"Có kết nối khác đã được thiết lập với máy chủ\"}");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                } else { // set the name of the socket if the string is done
-                    // check if there is already socket under this nameConnectionManager.getInstance().listenerWrapper.getSocket(socket.getName())
-                    if (ConnectionManager.getInstance().listenerWrapper.getSocket(authenticationJson.get("macAddress").getAsString()) != null) {
-                        try {
-                            socket.write("{error: \"Có kết nối khác đã được thiết lập với máy chủ\"}");
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        return false;
-                    }
-                    // set the name of the socket
-                    socket.setName(authenticationJson.get("macAddress").getAsString());
-                    // put socket into the storage
-                    ConnectionManager.getInstance().listenerWrapper.putSocket(socket.getName(), socket);
-                    // print out message
-                    System.out.printf("Client with mac address %s has connected to the network\n", socket.getName());
+                    return false;
                 }
-                return authenticate;
+                // set the name of the socket
+                socket.setName(authenticationJson.get("macAddress").getAsString());
+                // put socket into the storage
+                ConnectionManager.getInstance().listenerWrapper.putSocket(socket.getName(), socket);
+                // print out message
+                System.out.printf("Client with mac address %s has connected to the network\n", socket.getName());
+                return true;
             }
 
             public void cleanup() {

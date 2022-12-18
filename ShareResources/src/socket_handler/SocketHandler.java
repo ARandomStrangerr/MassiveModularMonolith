@@ -36,7 +36,7 @@ public abstract class SocketHandler implements Runnable {
             try {
                 requestString = socket.read();
             } catch (SSLException | SocketException e) {
-                System.err.println("This error needed to be named");
+                System.err.println("This error needs a name");
                 e.printStackTrace();
                 break;
             } catch (IOException e) {
