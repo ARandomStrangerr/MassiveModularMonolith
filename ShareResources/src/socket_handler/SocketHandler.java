@@ -42,7 +42,7 @@ public abstract class SocketHandler implements Runnable {
             } catch (IOException e) {
                 System.err.println("Fail to read message from socket");
                 e.printStackTrace();
-                continue;
+                break;
             }
             // if a request is null meaning that the other side of the socket is closed
             if (requestString == null) break;
