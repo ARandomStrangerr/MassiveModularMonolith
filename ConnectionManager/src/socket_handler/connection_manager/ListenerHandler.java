@@ -1,6 +1,7 @@
 package socket_handler.connection_manager;
 
 import chain.Chain;
+import chain.connection_manager.request_handler.ChainHandleFailure;
 import chain.connection_manager.request_handler.ChainProcessRequest;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -10,13 +11,16 @@ import socket_handler.SocketHandler;
 import socket_handler.SocketWrapper;
 
 import java.io.IOException;
+import java.util.Hashtable;
 
 public class ListenerHandler extends socket_handler.ListenerHandler {
     private final int timeout;
+    private final Hashtable<String, Thread> threads;
 
     public ListenerHandler(ListenerWrapper listener, int timeout) {
         super(listener);
         this.timeout = timeout;
+        threads = new Hashtable<>();
     }
 
     @Override
@@ -29,7 +33,7 @@ public class ListenerHandler extends socket_handler.ListenerHandler {
 
             @Override
             public Chain handleFailure(JsonObject request) {
-                return null;
+                return new ChainHandleFailure(request);
             }
 
             @Override
@@ -71,6 +75,8 @@ public class ListenerHandler extends socket_handler.ListenerHandler {
                 socket.setName(authenticationJson.get("macAddress").getAsString());
                 // put socket into the storage
                 ConnectionManager.getInstance().listenerWrapper.putSocket(socket.getName(), socket);
+                // put thread into the storage
+                threads.put(authenticationJson.get("macAddress").getAsString(), Thread.currentThread());
                 // print out message
                 System.out.printf("Client with mac address %s has connected to the network\n", socket.getName());
                 return true;
@@ -79,9 +85,13 @@ public class ListenerHandler extends socket_handler.ListenerHandler {
             public void cleanup() {
                 if (socket.getName() != null) {
                     ConnectionManager.getInstance().listenerWrapper.removeSocket(socket.getName());
-                    System.out.printf("Client with mac address %s has disconnected\n", socket.getName());
+                    System.out.printf("Socket with mac address %s has been disconnected on client side\n", socket.getName());
                 }
             }
         };
+    }
+
+    public Thread getThread(String key) {
+        return threads.get(key);
     }
 }
