@@ -89,7 +89,7 @@ public class ListenerWrapper {
         socketStorage.put(key, socket);
     }
 
-    public void removeSocket(String key){
-        socketStorage.remove(key);
+    public SocketWrapper removeSocket(String key){
+        return socketStorage.remove(key);
     }
 }
