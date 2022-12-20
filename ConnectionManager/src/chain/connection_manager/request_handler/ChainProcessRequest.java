@@ -6,8 +6,8 @@ import com.google.gson.JsonObject;
 public class ChainProcessRequest extends Chain {
     public ChainProcessRequest(JsonObject processObject, String socketName) {
         super(processObject);
-        super.chain.add(new LinkCheckAuthority(this, socketName));
-        super.chain.add(new LinkFormatRequest(this, socketName));
-        super.chain.add(new LinkSendRequest(this));
+        super.chain.add(new LinkFormatRequest(this, socketName)); // reformat the input json
+        super.chain.add(new LinkCheckAuthority(this, socketName)); // check for the requested job is available for the computer
+        super.chain.add(new LinkSendRequest(this)); // send the request to the data stream
     }
 }

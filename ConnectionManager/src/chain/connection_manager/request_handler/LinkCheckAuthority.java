@@ -2,6 +2,7 @@ package chain.connection_manager.request_handler;
 
 import chain.Chain;
 import chain.Link;
+import com.google.gson.JsonObject;
 import memorable.ConnectionManager;
 
 import java.sql.SQLException;
@@ -15,7 +16,7 @@ public class LinkCheckAuthority extends Link {
 
     @Override
     public boolean execute() {
-        String job = chain.getProcessObject().get("job").getAsString();
+        String job = chain.getProcessObject().get("header").getAsJsonObject().get("to").getAsString();
         try {
             if (!ConnectionManager.getInstance().database.getLoginInfo(socketName, job))
                 throw new Exception("client has no privilege");
@@ -24,7 +25,9 @@ public class LinkCheckAuthority extends Link {
             e.printStackTrace();
             return false;
         } catch (Exception e) {
-            chain.getProcessObject().addProperty("error", "Người dùng không được ủy quyền sử dụng phần mềm");
+            JsonObject body = new JsonObject();
+            body.addProperty("error", "Người dùng không được ủy quyền sử dụng phần mềm");
+            chain.getProcessObject().add("body", body);
             e.printStackTrace();
             return false;
         }

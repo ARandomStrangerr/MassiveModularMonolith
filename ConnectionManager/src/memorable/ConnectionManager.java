@@ -1,5 +1,6 @@
 package memorable;
 
+import socket_handler.connection_manager.ListenerHandler;
 import socket_handler.ListenerWrapper;
 import socket_handler.SocketWrapper;
 
@@ -8,6 +9,7 @@ public class ConnectionManager {
     public SocketWrapper socket;
     public ListenerWrapper listenerWrapper;
     public database.ConnectionManager database;
+    public ListenerHandler listenerHandler;
 
     private static ConnectionManager instance;
 

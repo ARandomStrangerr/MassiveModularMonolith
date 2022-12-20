@@ -2,6 +2,7 @@ package chain.connection_manager.start_module;
 
 import chain.Chain;
 import chain.Link;
+import memorable.ConnectionManager;
 import socket_handler.connection_manager.SocketHandler;
 import socket_handler.SocketWrapper;
 
@@ -33,6 +34,7 @@ class LinkStartSocket extends Link {
             e.printStackTrace();
             return false;
         }
+        ConnectionManager.getInstance().socket = socket;
         new Thread(new SocketHandler(socket)).start();
         System.out.printf("Connected to the host at %s:%d\n", hostAddress, port);
         return true;

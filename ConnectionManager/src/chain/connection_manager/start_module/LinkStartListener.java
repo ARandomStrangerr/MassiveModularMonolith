@@ -26,7 +26,9 @@ class LinkStartListener extends Link {
             return false;
         }
         ConnectionManager.getInstance().listenerWrapper = listener;
-        new Thread(new ListenerHandler(listener, timeout)).start();
+        ListenerHandler listenerHandler = new ListenerHandler(listener, timeout);
+        new Thread(listenerHandler).start();
+        ConnectionManager.getInstance().listenerHandler = listenerHandler;
         System.out.printf("A listener is operating at port %d\n", port);
         return true;
     }
