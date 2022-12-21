@@ -32,6 +32,16 @@ class TestCase2 {
     public static void main(String[] args) throws Exception{
         SocketWrapper socketWrapper = new SocketWrapper(InetAddress.getByName("localhost"), 9998, "key.jks", "hungcom23");
         socketWrapper.write("{macAddress:\"24:41:8C:06:2C:82\"}");
+        socketWrapper.write("{job:\"smtpmail\"}");
+        System.out.println(socketWrapper.read());
+        Thread.sleep(5000);
+    }
+}
+
+class TestCase3 {
+    public static void main(String[] args) throws Exception{
+        SocketWrapper socketWrapper = new SocketWrapper(InetAddress.getByName("localhost"), 9998, "key.jks", "hungcom23");
+        socketWrapper.write("{macAddress:\"24:41:8C:06:2C:82\"}");
         System.out.println(socketWrapper.read());
         Thread.sleep(5000);
     }
