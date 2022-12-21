@@ -12,6 +12,6 @@ class LinkSetInfo extends Link {
     @Override
     public boolean execute() {
         SMTPMail.getInstance().moduleName = chain.getProcessObject().get("moduleName").getAsString();
-        return false;
+        return true;
     }
 }

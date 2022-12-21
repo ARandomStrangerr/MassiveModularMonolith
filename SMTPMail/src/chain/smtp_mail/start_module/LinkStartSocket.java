@@ -4,6 +4,7 @@ import chain.Chain;
 import chain.Link;
 import com.google.gson.JsonObject;
 import memorable.SMTPMail;
+import socket_handler.smtp_mail.SocketHandler;
 import socket_handler.SocketWrapper;
 
 import java.io.IOException;
@@ -32,12 +33,7 @@ public class LinkStartSocket extends Link {
             e.printStackTrace();
             return false;
         }
-        try {
-            socketWrapper.write("{moduleName:\""+ SMTPMail.getInstance().moduleName +"\"}");
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
+        new Thread(new SocketHandler(socketWrapper, chain.getProcessObject().get("moduleName").getAsString())).start();
         SMTPMail.getInstance().socket = socketWrapper;
         System.out.printf("connected to the host at %s:%d", processObject.get("address").getAsString(), processObject.get("port").getAsInt());
         return true;
