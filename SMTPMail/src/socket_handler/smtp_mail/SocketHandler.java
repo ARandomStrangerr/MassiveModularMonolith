@@ -1,6 +1,7 @@
 package socket_handler.smtp_mail;
 
 import chain.Chain;
+import chain.smtp_mail.request_handler.ChainProcessRequest;
 import com.google.gson.JsonObject;
 import socket_handler.SocketWrapper;
 
@@ -18,15 +19,19 @@ public class SocketHandler extends socket_handler.SocketHandler {
         try {
             socket.write("{moduleName:\""+ moduleName +"\"}");
         } catch (IOException e){
-            e.printStackTrace();;
+            e.printStackTrace();
             return false;
         }
         return true;
     }
 
     @Override
+    public void cleanup() {
+    }
+
+    @Override
     public Chain handleFailure(JsonObject request) {
-        return null;
+        return new ChainProcessRequest(request);
     }
 
     @Override

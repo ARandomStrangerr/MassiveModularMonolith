@@ -1,21 +1,14 @@
 package memorable;
 
+import socket_handler.SocketWrapper;
+
 public class SMTPMail {
-    private String moduleName;
+    public String moduleName;
+    public SocketWrapper socket;
     private static SMTPMail instance;
 
     public static SMTPMail getInstance() {
         if (instance == null) instance = new SMTPMail();
         return instance;
-    }
-
-    private SMTPMail(){}
-
-    public String getModuleName() {
-        return moduleName;
-    }
-
-    public void setModuleName(String moduleName) {
-        this.moduleName = moduleName;
     }
 }

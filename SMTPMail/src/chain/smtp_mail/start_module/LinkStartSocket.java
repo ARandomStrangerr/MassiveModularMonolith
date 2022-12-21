@@ -22,7 +22,7 @@ public class LinkStartSocket extends Link {
     @Override
     public boolean execute() {
         JsonObject processObject = chain.getProcessObject();
-        SocketWrapper socketWrapper = null;
+        SocketWrapper socketWrapper;
         try {
             socketWrapper = new SocketWrapper(InetAddress.getByName(processObject.get("address").getAsString()),
                     processObject.get("port").getAsInt(), processObject.get("keyStorePath").getAsString(),
@@ -33,11 +33,13 @@ public class LinkStartSocket extends Link {
             return false;
         }
         try {
-            socketWrapper.write("{moduleName:\""+ SMTPMail.getInstance().getModuleName() +"\"}");
+            socketWrapper.write("{moduleName:\""+ SMTPMail.getInstance().moduleName +"\"}");
         } catch (IOException e) {
             e.printStackTrace();
             return false;
         }
+        SMTPMail.getInstance().socket = socketWrapper;
+        System.out.printf("connected to the host at %s:%d", processObject.get("address").getAsString(), processObject.get("port").getAsInt());
         return true;
     }
 }
