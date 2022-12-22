@@ -4,12 +4,10 @@ import chain.Chain;
 import chain.Link;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.sun.mail.util.MailConnectException;
 
 import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
+import javax.mail.internet.*;
 import java.util.Properties;
 
 class LinkSendMail extends Link {
@@ -27,7 +25,7 @@ class LinkSendMail extends Link {
         try {
             prop.put("mail.smtp.host", body.getAsJsonObject().get("host").getAsString());
         } catch (NullPointerException e) {
-            chain.getProcessObject().addProperty("error", "địa chỉ server bị bỏ trống");
+            chain.getProcessObject().addProperty("error", "Địa chỉ server bị bỏ trống");
             System.err.println("Address to the host SMTP is missing");
             return false;
         }
@@ -36,13 +34,24 @@ class LinkSendMail extends Link {
         } catch (NullPointerException e) {
             chain.getProcessObject().addProperty("error", "cổng nhận thông tin của server bị bỏ trống");
             System.err.println("Port the the host SMTP is missing");
-            e.printStackTrace();
             return false;
         }
         // create session
         String username, password;
-        username = body.getAsJsonObject().get("username").getAsString();
-        password = body.getAsJsonObject().get("password").getAsString();
+        try {
+            username = body.getAsJsonObject().get("username").getAsString();
+        } catch (NullPointerException e) {
+            chain.getProcessObject().addProperty("error", "tên người dùng bị bỏ trống");
+            System.err.println("username is missing");
+            return false;
+        }
+        try {
+            password = body.getAsJsonObject().get("password").getAsString();
+        } catch (NullPointerException e) {
+            chain.getProcessObject().addProperty("error", "mật khẩu bị bỏ trống");
+            System.err.println("password is missing");
+            return false;
+        }
         Session session = Session.getInstance(prop, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
@@ -61,18 +70,53 @@ class LinkSendMail extends Link {
         }
         try {
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(body.getAsJsonObject().get("recipient").getAsString())); // set the recipient mail
+        }catch (NullPointerException e){
+            chain.getProcessObject().addProperty("error", "Địa chỉ người nhận bỏ trống");
+            System.err.println("recipient is missing");
+            return false;
+        } catch (MessagingException e) {
+            chain.getProcessObject().addProperty("error", "something went wrong");
+            e.printStackTrace();
+            return false;
+        }
+        try {
             message.setSubject(body.get("subject").getAsString()); // set subject of the mail
-            // create mail body
-            MimeBodyPart bodyPart = new MimeBodyPart();
+        }catch (NullPointerException e){
+            chain.getProcessObject().addProperty("error", "tiêu đề thư chưa được điền");
+            System.err.println("Subject of the mail is missing");
+            return false;
+        }catch (MessagingException e) {
+            chain.getProcessObject().addProperty("error", "something went wrong");
+            e.printStackTrace();
+            return false;
+        }
+        // create mail body
+        MimeBodyPart bodyPart = new MimeBodyPart();
+
+        try {
             bodyPart.setContent(body.get("message").getAsString(), "text/html; charset=utf-8");
-            MimeMultipart multipart = new MimeMultipart();
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+        MimeMultipart multipart = new MimeMultipart();
+        try {
             multipart.addBodyPart(bodyPart);
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+        try {
             message.setContent(multipart);
-            // create attachment
-            for (JsonElement file : body.get("files").getAsJsonArray()) {
-                JsonObject fileObj = file.getAsJsonObject();
-            }
-        } catch (Exception e) {
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+        // todo create attachment
+        // send the mail
+        try {
+            Transport.send(message);
+        } catch (MessagingException e){
+            chain.getProcessObject().addProperty("error", e.getMessage());
+            e.printStackTrace();
+            return false;
         }
         return true;
     }
