@@ -16,7 +16,7 @@ public class LinkCheckAuthority extends Link {
 
     @Override
     public boolean execute() {
-        String job = chain.getProcessObject().get("header").getAsJsonObject().get("to").getAsString();
+        String job = chain.getProcessObject().get("header").getAsJsonObject().get("to").getAsString().toLowerCase();
         try {
             if (!ConnectionManager.getInstance().database.getLoginInfo(socketName, job))
                 throw new Exception("client has no privilege");

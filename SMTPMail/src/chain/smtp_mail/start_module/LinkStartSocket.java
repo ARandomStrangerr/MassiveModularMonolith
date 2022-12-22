@@ -35,7 +35,7 @@ public class LinkStartSocket extends Link {
         }
         new Thread(new SocketHandler(socketWrapper, chain.getProcessObject().get("moduleName").getAsString())).start();
         SMTPMail.getInstance().socket = socketWrapper;
-        System.out.printf("connected to the host at %s:%d", processObject.get("address").getAsString(), processObject.get("port").getAsInt());
+        System.out.printf("connected to the host at %s:%d\n", processObject.get("address").getAsString(), processObject.get("port").getAsInt());
         return true;
     }
 }
