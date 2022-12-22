@@ -1,6 +1,7 @@
 package socket_handler.smtp_mail;
 
 import chain.Chain;
+import chain.smtp_mail.request_handler.ChainHandleFailure;
 import chain.smtp_mail.request_handler.ChainProcessRequest;
 import com.google.gson.JsonObject;
 import socket_handler.SocketWrapper;
@@ -31,11 +32,11 @@ public class SocketHandler extends socket_handler.SocketHandler {
 
     @Override
     public Chain handleFailure(JsonObject request) {
-        return new ChainProcessRequest(request);
+        return new ChainHandleFailure(request);
     }
 
     @Override
     public Chain handleRequest(JsonObject request) {
-        return null;
+        return new ChainProcessRequest(request);
     }
 }
