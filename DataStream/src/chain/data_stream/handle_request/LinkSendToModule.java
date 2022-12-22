@@ -19,8 +19,7 @@ class LinkSendToModule extends Link {
         // get header of the processing request
         JsonObject header = chain.getProcessObject().get("header").getAsJsonObject();
         // get the socket which the end module associated to
-        SocketWrapper toSocket = null;
-        toSocket = DataStream.getInstance().getListener().getSocket(header.get("to").getAsString());
+        SocketWrapper toSocket = DataStream.getInstance().getListener().getSocket(header.get("to").getAsString());
         if (toSocket == null) {
             System.err.println("No socket associated with the name: " + header.get("to").getAsString());
             return false;
