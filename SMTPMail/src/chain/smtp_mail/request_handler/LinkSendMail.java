@@ -29,7 +29,6 @@ class LinkSendMail extends Link {
         } catch (NullPointerException e) {
             chain.getProcessObject().addProperty("error", "địa chỉ server bị bỏ trống");
             System.err.println("Address to the host SMTP is missing");
-            e.printStackTrace();
             return false;
         }
         try {
@@ -59,19 +58,22 @@ class LinkSendMail extends Link {
             System.err.println("Email format is not correct");
             e.printStackTrace();
             return false;
-        }try{
-        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(body.getAsJsonObject().get("recipient").getAsString())); // set the recipient mail
-        message.setSubject(body.get("subject").getAsString()); // set subject of the mail
-        // create mail body
-        MimeBodyPart bodyPart = new MimeBodyPart();
-        bodyPart.setContent(body.get("message").getAsString(), "text/html; charset=utf-8");
-        MimeMultipart multipart = new MimeMultipart();
-        multipart.addBodyPart(bodyPart);
-        message.setContent(multipart);
-        // create attachment
-        for (JsonElement file : body.get("files").getAsJsonArray()) {
-            JsonObject fileObj = file.getAsJsonObject();
-        }}catch (Exception e){}
+        }
+        try {
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(body.getAsJsonObject().get("recipient").getAsString())); // set the recipient mail
+            message.setSubject(body.get("subject").getAsString()); // set subject of the mail
+            // create mail body
+            MimeBodyPart bodyPart = new MimeBodyPart();
+            bodyPart.setContent(body.get("message").getAsString(), "text/html; charset=utf-8");
+            MimeMultipart multipart = new MimeMultipart();
+            multipart.addBodyPart(bodyPart);
+            message.setContent(multipart);
+            // create attachment
+            for (JsonElement file : body.get("files").getAsJsonArray()) {
+                JsonObject fileObj = file.getAsJsonObject();
+            }
+        } catch (Exception e) {
+        }
         return true;
     }
 }
