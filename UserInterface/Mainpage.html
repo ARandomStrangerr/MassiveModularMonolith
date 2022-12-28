@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap" rel="stylesheet"> 
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<title></title>
+</head>
+<body>
+	<div id="smtp-mail"> <!-- SMTP mail pane -->
+		<div class="header"> <!-- header -->
+			<h1>SMTP Mail</h1> <!-- pane title --> 
+			<div class="dropdown"> <!-- drop down with button --> 
+				<a class="button config-button" id="smtp-setting-button"></a>
+				<div class="float-div float-div-inactive" id="smtp-setting-div">
+					<div>
+						Tên người dùng <br>
+						<input class="setting-input" id="smtp-username">
+					</div>
+					<div>
+						Mật khẩu<br>
+						<input class="setting-input" id="smtp-password">
+					</div>
+					<div>
+						Địa chỉ server<br>
+						<input class="setting-input" id="smtp-server">
+					</div>
+					<div>
+						Cổng<br>
+						<input class="setting-input" id="smtp-port">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div> <!-- subject -->
+			Tiêu đề <input id="mail-subject">
+		</div>
+		<div> <!-- mail body -->
+			Nội dung thư
+			<textarea></textarea>
+		</div>
+		<div class="tree-view"> <!-- mail list -->
+			<div class="header">
+				Danh sách hộp thư : 
+				<div>
+					<a id="smpt-send" class="button"><img src="message.png"></a>
+					<a id="add-email-button" class="button green-button">+</a>
+				</div>
+			</div>
+			<ul id="email-list">
+			</ul>
+		</div>
+	</div>
+</body>
+</html>
+<script type="text/javascript" src="script.js"></script>

@@ -1,0 +1,184 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+body{
+	padding: 2em;
+	font: 24px 'Roboto', sans-serif;
+}
+h1{
+	display: inline;
+}
+input{
+	font: 24px 'Roboto', sans-serif;
+}
+textarea{
+	font: 24px 'Roboto', sans-serif;
+	width: 100%;
+	height: 6em;
+}
+div{
+	padding: 0.5em;
+}
+img{
+	width: 100%;
+	height: 100%;
+}
+
+.header {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+}
+.header > div {
+	display: flex;
+	flex-direction: row;
+}
+
+.button {
+	display: flex;
+	width: 2em;
+	height: 2em;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	transition: 0.2s;
+	margin-left: 0.5em;
+	border-radius: 0.5em;
+}
+.button-active{
+	background-color:#f7ebfd;
+}
+.button:hover{
+	background-color:#f7ebfd;
+}
+.green-button {
+	background-color:#B7EFC5;
+}
+.green-button:hover{
+	background-color: #92E6A7;
+}
+.red-button {
+	background-color:#FFE3E0;
+}
+.red-button:hover{
+	background-color: #FBC3BC;
+}
+.config-button{
+	background-image: url(./gear.png);
+	background-size:contain;
+}
+.edit-button{
+	background-image: url(./edit.png);
+	background-size: contain;
+}
+
+.dropdown {
+	position: relative;
+}
+.float-div {
+	top: 3em;
+	right: 0em;
+	position: absolute;
+	padding: 0.5em;
+	background-color: #f7ebfd;
+	border-radius: 0.5em;
+	transition: 0.2s;
+	overflow-y: hidden;
+	box-shadow: 0.5em 0.5em 1em #D099E3;
+	z-index: 10;
+}
+.float-div-inactive {
+	height: 0px;
+	padding: 0px;
+}
+.float-div div {
+	padding: 0.5em;
+}
+
+.tree-view ul {
+	list-style: none;
+	padding-top: 0.5em;
+}
+.tree-view li {
+	position: relative;
+	padding: 1em;
+	overflow-y: hidden;
+	transition: 0.2s;
+}
+.tree-view li:before {
+	position: absolute;
+    content: '';
+    background-color: #666;
+    top: 2em;
+    left: 0;
+    width: 0.6em;
+    height: 0.05em;
+}
+.tree-view li:after {
+	position: absolute;
+    content: '';
+	background-color: #666;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 0.05em;
+    height: 100%;
+}
+.tree-view li:hover{
+	background-color:#f7ebfd;
+}
+.tree-view li:last-child:after {
+	height: 2em;
+}
+.tree-view li > div {
+	padding: 0px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+.tree-view li > div > div{
+	display: flex;
+	padding: 0px;
+}
