@@ -45,6 +45,7 @@ table {
 body{
 	padding: 2em;
 	font: 24px 'Roboto', sans-serif;
+	height: 5000px;
 }
 h1{
 	display: inline;
@@ -181,4 +182,16 @@ img{
 .tree-view li > div > div{
 	display: flex;
 	padding: 0px;
+}
+
+#notification-pane{
+	position: fixed;
+	display: flex;
+	flex-direction: column-reverse;
+	overflow-y: scroll;
+	background-color: none;
+	width: 20em;
+	height: 10em;
+	right: 1em;
+	bottom: 1em;
 }

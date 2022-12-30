@@ -1,11 +1,19 @@
+const inputOutputModule = require("./InputOutputOperation.js");
+const textFileOperation = new inputOutputModule.TextFileOperation();
+
 // startup actions
-const setting = {};
+const setting = JSON.parse(textFileOperation.read("./config.txt"));
+// set setting fields
+for (let key in setting){
+	document.querySelector(`#${key}`).value = setting[key];
+}
 
 // action for changing setting inputs
 const settingInputs = document.querySelectorAll(".setting-input");
 settingInputs.forEach(input => {
 	input.addEventListener("blur", () => {
 		setting[input.id] = input.value;
+		textFileOperation.writeTextFile("config.txt", JSON.stringify(setting));
 	});
 });
 
@@ -21,7 +29,7 @@ dropdowns.forEach(dropdown => {
 	});
 });
 
-// action for adding email
+// action for adding email smtp
 const addEmailButton = document.querySelector("#add-email-button");
 addEmailButton.addEventListener("click", () => {
 	const emailList = document.querySelector("#email-list");
@@ -99,4 +107,10 @@ addEmailButton.addEventListener("click", () => {
 	emailLi.appendChild(itemDiv);
 	emailLi.appendChild(attachmentUl);
 	emailList.appendChild(emailLi);
+});
+
+// action for sending emails smtp
+const sendSMTPMailButton = document.querySelector("#smtp-send-button");
+sendSMTPMailButton.addEventListener("click", () => {
+	
 });

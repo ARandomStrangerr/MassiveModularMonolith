@@ -8,8 +8,8 @@ function createWindow(){
 		{
 			webPreferences:
 			{
-				nodeIntergration: true,
-				contextIsolation: false
+				nodeIntegration: true,
+            	contextIsolation: false,
 			},
 			width: 800,
 			height: 400
