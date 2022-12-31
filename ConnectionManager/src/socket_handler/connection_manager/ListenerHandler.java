@@ -10,7 +10,9 @@ import socket_handler.ListenerWrapper;
 import socket_handler.SocketHandler;
 import socket_handler.SocketWrapper;
 
+import javax.net.ssl.SSLHandshakeException;
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.util.Hashtable;
 
 public class ListenerHandler extends socket_handler.ListenerHandler {
@@ -49,6 +51,12 @@ public class ListenerHandler extends socket_handler.ListenerHandler {
                 String authenticationString;
                 try {
                     authenticationString = socket.read();
+                } catch (SocketTimeoutException e){
+                    System.err.println("Time out to receive socket name");
+                    return false;
+                } catch (SSLHandshakeException e) {
+                    System.err.println("Remote host terminated the handshake");
+                    return false;
                 } catch (IOException e) {
                     e.printStackTrace();
                     return false;
