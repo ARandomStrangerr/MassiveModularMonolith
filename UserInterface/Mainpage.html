@@ -36,17 +36,17 @@
 			</div>
 		</div>
 		<div> <!-- subject -->
-			Tiêu đề <input id="mail-subject">
+			Tiêu đề <input id="smtp-mail-subject">
 		</div>
 		<div> <!-- mail body -->
 			Nội dung thư
-			<textarea></textarea>
+			<textarea id="smtp-mail-body"></textarea>
 		</div>
 		<div class="tree-view"> <!-- mail list -->
 			<div class="header">
 				Danh sách hộp thư : 
 				<div>
-					<a id="smpt-send-button" class="button"><img src="message.png"></a>
+					<a id="smtp-send-button" class="button"><img src="message.png"></a>
 					<a id="add-email-button" class="button green-button">+</a>
 				</div>
 			</div>
@@ -54,7 +54,7 @@
 			</ul>
 		</div>
 	</div>
-	<div id="notification-pane"> <!-- notification pane -->
+	<div id="notification-container"> <!-- notification container -->
 	</div>
 </body>
 </html>

@@ -45,7 +45,6 @@ table {
 body{
 	padding: 2em;
 	font: 24px 'Roboto', sans-serif;
-	height: 5000px;
 }
 h1{
 	display: inline;
@@ -184,14 +183,25 @@ img{
 	padding: 0px;
 }
 
-#notification-pane{
+#notification-container {
 	position: fixed;
 	display: flex;
 	flex-direction: column-reverse;
 	overflow-y: scroll;
-	background-color: none;
+	background-color: transparent;
 	width: 20em;
 	height: 10em;
 	right: 1em;
 	bottom: 1em;
+	z-index: 0;
+}
+.notification {
+	margin-top: 1em;
+	border-radius: 05em;
+}
+.green-notification {
+	background-color:#B7EFC5;
+}
+.red-notification {
+	background-color:#FFE3E0;
 }

@@ -8,12 +8,25 @@ for (let key in setting){
 	document.querySelector(`#${key}`).value = setting[key];
 }
 
+// function to create a notification
+function createNotification(cssClass, message){
+	const notificationContainer = document.querySelector("#notification-container");
+	const notificationPane = document.createElement("div");
+	notificationPane.addEventListener("click", () => {
+		notificationContainer.removeChild(notificationPane);
+	});
+	notificationPane.classList.add("notification");
+	notificationPane.classList.add(cssClass);
+	notificationPane.innerText = message;
+	notificationContainer.appendChild(notificationPane);
+}
+
 // action for changing setting inputs
 const settingInputs = document.querySelectorAll(".setting-input");
 settingInputs.forEach(input => {
 	input.addEventListener("blur", () => {
-		setting[input.id] = input.value;
-		textFileOperation.writeTextFile("config.txt", JSON.stringify(setting));
+		setting[input.id] = input.value.trim();
+		textFileOperation.write("config.txt", JSON.stringify(setting));
 	});
 });
 
@@ -109,8 +122,65 @@ addEmailButton.addEventListener("click", () => {
 	emailList.appendChild(emailLi);
 });
 
+
 // action for sending emails smtp
 const sendSMTPMailButton = document.querySelector("#smtp-send-button");
 sendSMTPMailButton.addEventListener("click", () => {
-	
+	const emailList = document.querySelector("#email-list");
+	const subject = document.querySelector("#smtp-mail-subject").value;
+	const body = document.querySelector("#smtp-mail-body").value;
+	// if (subject.trim() == "") {
+	// 	createNotification("red-notification", "Tiêu đề của thư bị bỏ trống");
+	// 	return;
+	// }
+	// if (body.trim() == "") {
+	// 	createNotification("red-notification", "Nội dung thư bị bỏ trống");
+	// 	return;
+	// }
+	// if (setting["smtp-username"] == ""){
+	// 	createNotification("red-notification", "Tên hộp thư bị bỏ trống");
+	// 	return;
+	// }
+	// if (setting["smtp-password"] == ""){
+	// 	createNotification("red-notification", "Mật khẩu hộp thư bị bỏ trống");
+	// 	return;
+	// }
+	// if (setting["smtp-server"] == ""){
+	// 	createNotification("red-notification", "Địa chỉ SMTP server bị bỏ trống");
+	// 	return;
+	// }
+	// if (setting["smtp-port"] == ""){
+	// 	createNotification("red-notification", "Cổng SMTP server bị bỏ trống");
+	// 	return;
+	// }
+	if (emailList.children.length == 0){
+		createNotification("red-notification", "Danh sách hộp thư nhận không có ai");
+		return;
+	}
+	let socketOperation;
+	try {
+		socketOperation = new inputOutputModule.SocketOperation("certificate.pem", "key.pem", "127.0.0.1", 9998, "abcdef");
+	} catch (err) {
+		createNotification("red-notification", "Không kết nối được đến máy chủ");
+		return;
+	}
+	let sendData = {
+		job: "SMTPMail",
+		host: setting["smtp-server"],
+		port: setting["smtp-port"],
+		username: setting["smtp-username"],
+		password: setting["smtp-password"],
+		recipient: "billslim0996@gmail.com",
+		subject: subject,
+		body: body
+	};
+	setTimeout(function () {
+		socketOperation.write(JSON.stringify(sendData));
+		setTimeout(function() {
+			 let returnData = JSON.parse(socketOperation.read());
+			 if (returnData.error){
+			 	createNotification("red-notification", returnData.error);
+			 }
+		},1000);
+	},1000);
 });
