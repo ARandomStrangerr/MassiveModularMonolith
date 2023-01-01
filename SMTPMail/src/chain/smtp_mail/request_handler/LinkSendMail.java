@@ -2,9 +2,7 @@ package chain.smtp_mail.request_handler;
 
 import chain.Chain;
 import chain.Link;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.sun.mail.util.MailConnectException;
 
 import javax.mail.*;
 import javax.mail.internet.*;
@@ -96,7 +94,13 @@ class LinkSendMail extends Link {
         try {
             bodyPart.setContent(body.get("message").getAsString(), "text/html; charset=utf-8");
         } catch (MessagingException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            return false;
+        } catch (NullPointerException e) {
+            System.err.println("Body of the mail is missing");
+            chain.getProcessObject().addProperty("error", "nội dung thư bị bỏ trống");
+            chain.getProcessObject().get("header").getAsJsonObject().addProperty("status", false);
+            return false;
         }
         MimeMultipart multipart = new MimeMultipart();
         try {
@@ -118,6 +122,7 @@ class LinkSendMail extends Link {
             e.printStackTrace();
             return false;
         }
+        System.out.printf("Success send mail to %s \n", body.getAsJsonObject().get("recipient").getAsString());
         return true;
     }
 }
