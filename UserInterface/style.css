@@ -7,8 +7,8 @@ b, u, i, center,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
 menu, nav, output, ruby, section, summary,
 time, mark, audio, video {
 	margin: 0;
@@ -19,7 +19,7 @@ time, mark, audio, video {
 	vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure, 
+article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
@@ -119,7 +119,6 @@ img{
 }
 .float-div {
 	top: 3em;
-	right: 0em;
 	position: absolute;
 	padding: 0.5em;
 	background-color: #f7ebfd;
@@ -128,6 +127,9 @@ img{
 	overflow-y: hidden;
 	box-shadow: 0.5em 0.5em 1em #D099E3;
 	z-index: 10;
+}
+.float-div-right{
+	right: 0em;
 }
 .float-div-inactive {
 	height: 0px;
@@ -204,4 +206,18 @@ img{
 }
 .red-notification {
 	background-color:#FFE3E0;
+}
+
+#menu > a {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	padding: 0.5em;
+	box-sizing: border-box;
+}
+#menu > a > div {
+	padding: 0.05em;
+	width: 1em;
+	border-radius: 50%;
+	background-color: black;
 }

@@ -5,17 +5,28 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap" rel="stylesheet"> 
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<title></title>
 </head>
 <body>
+	<div class="dropdown" id="menu"> <!-- selection pane menu -->
+		<a class="button"> <div></div><div></div><div></div> </a>
+		<div class="float-div float-div-inactive">
+			<div>
+				SMTP Mail
+			</div>
+			<div>
+				Cài đặt
+			</div>
+		</div>
+	</div>
 	<div id="smtp-mail-pane"> <!-- SMTP mail pane -->
 		<div class="header"> <!-- header -->
-			<h1>SMTP Mail</h1> <!-- pane title --> 
-			<div class="dropdown"> <!-- drop down with button --> 
+			<h1>SMTP Mail</h1> <!-- pane title -->
+			<div class="dropdown"> <!-- drop down with button -->
 				<a class="button config-button" id="smtp-setting-button"></a>
-				<div class="float-div float-div-inactive" id="smtp-setting-div">
+				<div class="float-div float-div-right float-div-inactive" id="smtp-setting-div">
 					<div>
 						Tên người dùng <br>
 						<input class="setting-input" id="smtp-username">
@@ -44,7 +55,7 @@
 		</div>
 		<div class="tree-view"> <!-- mail list -->
 			<div class="header">
-				Danh sách hộp thư : 
+				Danh sách hộp thư :
 				<div>
 					<a id="smtp-send-button" class="button"><img src="message.png"></a>
 					<a id="add-email-button" class="button green-button">+</a>
