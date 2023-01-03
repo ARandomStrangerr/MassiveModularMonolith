@@ -89,6 +89,7 @@ addEmailButton.addEventListener("click", () => {
 			fileInput.onchange = () => {
 				file.innerText = fileInput.files[0].name;
 				size.innerText = `${fileInput.files[0].size} KB`;
+				attachmentLi.file = fileInput.files[0];
 			}
 			fileInput.click();
 		});
@@ -114,6 +115,7 @@ addEmailButton.addEventListener("click", () => {
 	buttonDiv.appendChild(addAttachmentButton);
 	buttonDiv.appendChild(deleteButton);
 	email.innerText = "example@mail.com";
+	email.classList.add("email");
 	itemDiv.appendChild(email);
 	itemDiv.appendChild(buttonDiv);
 	attachmentUl.classList.add("tree-view");
@@ -129,37 +131,37 @@ sendSMTPMailButton.addEventListener("click", () => {
 	const emailList = document.querySelector("#email-list");
 	const subject = document.querySelector("#smtp-mail-subject").value;
 	const body = document.querySelector("#smtp-mail-body").value;
-	// if (subject.trim() == "") {
-	// 	createNotification("red-notification", "Tiêu đề của thư bị bỏ trống");
-	// 	return;
-	// }
-	// if (body.trim() == "") {
-	// 	createNotification("red-notification", "Nội dung thư bị bỏ trống");
-	// 	return;
-	// }
-	// if (setting["smtp-username"] == ""){
-	// 	createNotification("red-notification", "Tên hộp thư bị bỏ trống");
-	// 	return;
-	// }
-	// if (setting["smtp-password"] == ""){
-	// 	createNotification("red-notification", "Mật khẩu hộp thư bị bỏ trống");
-	// 	return;
-	// }
-	// if (setting["smtp-server"] == ""){
-	// 	createNotification("red-notification", "Địa chỉ SMTP server bị bỏ trống");
-	// 	return;
-	// }
-	// if (setting["smtp-port"] == ""){
-	// 	createNotification("red-notification", "Cổng SMTP server bị bỏ trống");
-	// 	return;
-	// }
+	if (subject.trim() == "") {
+		createNotification("red-notification", "Tiêu đề của thư bị bỏ trống");
+		return;
+	}
+	if (body.trim() == "") {
+		createNotification("red-notification", "Nội dung thư bị bỏ trống");
+		return;
+	}
+	if (setting["smtp-username"] == ""){
+		createNotification("red-notification", "Tên hộp thư bị bỏ trống");
+		return;
+	}
+	if (setting["smtp-password"] == ""){
+		createNotification("red-notification", "Mật khẩu hộp thư bị bỏ trống");
+		return;
+	}
+	if (setting["smtp-server"] == ""){
+		createNotification("red-notification", "Địa chỉ SMTP server bị bỏ trống");
+		return;
+	}
+	if (setting["smtp-port"] == ""){
+		createNotification("red-notification", "Cổng SMTP server bị bỏ trống");
+		return;
+	}
 	if (emailList.children.length == 0){
 		createNotification("red-notification", "Danh sách hộp thư nhận không có ai");
 		return;
 	}
 	let socketOperation;
 	try {
-		socketOperation = new inputOutputModule.SocketOperation("certificate.pem", "key.pem", "127.0.0.1", 9998, "abcdef");
+		socketOperation = new inputOutputModule.SocketOperation("certificate.pem", "key.pem", "127.0.0.1", 9998, "24:41:8C:06:2C:82");
 	} catch (err) {
 		createNotification("red-notification", "Không kết nối được đến máy chủ");
 		return;
@@ -170,17 +172,23 @@ sendSMTPMailButton.addEventListener("click", () => {
 		port: setting["smtp-port"],
 		username: setting["smtp-username"],
 		password: setting["smtp-password"],
-		recipient: "billslim0996@gmail.com",
 		subject: subject,
-		body: body
+		message: body
 	};
-	setTimeout(function () {
-		socketOperation.write(JSON.stringify(sendData));
-		setTimeout(function() {
-			 let returnData = JSON.parse(socketOperation.read());
-			 if (returnData.error){
-			 	createNotification("red-notification", returnData.error);
-			 }
-		},1000);
+	setTimeout(async () => {
+		for (let i = 0; i < emailList.children.length; i++) {
+			sendData["attachment"] = [];
+			const attachmentList = emailList.children[i].querySelector(".tree-view");
+			for (let j = 0; j < attachmentList.children.length; j++) {
+				sendData["attachment"].push(
+					{
+						name: attachmentList.children[j].file.name,
+						blob: textFileOperation.readBase64(attachmentList.children[j].file.path)
+					}
+				);
+			}
+			sendData["recipient"] = emailList.children[i].querySelector(".email").innerText;
+			socketOperation.write(JSON.stringify(sendData));
+		}
 	},1000);
 });
