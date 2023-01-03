@@ -2,10 +2,14 @@ package chain.smtp_mail.request_handler;
 
 import chain.Chain;
 import chain.Link;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import javax.mail.*;
 import javax.mail.internet.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Base64;
 import java.util.Properties;
 
 class LinkSendMail extends Link {
@@ -68,7 +72,7 @@ class LinkSendMail extends Link {
         }
         try {
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(body.getAsJsonObject().get("recipient").getAsString())); // set the recipient mail
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             chain.getProcessObject().addProperty("error", "Địa chỉ người nhận bỏ trống");
             System.err.println("recipient is missing");
             return false;
@@ -79,11 +83,11 @@ class LinkSendMail extends Link {
         }
         try {
             message.setSubject(body.get("subject").getAsString()); // set subject of the mail
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             chain.getProcessObject().addProperty("error", "tiêu đề thư chưa được điền");
             System.err.println("Subject of the mail is missing");
             return false;
-        }catch (MessagingException e) {
+        } catch (MessagingException e) {
             chain.getProcessObject().addProperty("error", "something went wrong");
             e.printStackTrace();
             return false;
@@ -113,15 +117,34 @@ class LinkSendMail extends Link {
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }
-        // todo create attachment
+        // create attachment
+        if (body.has("attachment")) {
+            MimeBodyPart attachmentPart = new MimeBodyPart();
+            for (JsonElement attachment : body.get("attachment").getAsJsonArray()) {
+                JsonObject attachmentObj = attachment.getAsJsonObject();
+                byte[] decodedBase64 = Base64.getDecoder().decode(attachmentObj.get("blob").getAsString());
+                try (FileOutputStream os = new FileOutputStream(attachmentObj.get("name").getAsString())){
+                    os.write(decodedBase64);
+                    attachmentPart.attachFile(attachmentObj.get("name").getAsString());
+                } catch (IOException | MessagingException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                multipart.addBodyPart(attachmentPart);
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
+        }
         // send the mail
         try {
             Transport.send(message);
-        } catch (MessagingException e){
+        } catch (MessagingException e) {
             chain.getProcessObject().addProperty("error", e.getMessage());
             e.printStackTrace();
             return false;
         }
+        // todo remove file after done using
         System.out.printf("Success send mail to %s \n", body.getAsJsonObject().get("recipient").getAsString());
         return true;
     }
