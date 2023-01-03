@@ -1,12 +1,16 @@
 class TextFileOperation {
 	#fileSystem;
-	
+
 	constructor (){
 		this.#fileSystem = require("fs");
 	}
 
 	read(path){
 		return this.#fileSystem.readFileSync(path, "utf8");
+	}
+
+	readBase64(path){
+		return this.#fileSystem.readFileSync(path, {encoding: "base64"});
 	}
 
 	write(path, data){
