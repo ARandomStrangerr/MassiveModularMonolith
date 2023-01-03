@@ -1,5 +1,6 @@
 const inputOutputModule = require("./InputOutputOperation.js");
 const textFileOperation = new inputOutputModule.TextFileOperation();
+const macAddr = require("os").networkInterfaces().wlp4s0[0].mac;
 
 // startup actions
 const setting = JSON.parse(textFileOperation.read("./config.txt"));
@@ -161,7 +162,7 @@ sendSMTPMailButton.addEventListener("click", () => {
 	}
 	let socketOperation;
 	try {
-		socketOperation = new inputOutputModule.SocketOperation("certificate.pem", "key.pem", "127.0.0.1", 9998, "24:41:8C:06:2C:82");
+		socketOperation = new inputOutputModule.SocketOperation("certificate.pem", "key.pem", "127.0.0.1", 9998, macAddr);
 	} catch (err) {
 		createNotification("red-notification", "Không kết nối được đến máy chủ");
 		return;
@@ -175,7 +176,7 @@ sendSMTPMailButton.addEventListener("click", () => {
 		subject: subject,
 		message: body
 	};
-	setTimeout(async () => {
+	setTimeout(() => {
 		for (let i = 0; i < emailList.children.length; i++) {
 			sendData["attachment"] = [];
 			const attachmentList = emailList.children[i].querySelector(".tree-view");
@@ -191,4 +192,7 @@ sendSMTPMailButton.addEventListener("click", () => {
 			socketOperation.write(JSON.stringify(sendData));
 		}
 	},1000);
+	setTimeout(() => {
+
+	})
 });
