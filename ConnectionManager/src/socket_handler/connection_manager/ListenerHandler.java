@@ -13,7 +13,6 @@ import socket_handler.SocketWrapper;
 import javax.net.ssl.SSLHandshakeException;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
-import java.util.Hashtable;
 
 public class ListenerHandler extends socket_handler.ListenerHandler {
     private final int timeout;
