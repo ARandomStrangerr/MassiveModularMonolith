@@ -20,7 +20,7 @@ public class SocketWrapper {
     private String name;
 
     // mainly the job of this is for a socket accepted by a listener, the type of this socket depends on the listener which accepted it
-    public SocketWrapper(Socket socket, SocketType type) throws IOException{
+    public SocketWrapper(Socket socket, SocketType type) throws IOException {
         this.socket = socket;
         br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
@@ -29,12 +29,12 @@ public class SocketWrapper {
 
     /**
      * create a socket to the indicated address and port
-     * @args
-     * InetAddress: address to the host
+     *
+     * @args InetAddress: address to the host
      * int: port of the host
      * SocketType: type of the socket
      **/
-    public SocketWrapper(InetAddress hostAddress, int port, SocketType type) throws IOException{
+    public SocketWrapper(InetAddress hostAddress, int port, SocketType type) throws IOException {
         switch (type) {
             case PLAIN -> {
                 this.socket = new Socket(hostAddress, port);
@@ -54,15 +54,15 @@ public class SocketWrapper {
      * poor-man TSL socket constructor. This constructor create an TLS socket to a self-signed certificate host.
      * due to double handshake, both host and client must trust each other, but self-signed certificate cannot be trusted.
      * therefore, certificate of the host must be added manually. always create a TLS socket
-     * @args
-     * InetAddress: address of the host
+     *
+     * @args InetAddress: address of the host
      * int: port of the host
      * String: path to the truststore certificate file
      * String: the password for the trustore certificate file
      **/
     public SocketWrapper
     (InetAddress hostAddress, int port, String trustStorePath, String trustStorePassword)
-            throws IOException, NoSuchAlgorithmException, CertificateException,KeyStoreException, UnrecoverableKeyException, KeyManagementException {
+            throws IOException, NoSuchAlgorithmException, CertificateException, KeyStoreException, UnrecoverableKeyException, KeyManagementException {
         KeyStore ks = KeyStore.getInstance("JKS");
         ks.load(new FileInputStream(trustStorePath), trustStorePassword.toCharArray());
 
@@ -98,10 +98,10 @@ public class SocketWrapper {
         socket.setSoTimeout(nanosecond);
     }
 
-    public void close() throws IOException{
+    public void close() throws IOException {
+        socket.close();
         br.close();
         bw.close();
-        socket.close();
     }
 
     public String getName() {

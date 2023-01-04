@@ -3,6 +3,7 @@ package chain.connection_manager.request_handler;
 import chain.Chain;
 import chain.Link;
 import memorable.ConnectionManager;
+import socket_handler.SocketWrapper;
 
 import java.io.IOException;
 
@@ -19,8 +20,6 @@ public class LinkTerminateSocketFromClient extends Link {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            ConnectionManager.getInstance().listenerHandler.getThread(chain.getProcessObject().get("header").getAsJsonObject().get("clientId").getAsString()).stop();
-            System.out.printf("Socket and thread associated working for the socket %s has been closed and stopped\n", chain.getProcessObject().get("header").getAsJsonObject().get("clientId").getAsString());
         }
         return true;
     }

@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import javax.net.ssl.SSLException;
 import java.io.IOException;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 
 public abstract class SocketHandler implements Runnable {
     protected final SocketWrapper socket;
@@ -36,8 +37,7 @@ public abstract class SocketHandler implements Runnable {
             try {
                 requestString = socket.read();
             } catch (SSLException | SocketException e) {
-                System.err.println("This error needs a name");
-                e.printStackTrace();
+//                System.err.println("Socket");
                 break;
             } catch (IOException e) {
                 System.err.println("Fail to read message from socket");
