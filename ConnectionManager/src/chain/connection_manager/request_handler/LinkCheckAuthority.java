@@ -22,13 +22,15 @@ public class LinkCheckAuthority extends Link {
                 throw new Exception("client has no privilege");
         } catch (SQLException e) {
             chain.getProcessObject().addProperty("error", "Phần mềm gặp vấn đề, vui lòng liên hệ với người lập trình để được giải quyết");
+            chain.getProcessObject().get("header").getAsJsonObject().addProperty("status", false);
             e.printStackTrace();
             return false;
         } catch (Exception e) {
             JsonObject body = new JsonObject();
             body.addProperty("error", "Người dùng không được ủy quyền sử dụng phần mềm");
             chain.getProcessObject().add("body", body);
-            e.printStackTrace();
+            chain.getProcessObject().get("header").getAsJsonObject().addProperty("status", false);
+            System.err.println(e.getMessage());
             return false;
         }
         return true;
