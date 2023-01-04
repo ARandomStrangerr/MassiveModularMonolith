@@ -118,7 +118,7 @@ class LinkSendMail extends Link {
             throw new RuntimeException(e);
         }
         // create attachment
-        if (body.has("attachment")) {
+        if (body.has("attachment") && body.get("attachment").getAsJsonArray().size() != 0) {
             MimeBodyPart attachmentPart = new MimeBodyPart();
             for (JsonElement attachment : body.get("attachment").getAsJsonArray()) {
                 JsonObject attachmentObj = attachment.getAsJsonObject();
