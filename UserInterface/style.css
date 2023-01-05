@@ -116,6 +116,7 @@ img{
 
 .dropdown {
 	position: relative;
+	padding: 0px;
 }
 .float-div {
 	top: 3em;
