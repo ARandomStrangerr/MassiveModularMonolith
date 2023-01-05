@@ -15,7 +15,7 @@ class TextFileOperation {
 
 	write(path, data){
 		this.#fileSystem.writeFile(path, data, function (error) {
-			throw new Error(error);
+			if (error) console.log(error);
 		});
 	}
 }
@@ -34,22 +34,21 @@ class SocketOperation {
 		};
 		// declare another variable due to JS prevent to use the private element of the class
 		let socket = tls.connect(port, option, function() {
-			const writeData = {
-				macAddress: macAddress
-			};
 			socket.setEncoding("utf8");
-			socket.write(`${JSON.stringify(writeData)}\n`);
 		});
+		const writeData = {
+			macAddress: macAddress
+		};
+		socket.write(`${JSON.stringify(writeData)}\n`);
 		let list = [];
 		// when data arrive , just push it into a list
 		socket.on("data", (data) => {
+			console.log(data);
 			list.push(data);
 		});
 		// set the local variables to this class private variables
 		this.#socket = socket;
 		this.#dataLine = list;
-		// while loop prevent exit the constructor when either socket or list is empty
-		while (!this.#socket || !this.#dataLine);
 	}
 
 	write(data){
@@ -57,13 +56,25 @@ class SocketOperation {
 	}
 
 	read(){
-		// the while loop help to block the return until there is an input
-		while (this.#dataLine.length == 0);
 		return this.#dataLine.pop();
+	}
+}
+
+class ExcelFileOperation {
+	read(path){
+		const xlsx = require("xlsx");
+		const data = [];
+		const file = xlsx .readFile(path);
+		const sheet = xlsx.utils.sheet_to_json(file.Sheets[file.SheetNames[0]]);
+		temp.forEach((res) => {
+			data.push(res);
+		});
+		return data;
 	}
 }
 
 module.exports = {
 	TextFileOperation: TextFileOperation,
-	SocketOperation: SocketOperation
+	SocketOperation: SocketOperation,
+	ExcelFileOperation: ExcelFileOperation
 };

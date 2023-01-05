@@ -58,12 +58,25 @@
 				Danh sách hộp thư :
 				<div>
 					<a id="smtp-send-button" class="button"><img src="message.png"></a>
-					<a id="add-email-button" class="button green-button">+</a>
+					<div class="dropdown">
+						<a class="button green-button">+</a>
+						<div class="float-div float-div-right float-div-inactive">
+							<div id="add-email-button">Thêm một email</div>
+							<div>Thêm từ tệp tin excel</div>
+						</div>
+					</div>
 				</div>
 			</div>
 			<ul id="email-list">
 			</ul>
 		</div>
+	</div>
+	<div id="setting-pane"> <!-- setting pane and sources credit -->
+		Địa chỉ server
+		<input type="text" class="setting-input" id="home-server">
+		Cổng
+		<input type="number" class="setting-input" id="home-port">
+		<a href="https://www.flaticon.com/free-icon/message_3062634?term=send+mail&page=1&position=14&origin=tag&related_id=3062634">send mail icon</a>
 	</div>
 	<div id="notification-container"> <!-- notification container -->
 	</div>
