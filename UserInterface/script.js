@@ -22,27 +22,6 @@ function createNotification(cssClass, message){
 	notificationContainer.appendChild(notificationPane);
 }
 
-// action for changing setting inputs
-const settingInputs = document.querySelectorAll(".setting-input");
-settingInputs.forEach(input => {
-	input.addEventListener("blur", () => {
-		setting[input.id] = input.value.trim();
-		textFileOperation.write("config.txt", JSON.stringify(setting));
-	});
-});
-
-// action for dropdown div
-const dropdowns = document.querySelectorAll(".dropdown");
-dropdowns.forEach(dropdown => {
-	const button = dropdown.querySelector(".button");
-	const floatDiv = dropdown.querySelector(".float-div");
-
-	button.addEventListener("click", () => {
-		floatDiv.classList.toggle("float-div-inactive");
-		button.classList.toggle("button-active");
-	});
-});
-
 // add attachment to an email unordered list item
 function addAttachmentSMTP(mailDiv, fileObj){
 	const attachmentLi = document.createElement("li");
@@ -137,6 +116,39 @@ function addEmailSMTP(mailName){
 	return emailLi;
 }
 
+// action for changing setting inputs
+const settingInputs = document.querySelectorAll(".setting-input");
+settingInputs.forEach(input => {
+	input.addEventListener("blur", () => {
+		setting[input.id] = input.value.trim();
+		textFileOperation.write("config.txt", JSON.stringify(setting));
+	});
+});
+
+// action selecting pane
+const paneSelectors = document.querySelectorAll(".toggle-pane-button");
+let currentDisplayPane;
+paneSelectors.forEach(toggleButton => {
+	toggleButton.addEventListener("click", () => {
+		let togglePane = document.querySelector(`#${toggleButton.id}-pane`);
+		if (currentDisplayPane) currentDisplayPane.classList.toggle("float-div-inactive");
+		togglePane.classList.toggle("float-div-inactive");
+		currentDisplayPane = togglePane;
+	});
+});
+
+// action for dropdown div
+const dropdowns = document.querySelectorAll(".dropdown");
+dropdowns.forEach(dropdown => {
+	const button = dropdown.querySelector(".button");
+	const floatDiv = dropdown.querySelector(".float-div");
+
+	button.addEventListener("click", () => {
+		floatDiv.classList.toggle("float-div-inactive");
+		button.classList.toggle("button-active");
+	});
+});
+
 // action for adding single email smtp
 const addEmailButton = document.querySelector("#add-email-button");
 addEmailButton.addEventListener("click", () => {
@@ -159,6 +171,7 @@ addEmailExcel.addEventListener("click", () => {
 					addAttachmentSMTP(emailLi, fileObj);
 				}
 			});
+			createNotification("green-notification", `Thành công nhập vào ${rows.length} email`)
 		})
 		.catch(function(err){
 			console.log(err);
@@ -203,7 +216,7 @@ sendSMTPMailButton.addEventListener("click", () => {
 	}
 	let socketOperation;
 	try {
-		socketOperation = new inputOutputModule.SocketOperation("certificate.pem", "key.pem", "127.0.0.1", 9998, macAddr);
+		socketOperation = new inputOutputModule.SocketOperation("certificate.pem", "key.pem", setting["home-server"], home-port["home-port"], macAddr);
 	} catch (err) {
 		createNotification("red-notification", "Không kết nối được đến máy chủ");
 		return;
