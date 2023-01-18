@@ -1,7 +1,7 @@
 package socket_handler.data_stream;
 
 import chain.Chain;
-import chain.data_stream.handle_failure.ChainHandleFailure;
+import chain.data_stream.handle_request.ChainHandleFailure;
 import chain.data_stream.handle_request.ChainHandleRequest;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
