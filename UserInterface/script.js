@@ -43,9 +43,53 @@ dropdowns.forEach(dropdown => {
 	});
 });
 
-// action for adding email smtp
-const addEmailButton = document.querySelector("#add-email-button");
-addEmailButton.addEventListener("click", () => {
+// add attachment to an email unordered list item
+function addAttachmentSMTP(mailDiv, fileObj){
+	const attachmentLi = document.createElement("li");
+	const editAttachmentButton = document.createElement("a");
+	const deleteAttachmentButton = document.createElement("a");
+	const fileDiv = document.createElement("div");
+	const fileButtonDiv = document.createElement("div");
+	const file = document.createElement("span");
+	const size = document.createElement("span");
+	const attachmentUl = mailDiv.querySelector("ul");
+	editAttachmentButton.addEventListener("click", () => {
+		const fileInput = document.createElement("input");
+		fileInput.type = "file";
+		fileInput.onchange = () => {
+			file.innerText = fileInput.files[0].name;
+			size.innerText = `${fileInput.files[0].size} KB`;
+			attachmentLi.file = fileInput.files[0];
+		}
+		fileInput.click();
+	});
+	editAttachmentButton.classList.add("button");
+	editAttachmentButton.classList.add("edit-button");
+	deleteAttachmentButton.innerText = "-";
+	deleteAttachmentButton.classList.add("button");
+	deleteAttachmentButton.classList.add("red-button");
+	deleteAttachmentButton.addEventListener("click", () => {
+		attachmentUl.removeChild(attachmentLi);
+	});
+	if (fileObj){
+		file.innerText = fileObj.name;
+		size.innerText = `${fileObj.size} KB`
+		attachmentLi.file = fileObj;
+	} else {
+		file.innerText = "Tệp tin";
+		size.innerText = "0 KB";
+	}
+	fileButtonDiv.appendChild(editAttachmentButton);
+	fileButtonDiv.appendChild(deleteAttachmentButton);
+	fileDiv.appendChild(file);
+	fileDiv.appendChild(size);
+	fileDiv.appendChild(fileButtonDiv);
+	attachmentLi.appendChild(fileDiv);
+	attachmentUl.appendChild(attachmentLi);
+}
+
+// add email function
+function addEmailSMTP(mailName){
 	const emailList = document.querySelector("#email-list");
 	const itemDiv = document.createElement("div");
 	const buttonDiv = document.createElement("div");
@@ -73,49 +117,16 @@ addEmailButton.addEventListener("click", () => {
 		email.innerText = "";
 		itemDiv.prepend(textField);
 	});
-	addAttachmentButton.innerText="+";
+	addAttachmentButton.innerText = "+";
 	addAttachmentButton.classList.add("button");
 	addAttachmentButton.classList.add("green-button");
 	addAttachmentButton.addEventListener("click", () => {
-		const attachmentLi = document.createElement("li");
-		const editAttachmentButton = document.createElement("a");
-		const deleteAttachmentButton = document.createElement("a");
-		const fileDiv = document.createElement("div");
-		const fileButtonDiv = document.createElement("div");
-		const file = document.createElement("span");
-		const size = document.createElement("span");
-		editAttachmentButton.addEventListener("click", () => {
-			const fileInput = document.createElement("input");
-			fileInput.type = "file";
-			fileInput.onchange = () => {
-				file.innerText = fileInput.files[0].name;
-				size.innerText = `${fileInput.files[0].size} KB`;
-				attachmentLi.file = fileInput.files[0];
-			}
-			fileInput.click();
-		});
-		editAttachmentButton.classList.add("button");
-		editAttachmentButton.classList.add("edit-button");
-		deleteAttachmentButton.innerText="-";
-		deleteAttachmentButton.classList.add("button");
-		deleteAttachmentButton.classList.add("red-button");
-		deleteAttachmentButton.addEventListener("click", ()=> {
-			attachmentUl.removeChild(attachmentLi);
-		});
-		file.innerText = "Tệp tin";
-		size.innerText = "0 KB";
-		fileButtonDiv.appendChild(editAttachmentButton);
-		fileButtonDiv.appendChild(deleteAttachmentButton);
-		fileDiv.appendChild(file);
-		fileDiv.appendChild(size);
-		fileDiv.appendChild(fileButtonDiv);
-		attachmentLi.appendChild(fileDiv);
-		attachmentUl.appendChild(attachmentLi);
+		addAttachmentSMTP(emailLi);
 	});
 	buttonDiv.appendChild(editButton);
 	buttonDiv.appendChild(addAttachmentButton);
 	buttonDiv.appendChild(deleteButton);
-	email.innerText = "example@mail.com";
+	email.innerText = mailName;
 	email.classList.add("email");
 	itemDiv.appendChild(email);
 	itemDiv.appendChild(buttonDiv);
@@ -123,8 +134,38 @@ addEmailButton.addEventListener("click", () => {
 	emailLi.appendChild(itemDiv);
 	emailLi.appendChild(attachmentUl);
 	emailList.appendChild(emailLi);
+	return emailLi;
+}
+
+// action for adding single email smtp
+const addEmailButton = document.querySelector("#add-email-button");
+addEmailButton.addEventListener("click", () => {
+	addEmailSMTP("example@mail.com");
 });
 
+// action for adding multiple emails from excel
+const addEmailExcel = document.querySelector("#add-email-excel");
+addEmailExcel.addEventListener("click", () => {
+	const fileInput = document.createElement("input");
+	const excelFileOperation = new inputOutputModule.ExcelFileOperation();
+	fileInput.type = "file";
+	fileInput.onchange = () => {
+		excelFileOperation.read(fileInput.files[0])
+		.then(function(rows){
+			rows.forEach(row => {
+				let emailLi = addEmailSMTP(row[0]);
+				for (let i = 1; i < row.length; i++){
+					let fileObj = new File([textFileOperation.readBuffer(row[i])], row[i]);
+					addAttachmentSMTP(emailLi, fileObj);
+				}
+			});
+		})
+		.catch(function(err){
+			console.log(err);
+		});
+	}
+	fileInput.click();
+});
 
 // action for sending emails smtp
 const sendSMTPMailButton = document.querySelector("#smtp-send-button");
@@ -191,8 +232,15 @@ sendSMTPMailButton.addEventListener("click", () => {
 			sendData["recipient"] = emailList.children[i].querySelector(".email").innerText;
 			socketOperation.write(JSON.stringify(sendData));
 		}
-	},1000);
+	},0);
 	setTimeout(() => {
-
-	})
+		for (let i = 0; i < emailList.children.length; i++) {
+			let returnData = JSON.parse(socketOperation.read());
+			if (returnData.error) {
+				createNotification("red-notification", returnData.error);
+			} else if (returnData.update) {
+				createNotification("green-notification", returnData.update);
+			}
+		}
+	},8000);
 });
