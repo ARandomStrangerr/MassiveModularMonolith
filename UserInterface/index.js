@@ -11,8 +11,8 @@ function createWindow(){
 				nodeIntegration: true,
             	contextIsolation: false,
 			},
-			width: 800,
-			height: 400
+			width: 1600,
+			height: 1000
 		}
 	);
 	mainWindow.loadURL(`file://${__dirname}/Mainpage.html`);
