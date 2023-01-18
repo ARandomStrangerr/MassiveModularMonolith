@@ -13,15 +13,11 @@
 	<div class="dropdown" id="menu"> <!-- selection pane menu -->
 		<a class="button"> <div></div><div></div><div></div> </a>
 		<div class="float-div float-div-inactive">
-			<div>
-				SMTP Mail
-			</div>
-			<div>
-				Cài đặt
-			</div>
+			<div class="toggle-pane-button" id="smtp-mail">SMTP Mail</div>
+			<div class="toggle-pane-button" id="setting">Cài đặt</div>
 		</div>
 	</div>
-	<div id="smtp-mail-pane"> <!-- SMTP mail pane -->
+	<div class="major-pane float-div-inactive" id="smtp-mail-pane"> <!-- SMTP mail pane -->
 		<div class="header"> <!-- header -->
 			<h1>SMTP Mail</h1> <!-- pane title -->
 			<div class="dropdown"> <!-- drop down with button -->
@@ -62,7 +58,7 @@
 						<a class="button green-button">+</a>
 						<div class="float-div float-div-right float-div-inactive">
 							<div id="add-email-button">Thêm một email</div>
-							<div>Thêm từ tệp tin excel</div>
+							<div id="add-email-excel">Thêm từ tệp tin excel</div>
 						</div>
 					</div>
 				</div>
@@ -71,7 +67,7 @@
 			</ul>
 		</div>
 	</div>
-	<div id="setting-pane"> <!-- setting pane and sources credit -->
+	<div class="major-pane float-div-inactive" id="setting-pane"> <!-- setting pane and sources credit -->
 		Địa chỉ server
 		<input type="text" class="setting-input" id="home-server">
 		Cổng

@@ -114,6 +114,10 @@ img{
 	background-size: contain;
 }
 
+.major-pane{
+	overflow-y: hidden;
+}
+
 .dropdown {
 	position: relative;
 	padding: 0px;
