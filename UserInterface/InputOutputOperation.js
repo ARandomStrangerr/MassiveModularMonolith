@@ -9,6 +9,10 @@ class TextFileOperation {
 		return this.#fileSystem.readFileSync(path, "utf8");
 	}
 
+	readBuffer(path){
+		return this.#fileSystem.readFileSync(path);
+	}
+
 	readBase64(path){
 		return this.#fileSystem.readFileSync(path, {encoding: "base64"});
 	}
@@ -61,14 +65,9 @@ class SocketOperation {
 }
 
 class ExcelFileOperation {
-	read(path){
-		const xlsx = require("xlsx");
-		const data = [];
-		const file = xlsx .readFile(path);
-		const sheet = xlsx.utils.sheet_to_json(file.Sheets[file.SheetNames[0]]);
-		temp.forEach((res) => {
-			data.push(res);
-		});
+	async read(path){
+		const excelReader = require("read-excel-file");
+		const data = await excelReader(path);
 		return data;
 	}
 }
