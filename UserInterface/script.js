@@ -3,7 +3,12 @@ const textFileOperation = new inputOutputModule.TextFileOperation();
 const macAddr = require("os").networkInterfaces().wlp4s0[0].mac;
 
 // startup actions
-const setting = JSON.parse(textFileOperation.read("./config.txt"));
+let setting;
+try{
+	setting = JSON.parse(textFileOperation.read("./config.txt"));
+} catch (ignore) {
+
+}
 // set setting fields
 for (let key in setting){
 	document.querySelector(`#${key}`).value = setting[key];
@@ -216,8 +221,9 @@ sendSMTPMailButton.addEventListener("click", () => {
 	}
 	let socketOperation;
 	try {
-		socketOperation = new inputOutputModule.SocketOperation("certificate.pem", "key.pem", setting["home-server"], home-port["home-port"], macAddr);
+		socketOperation = new inputOutputModule.SocketOperation("certificate.pem", "key.pem", setting["home-server"], setting["home-port"], macAddr);
 	} catch (err) {
+		console.log(err);
 		createNotification("red-notification", "Không kết nối được đến máy chủ");
 		return;
 	}

@@ -9,15 +9,15 @@ function createWindow(){
 			webPreferences:
 			{
 				nodeIntegration: true,
-            	contextIsolation: false,
+				contextIsolation: false,
 			},
 			width: 1600,
 			height: 1000
 		}
 	);
 	mainWindow.loadURL(`file://${__dirname}/Mainpage.html`);
-	mainWindow.webContents.openDevTools();
-	mainWindow.on("closed",
+		// mainWindow.webContents.openDevTools();
+		mainWindow.on("closed",
 		function(){
 			mainWindow = null;
 			remote = null;
@@ -27,7 +27,7 @@ function createWindow(){
 
 electron.on("ready", createWindow);
 electron.on("window-all-closed",
-	function() {
-		electron.quit();
-	}
+function() {
+	electron.quit();
+}
 );
