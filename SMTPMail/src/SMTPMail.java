@@ -1,14 +1,14 @@
 import chain.smtp_mail.start_module.ChainStartModule;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 public class SMTPMail {
     public static void main(String[] args){
-        JsonObject startJson = new JsonObject();
-        startJson.addProperty("address", "localhost");
-        startJson.addProperty("port", 9999);
-        startJson.addProperty("keyStorePath","key.jks");
-        startJson.addProperty("keyStorePassword", "hungcom23");
-        startJson.addProperty("moduleName", "SMTPMail");
-        if (!new ChainStartModule(startJson).execute()) System.exit(-1);
+        if (args.length == 0){
+            System.err.println("Missing the argument");
+            return;
+        }
+        JsonObject information = new Gson().fromJson(args[0], JsonObject.class);
+        if (!new ChainStartModule(information).execute()) System.exit(2);
     }
 }

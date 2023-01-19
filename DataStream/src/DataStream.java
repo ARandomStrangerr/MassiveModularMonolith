@@ -1,19 +1,15 @@
 import chain.data_stream.start_module.ChainStartModule;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 public class DataStream {
     public static void main(String[] args) {
-        int port = 9999;
-        int timeout = 5000;
-        String keyStorePassword = "hungcom23";
-        String keyStorePath = "key.jks";
-        String moduleName = "DataStream";
-        JsonObject information = new JsonObject();
-        information.addProperty("port",port);
-        information.addProperty("timeout",timeout);
-        information.addProperty("keyStorePassword",keyStorePassword);
-        information.addProperty("keyStorePath",keyStorePath);
-        information.addProperty("moduleName", moduleName);
-        new ChainStartModule(information).execute();
+        Gson gson = new Gson();
+        if (args.length == 0) {
+            System.err.println("Missing the argument");
+            return;
+        }
+        JsonObject information = gson.fromJson(args[0], JsonObject.class);
+        if (!new ChainStartModule(information).execute()) System.exit(2);
     }
 }
