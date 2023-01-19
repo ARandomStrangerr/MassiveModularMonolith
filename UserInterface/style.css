@@ -42,9 +42,13 @@ table {
 	border-spacing: 0;
 }
 
+html{
+	height: 100%;
+}
 body{
 	padding: 2em;
 	font: 24px 'Roboto', sans-serif;
+	height: 100%;
 }
 h1{
 	display: inline;
@@ -116,6 +120,7 @@ img{
 
 .major-pane{
 	overflow-y: hidden;
+	height: 100%;
 }
 
 .dropdown {
@@ -156,22 +161,22 @@ img{
 }
 .tree-view li:before {
 	position: absolute;
-    content: '';
-    background-color: #666;
-    top: 2em;
-    left: 0;
-    width: 0.6em;
-    height: 0.05em;
+	content: '';
+	background-color: #666;
+	top: 2em;
+	left: 0;
+	width: 0.6em;
+	height: 0.05em;
 }
 .tree-view li:after {
 	position: absolute;
-    content: '';
+	content: '';
 	background-color: #666;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    width: 0.05em;
-    height: 100%;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	width: 0.05em;
+	height: 100%;
 }
 .tree-view li:hover{
 	background-color:#f7ebfd;
@@ -197,10 +202,10 @@ img{
 	overflow-y: scroll;
 	background-color: transparent;
 	width: 20em;
-	height: 10em;
+	max-height: 10em;
 	right: 1em;
 	bottom: 1em;
-	z-index: 0;
+	pointer-events: none;
 }
 .notification {
 	margin-top: 1em;
