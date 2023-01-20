@@ -22,6 +22,7 @@ class LinkSendToModule extends Link {
         if (toSocket == null) {
             System.err.println("No socket associated with the name: " + header.get("to").getAsString());
             chain.getProcessObject().addProperty("error", "Vui lòng liên lạc với công ty phầm mềm để được giải quyết");
+            chain.getProcessObject().getAsJsonObject().get("header").getAsJsonObject().addProperty("status", false);
             return false;
         }
         // write the message to the module
