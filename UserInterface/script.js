@@ -1,13 +1,25 @@
 const inputOutputModule = require("./InputOutputOperation.js");
 const textFileOperation = new inputOutputModule.TextFileOperation();
-const macAddr = require("os").networkInterfaces().wlp4s0[0].mac;
+const netInterfaces = require("os").networkInterfaces();
+
+let macAddr;
+for (let key in netInterfaces) {
+	let netInterface = netInterfaces[key];
+	for (let i of netInterface) {
+		if (i.mac!=="00:00:00:00:00:00") {
+			macAddr = i.mac;
+			break;
+		}
+	}
+	if (macAddr) break;
+}
 
 // startup actions
 let setting;
 try{
 	setting = JSON.parse(textFileOperation.read("./config.txt"));
-} catch (ignore) {
-
+} catch (err) {
+    setting = {};
 }
 // set setting fields
 for (let key in setting){
