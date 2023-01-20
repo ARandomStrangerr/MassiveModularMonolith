@@ -37,7 +37,7 @@ class SocketOperation {
 			cert: fileSystem.readFileSync(certificatePath)
 		};
 		// declare another variable due to JS prevent to use the private element of the class
-		let socket = tls.connect(port, option, function() {
+		let socket = tls.connect(port, address, option, function() {
 			socket.setEncoding("utf8");
 		});
 		const writeData = {
