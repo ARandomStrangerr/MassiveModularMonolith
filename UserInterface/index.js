@@ -29,5 +29,4 @@ electron.on("ready", createWindow);
 electron.on("window-all-closed",
 function() {
 	electron.quit();
-}
-);
+});
