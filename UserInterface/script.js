@@ -1,6 +1,7 @@
 const inputOutputModule = require("./InputOutputOperation.js");
 const textFileOperation = new inputOutputModule.TextFileOperation();
 const netInterfaces = require("os").networkInterfaces();
+const isWindows = require("os").platform() === "win32";
 
 let macAddr;
 for (let key in netInterfaces) {
@@ -19,7 +20,7 @@ let setting;
 try{
 	setting = JSON.parse(textFileOperation.read("./config.txt"));
 } catch (err) {
-    setting = {};
+	setting = {};
 }
 // set setting fields
 for (let key in setting){
@@ -159,8 +160,18 @@ const dropdowns = document.querySelectorAll(".dropdown");
 dropdowns.forEach(dropdown => {
 	const button = dropdown.querySelector(".button");
 	const floatDiv = dropdown.querySelector(".float-div");
-
 	button.addEventListener("click", () => {
+		floatDiv.classList.toggle("float-div-inactive");
+		button.classList.toggle("button-active");
+	});
+});
+
+// action for dropdown div click then hide
+const hideOnClick = document.querySelectorAll(".hide-on-click");
+hideOnClick.forEach(dropdown => {
+	const button = dropdown.querySelector(".button");
+	const floatDiv = dropdown.querySelector(".float-div");
+	floatDiv.addEventListener("click", () => {
 		floatDiv.classList.toggle("float-div-inactive");
 		button.classList.toggle("button-active");
 	});
@@ -181,18 +192,27 @@ addEmailExcel.addEventListener("click", () => {
 	fileInput.onchange = () => {
 		excelFileOperation.read(fileInput.files[0])
 		.then(function(rows){
+			let count = 0;
 			rows.forEach(row => {
 				let emailLi = addEmailSMTP(row[0]);
 				for (let i = 1; i < row.length; i++){
-					let fileObj = new File([textFileOperation.readBuffer(row[i])], row[i]);
+					let name;
+					if (isWindows) name = row[0].split("\\");
+					else name = row[i].split("/");
+					name = name[name.length-1];
+					let fileObj;
+					try {
+						fileObj= new File([textFileOperation.readBuffer(row[i])], name);
+					} catch (err) {
+						createNotification("red-notification", err);
+						continue;
+					}
 					addAttachmentSMTP(emailLi, fileObj);
+					count = count + 1;
 				}
 			});
-			createNotification("green-notification", `Thành công nhập vào ${rows.length} email`)
+			createNotification("green-notification", `Thành công nhập vào ${rows.length} email cùng với ${count} tệp tin đính kèm`)
 		})
-		.catch(function(err){
-			console.log(err);
-		});
 	}
 	fileInput.click();
 });

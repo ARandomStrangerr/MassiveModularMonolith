@@ -10,7 +10,7 @@
 	<title></title>
 </head>
 <body>
-	<div class="dropdown" id="menu"> <!-- selection pane menu -->
+	<div class="dropdown hide-on-click" id="menu"> <!-- selection pane menu -->
 		<a class="button"> <div></div><div></div><div></div> </a>
 		<div class="float-div float-div-inactive">
 			<div class="toggle-pane-button" id="smtp-mail">SMTP Mail</div>
@@ -20,7 +20,7 @@
 	<div class="major-pane float-div-inactive" id="smtp-mail-pane"> <!-- SMTP mail pane -->
 		<div class="header"> <!-- header -->
 			<h1>SMTP Mail</h1> <!-- pane title -->
-			<div class="dropdown"> <!-- drop down with button -->
+			<div class="dropdown"> <!-- config area -->
 				<a class="button config-button" id="smtp-setting-button"></a>
 				<div class="float-div float-div-right float-div-inactive" id="smtp-setting-div">
 					<div>
@@ -54,7 +54,7 @@
 				Danh sách hộp thư :
 				<div>
 					<a id="smtp-send-button" class="button"><img src="message.png"></a>
-					<div class="dropdown">
+					<div class="dropdown hide-on-click">
 						<a class="button green-button">+</a>
 						<div class="float-div float-div-right float-div-inactive">
 							<div id="add-email-button">Thêm một email</div>
