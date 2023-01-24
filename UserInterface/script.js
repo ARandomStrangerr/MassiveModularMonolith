@@ -251,9 +251,17 @@ sendSMTPMailButton.addEventListener("click", () => {
 		createNotification("red-notification", "Danh sách hộp thư nhận không có ai");
 		return;
 	}
+	let onData = function (data){
+		let returnData = JSON.parse(data);
+		if (returnData.error) {
+			createNotification("red-notification", returnData.error);
+		} else if (returnData.update) {
+			createNotification("green-notification", returnData.update);
+		}
+	}
 	let socketOperation;
 	try {
-		socketOperation = new inputOutputModule.SocketOperation("certificate.pem", "key.pem", setting["home-server"], setting["home-port"], macAddr);
+		socketOperation = new inputOutputModule.SocketOperation("certificate.pem", "key.pem", setting["home-server"], setting["home-port"], macAddr, onData);
 	} catch (err) {
 		console.log(err);
 		createNotification("red-notification", "Không kết nối được đến máy chủ");
@@ -283,15 +291,8 @@ sendSMTPMailButton.addEventListener("click", () => {
 			sendData["recipient"] = emailList.children[i].querySelector(".email").innerText;
 			socketOperation.write(JSON.stringify(sendData));
 		}
+		setTimeout(() => {
+			socketOperation.close();
+		},8000);
 	},0);
-	setTimeout(() => {
-		for (let i = 0; i < emailList.children.length; i++) {
-			let returnData = JSON.parse(socketOperation.read());
-			if (returnData.error) {
-				createNotification("red-notification", returnData.error);
-			} else if (returnData.update) {
-				createNotification("green-notification", returnData.update);
-			}
-		}
-	},8000);
 });
