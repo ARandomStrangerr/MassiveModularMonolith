@@ -197,7 +197,7 @@ addEmailExcel.addEventListener("click", () => {
 				let emailLi = addEmailSMTP(row[0]);
 				for (let i = 1; i < row.length; i++){
 					let name;
-					if (isWindows) name = row[0].split("\\");
+					if (isWindows) name = row[i].split("\\");
 					else name = row[i].split("/");
 					name = name[name.length-1];
 					let fileObj;
