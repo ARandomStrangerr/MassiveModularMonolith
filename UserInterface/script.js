@@ -202,11 +202,13 @@ addEmailExcel.addEventListener("click", () => {
 					name = name[name.length-1];
 					let fileObj;
 					try {
-						fileObj= new File([textFileOperation.readBuffer(row[i])], name);
+						fileObj = new File([textFileOperation.readBuffer(row[i])], name);
 					} catch (err) {
 						createNotification("red-notification", err);
 						continue;
 					}
+					fileObj.pathExtra = row[i];
+					console.log(fileObj);
 					addAttachmentSMTP(emailLi, fileObj);
 					count = count + 1;
 				}
@@ -223,6 +225,7 @@ sendSMTPMailButton.addEventListener("click", () => {
 	const emailList = document.querySelector("#email-list");
 	const subject = document.querySelector("#smtp-mail-subject").value;
 	const body = document.querySelector("#smtp-mail-body").value;
+	// check if the input information is enough
 	if (subject.trim() == "") {
 		createNotification("red-notification", "Tiêu đề của thư bị bỏ trống");
 		return;
@@ -251,6 +254,23 @@ sendSMTPMailButton.addEventListener("click", () => {
 		createNotification("red-notification", "Danh sách hộp thư nhận không có ai");
 		return;
 	}
+	// callback handle connection error
+	let onErr = function(err) {
+		let str = err.toString();
+		if (str.includes("ECONNREFUSED")) createNotification("red-notification", "Không kết nối được đến máy chủ");
+		else createNotification("red-notification", err);
+	}
+	// open socket to the server
+	let socketOperation;
+	try {
+		socketOperation = new inputOutputModule.SocketOperation("certificate.pem", "key.pem", setting["home-server"], setting["home-port"], macAddr, onErr);
+	} catch (err) {
+		console.log(err);
+		createNotification("red-notification", "Thông tin bảo mật bị thiếu");
+		return;
+	}
+	// set callback when input receive
+	let count = 0;
 	let onData = function (data){
 		let returnData = JSON.parse(data);
 		if (returnData.error) {
@@ -258,15 +278,11 @@ sendSMTPMailButton.addEventListener("click", () => {
 		} else if (returnData.update) {
 			createNotification("green-notification", returnData.update);
 		}
+		count=count+1;
+		if (count === emailList.children.length) socketOperation.close();
 	}
-	let socketOperation;
-	try {
-		socketOperation = new inputOutputModule.SocketOperation("certificate.pem", "key.pem", setting["home-server"], setting["home-port"], macAddr, onData);
-	} catch (err) {
-		console.log(err);
-		createNotification("red-notification", "Không kết nối được đến máy chủ");
-		return;
-	}
+	socketOperation.read(onData);
+	// send data
 	let sendData = {
 		job: "SMTPMail",
 		host: setting["smtp-server"],
@@ -284,15 +300,12 @@ sendSMTPMailButton.addEventListener("click", () => {
 				sendData["attachment"].push(
 					{
 						name: attachmentList.children[j].file.name,
-						blob: textFileOperation.readBase64(attachmentList.children[j].file.path)
+						blob: textFileOperation.readBase64(attachmentList.children[j].file.path === "" ? attachmentList.children[j].file.pathExtra : attachmentList.children[j].file.path)
 					}
 				);
 			}
 			sendData["recipient"] = emailList.children[i].querySelector(".email").innerText;
 			socketOperation.write(JSON.stringify(sendData));
 		}
-		setTimeout(() => {
-			socketOperation.close();
-		},8000);
 	},0);
 });

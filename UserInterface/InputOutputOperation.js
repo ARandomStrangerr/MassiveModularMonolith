@@ -27,7 +27,7 @@ class TextFileOperation {
 class SocketOperation {
 	#socket; // the socket itself
 
-	constructor (certificatePath, keyPath, address, port, macAddress, onData){
+	constructor (certificatePath, keyPath, address, port, macAddress, errHandler){
 		process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 		const fileSystem = require("fs");
 		const tls = require("tls");
@@ -42,11 +42,14 @@ class SocketOperation {
 		const writeData = {
 			macAddress: macAddress
 		};
+		socket.on("error", errHandler)
 		socket.write(`${JSON.stringify(writeData)}\n`);
-		// when data arrive , just push it into a list
-		socket.on("data", onData);
 		// set the local variables to this class private variables
 		this.#socket = socket;
+	}
+
+	read(callback) {
+		this.#socket.on("data", callback);
 	}
 
 	write(data){
