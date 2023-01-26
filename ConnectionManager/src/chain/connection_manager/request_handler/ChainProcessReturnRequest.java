@@ -7,5 +7,6 @@ public class ChainProcessReturnRequest extends Chain {
     public ChainProcessReturnRequest(JsonObject processObject) {
         super(processObject);
         chain.add(new LinkSendToClient(this));
+        chain.add(new LinkTerminateSocketFromClient(this));
     }
 }
