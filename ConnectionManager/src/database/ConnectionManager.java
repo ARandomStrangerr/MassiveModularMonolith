@@ -9,7 +9,7 @@ public class ConnectionManager extends ConnectionPool{
         super(url, poolSize);
     }
 
-    public boolean getLoginInfo(String macAddress, String job) throws SQLException {
+    public boolean getLoginInfo(String macAddress, String job) throws SQLException, InterruptedException {
         PrepareStatementInterface prepareStatementInterface = connection -> {
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM authentication WHERE (mac=? AND job=?)");
             statement.setString(1, macAddress.toUpperCase());
