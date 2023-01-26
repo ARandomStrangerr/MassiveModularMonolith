@@ -83,7 +83,7 @@ public class SocketWrapper {
     }
 
     // write the given string to the data stream
-    public void write(String data) throws IOException {
+    public synchronized void write(String data) throws IOException {
         bw.write(data);
         bw.newLine();
         bw.flush();
