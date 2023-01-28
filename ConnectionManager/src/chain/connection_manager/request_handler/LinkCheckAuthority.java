@@ -30,7 +30,7 @@ public class LinkCheckAuthority extends Link {
             body.addProperty("error", "Người dùng không được ủy quyền sử dụng phần mềm");
             chain.getProcessObject().add("body", body);
             chain.getProcessObject().get("header").getAsJsonObject().addProperty("status", false);
-            System.err.println(e.getMessage());
+            e.printStackTrace();
             return false;
         }
         return true;
