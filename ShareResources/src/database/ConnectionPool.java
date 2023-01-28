@@ -7,6 +7,7 @@ import java.util.NoSuchElementException;
 public abstract class ConnectionPool {
     private final LinkedList<Connection> connectionPool;
     private final LinkedList<ConnectionPool> queue;
+
     public ConnectionPool(String url, int poolSize) throws SQLException {
         connectionPool = new LinkedList<>();
         queue = new LinkedList<>();
@@ -36,15 +37,17 @@ public abstract class ConnectionPool {
         instead :
         0 connection -> a thread return connection ( 1 connection ) -> ? something happened here ( 0 connection )
         -> notify the next thread ( 0 connection ) -> the next thread claim the connection ( 0 connection ) ERROR !
+        one possible answer is to queue the line again if fail to retread a connection. which is implemented as follow.
+        however, I wish to do this one time only without this safe net.
          */
         while (true) {
-        if (connectionPool.size() == 0 || queue.size() != 0) {
-            queue.add(this);
-            wait();
-        }
+            if (connectionPool.size() == 0 || queue.size() != 0) {
+                queue.add(this);
+                wait();
+            }
             try {
                 return connectionPool.removeFirst();
-            } catch (NoSuchElementException e){
+            } catch (NoSuchElementException e) {
                 continue;
             }
         }
