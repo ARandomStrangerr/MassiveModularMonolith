@@ -2,6 +2,7 @@ const inputOutputModule = require("./InputOutputOperation.js");
 const textFileOperation = new inputOutputModule.TextFileOperation();
 const netInterfaces = require("os").networkInterfaces();
 const isWindows = require("os").platform() === "win32";
+let lock;
 
 let macAddr;
 for (let key in netInterfaces) {
@@ -38,6 +39,9 @@ function createNotification(cssClass, message){
 	notificationPane.classList.add(cssClass);
 	notificationPane.innerText = message;
 	notificationContainer.appendChild(notificationPane);
+	setTimeout(() => {
+		notificationPane.click();
+	},10000)
 }
 
 // add attachment to an email unordered list item
@@ -208,7 +212,6 @@ addEmailExcel.addEventListener("click", () => {
 						continue;
 					}
 					fileObj.pathExtra = row[i];
-					console.log(fileObj);
 					addAttachmentSMTP(emailLi, fileObj);
 					count = count + 1;
 				}
@@ -225,33 +228,43 @@ sendSMTPMailButton.addEventListener("click", () => {
 	const emailList = document.querySelector("#email-list");
 	const subject = document.querySelector("#smtp-mail-subject").value;
 	const body = document.querySelector("#smtp-mail-body").value;
+	let check;
+	if (lock){
+		createNotification("red-notification", `${lock} đang chạy, vui lòng đợi thao tác hoàn thành trước khi làm việc khác`);
+		return;
+	}
+	lock = "SMTP Mail";
 	// check if the input information is enough
 	if (subject.trim() == "") {
 		createNotification("red-notification", "Tiêu đề của thư bị bỏ trống");
-		return;
+		check = true;
 	}
 	if (body.trim() == "") {
 		createNotification("red-notification", "Nội dung thư bị bỏ trống");
-		return;
+		check = true;
 	}
 	if (setting["smtp-username"] == ""){
 		createNotification("red-notification", "Tên hộp thư bị bỏ trống");
-		return;
+		check = true;
 	}
 	if (setting["smtp-password"] == ""){
 		createNotification("red-notification", "Mật khẩu hộp thư bị bỏ trống");
-		return;
+		check = true;
 	}
 	if (setting["smtp-server"] == ""){
 		createNotification("red-notification", "Địa chỉ SMTP server bị bỏ trống");
-		return;
+		check = true;
 	}
 	if (setting["smtp-port"] == ""){
 		createNotification("red-notification", "Cổng SMTP server bị bỏ trống");
-		return;
+		check = true;
 	}
 	if (emailList.children.length == 0){
 		createNotification("red-notification", "Danh sách hộp thư nhận không có ai");
+		check = true;
+	}
+	if (check){
+		lock = null;
 		return;
 	}
 	// callback handle connection error
@@ -259,6 +272,7 @@ sendSMTPMailButton.addEventListener("click", () => {
 		let str = err.toString();
 		if (str.includes("ECONNREFUSED")) createNotification("red-notification", "Không kết nối được đến máy chủ");
 		else createNotification("red-notification", err);
+		lock = null;
 	}
 	// open socket to the server
 	let socketOperation;
@@ -267,6 +281,7 @@ sendSMTPMailButton.addEventListener("click", () => {
 	} catch (err) {
 		console.log(err);
 		createNotification("red-notification", "Thông tin bảo mật bị thiếu");
+		lock = null;
 		return;
 	}
 	// set callback when input receive
@@ -279,7 +294,11 @@ sendSMTPMailButton.addEventListener("click", () => {
 			createNotification("green-notification", returnData.update);
 		}
 		count=count+1;
-		if (count === emailList.children.length) socketOperation.close();
+		if (count === emailList.children.length) {
+			socketOperation.close();
+			createNotification("green-notification", `Thành coong gửi đi ${ emailList.children.length}`);
+			lock = null;
+		}
 	}
 	socketOperation.read(onData);
 	// send data

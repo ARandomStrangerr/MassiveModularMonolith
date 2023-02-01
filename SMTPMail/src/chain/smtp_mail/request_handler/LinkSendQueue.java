@@ -176,13 +176,13 @@ public class LinkSendQueue extends Link {
                     }
                 }
                 // send the mail
-//                try {
-//                    Transport.send(message);
-//                } catch (MessagingException e) {
-//                    sendUpdate(processObject, "error", e.getMessage());
-//                    e.printStackTrace();
-//                    continue;
-//                }
+                try {
+                    Transport.send(message);
+                } catch (MessagingException e) {
+                    sendUpdate(processObject, "error", e.getMessage());
+                    e.printStackTrace();
+                    continue;
+                }
                 // todo remove file after done using
                 System.out.printf("Success send mail to %s \n", body.getAsJsonObject().get("recipient").getAsString());
                 sendUpdate(processObject, "update", String.format("Thành công gởi thư đến địa chỉ %s", body.get("recipient").getAsString()));
