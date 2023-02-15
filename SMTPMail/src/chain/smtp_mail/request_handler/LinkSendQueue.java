@@ -183,6 +183,10 @@ public class LinkSendQueue extends Link {
                 try {
                     Transport.send(message);
                 } catch (MailConnectException e) {
+                    JsonObject copy = processObject.deepCopy();
+                    synchronized (queueTable){
+                        queueTable.get(emailAddress).add(copy);
+                    }
                     sendUpdate(processObject, "error", "Không kết nối được đến máy chủ Microsoft Outlook");
                     System.err.printf("ERROR: Cannot send to %s because cannot connect to %s\n", body.getAsJsonObject().get("recipient").getAsString(), body.getAsJsonObject().get("host").getAsString());
                     continue;
