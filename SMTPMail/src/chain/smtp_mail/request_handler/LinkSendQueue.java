@@ -4,6 +4,7 @@ import chain.Chain;
 import chain.Link;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.sun.mail.util.MailConnectException;
 import memorable.SMTPMail;
 
 import javax.mail.*;
@@ -102,6 +103,7 @@ public class LinkSendQueue extends Link {
                 });
                 // create mail header
                 MimeMessage message = new MimeMessage(session);
+                // set from
                 try {
                     message.setFrom(new InternetAddress(username)); // mail from whom
                 } catch (MessagingException e) {
@@ -110,6 +112,7 @@ public class LinkSendQueue extends Link {
                     e.printStackTrace();
                     continue;
                 }
+                // set recipient
                 try {
                     message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(body.getAsJsonObject().get("recipient").getAsString())); // set the recipient mail
                 } catch (NullPointerException e) {
@@ -121,6 +124,7 @@ public class LinkSendQueue extends Link {
                     e.printStackTrace();
                     continue;
                 }
+                // set subject
                 try {
                     message.setSubject(body.get("subject").getAsString()); // set subject of the mail
                 } catch (NullPointerException e) {
@@ -178,13 +182,17 @@ public class LinkSendQueue extends Link {
                 // send the mail
                 try {
                     Transport.send(message);
+                } catch (MailConnectException e) {
+                    sendUpdate(processObject, "error", "Không kết nối được đến máy chủ Microsoft Outlook");
+                    System.err.printf("ERROR: Cannot send to %s because cannot connect to %s\n", body.getAsJsonObject().get("recipient").getAsString(), body.getAsJsonObject().get("host").getAsString());
+                    continue;
                 } catch (MessagingException e) {
                     sendUpdate(processObject, "error", e.getMessage());
                     e.printStackTrace();
                     continue;
                 }
                 // todo remove file after done using
-                System.out.printf("Success send mail to %s \n", body.getAsJsonObject().get("recipient").getAsString());
+                System.out.printf("Success send mail to %s\n", body.getAsJsonObject().get("recipient").getAsString());
                 sendUpdate(processObject, "update", String.format("Thành công gởi thư đến địa chỉ %s", body.get("recipient").getAsString()));
             }
             synchronized (queueTable) {
