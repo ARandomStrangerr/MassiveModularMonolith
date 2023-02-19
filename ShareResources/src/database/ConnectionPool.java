@@ -19,7 +19,9 @@ public abstract class ConnectionPool {
     protected ResultSet executePreparedStatement(PrepareStatementInterface prepareStatementInterface) throws SQLException, InterruptedException {
         // remove a connection from the pool
         Connection con = getConnection();
+        // create prepared statement
         PreparedStatement preparedStatement = prepareStatementInterface.executeStatement(con);
+        // execute the prepared statement
         ResultSet result = preparedStatement.executeQuery();
         // return the connection to the pool
         returnConnection(con);
