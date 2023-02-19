@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ConnectionManager/ConnectionManager.iml" filepath="$PROJECT_DIR$/ConnectionManager/ConnectionManager.iml" />
       <module fileurl="file://$PROJECT_DIR$/DataStream/DataStream.iml" filepath="$PROJECT_DIR$/DataStream/DataStream.iml" />
+      <module fileurl="file://$PROJECT_DIR$/GMail/GMail.iml" filepath="$PROJECT_DIR$/GMail/GMail.iml" />
       <module fileurl="file://$PROJECT_DIR$/MassiveModularMonolith.iml" filepath="$PROJECT_DIR$/MassiveModularMonolith.iml" />
       <module fileurl="file://$PROJECT_DIR$/SMTPMail/SMTPMail.iml" filepath="$PROJECT_DIR$/SMTPMail/SMTPMail.iml" />
       <module fileurl="file://$PROJECT_DIR$/ShareResources/ShareResources.iml" filepath="$PROJECT_DIR$/ShareResources/ShareResources.iml" />
