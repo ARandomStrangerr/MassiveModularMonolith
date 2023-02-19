@@ -20,6 +20,10 @@ class LinkFormatRequest extends Link {
             System.err.println("cannot find the 'to' filed on the header");
             return false;
         }
+        if (!chain.getProcessObject().get("header").getAsJsonObject().has("clientId")){
+            System.err.println("cannot find the 'clientId' field on the header");
+            return false;
+        }
         if (!chain.getProcessObject().get("header").getAsJsonObject().has("status")) {
             System.err.println("cannot find the 'status' on the header");
             return false;
