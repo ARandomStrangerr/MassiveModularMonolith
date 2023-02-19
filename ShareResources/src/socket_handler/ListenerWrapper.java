@@ -92,4 +92,8 @@ public class ListenerWrapper {
     public SocketWrapper removeSocket(String key){
         return socketStorage.remove(key);
     }
+
+    public int getPort() {
+        return serverSocket.getLocalPort();
+    }
 }
