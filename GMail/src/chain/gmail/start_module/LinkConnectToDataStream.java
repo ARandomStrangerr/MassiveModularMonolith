@@ -4,7 +4,7 @@ import chain.Chain;
 import chain.Link;
 import memorable.GMail;
 import socket_handler.SocketWrapper;
-import socket_manager.gmail.SocketHandler;
+import socket_handler.gmail.SocketHandler;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;

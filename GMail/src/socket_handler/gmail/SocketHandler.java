@@ -1,4 +1,4 @@
-package socket_manager.gmail;
+package socket_handler.gmail;
 
 import chain.Chain;
 import com.google.gson.JsonObject;
