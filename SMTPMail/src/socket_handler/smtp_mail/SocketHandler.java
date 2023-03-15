@@ -23,11 +23,13 @@ public class SocketHandler extends socket_handler.SocketHandler {
             e.printStackTrace();
             return false;
         }
+        socket.setName("DataStream");
         return true;
     }
 
     @Override
     public void cleanup() {
+        System.exit(1);
     }
 
     @Override
