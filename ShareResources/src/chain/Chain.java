@@ -2,10 +2,11 @@ package chain;
 
 import com.google.gson.JsonObject;
 
+import java.util.Collections;
 import java.util.LinkedList;
 
 public class Chain {
-    protected final LinkedList<Link> chain;
+    private final LinkedList<Link> chain;
     private boolean endEarly;
     private final JsonObject processObject;
 
@@ -44,5 +45,13 @@ public class Chain {
      */
     public JsonObject getProcessObject() {
         return processObject;
+    }
+
+    /**
+     * add links into the chain
+     * @param links the list of links
+     */
+    public void addLink(Link... links){
+        Collections.addAll(this.chain, links);
     }
 }

@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 public class ChainHandleFailure extends Chain {
     public ChainHandleFailure(JsonObject processObject) {
         super(processObject);
-        chain.add(new LinkFormatMessage(this));
-        chain.add(new LinkSendToDataStream(this));
+        addLink(new LinkFormatMessage(this),
+            new LinkSendToDataStream(this));
     }
 }

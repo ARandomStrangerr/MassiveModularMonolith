@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 public class ChainProcessReturnRequest extends Chain {
     public ChainProcessReturnRequest(JsonObject processObject) {
         super(processObject);
-        chain.add(new LinkSendToClient(this));
-        chain.add(new LinkTerminateSocketFromClient(this));
+        addLink(new LinkSendToClient(this),
+            new LinkTerminateSocketFromClient(this));
     }
 }

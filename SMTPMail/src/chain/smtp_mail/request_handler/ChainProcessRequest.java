@@ -6,6 +6,6 @@ import com.google.gson.JsonObject;
 public class ChainProcessRequest extends Chain {
     public ChainProcessRequest(JsonObject processObject) {
         super(processObject);
-        chain.add(new LinkSendQueue(this));
+        addLink(new LinkSendQueue(this));
     }
 }
