@@ -1,0 +1,128 @@
+/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+body{
+	box-sizing: border-box;
+	width: 90vw;
+	height: 100vh;
+  font-size: 20px;
+	padding: 20px;
+	background-color: #f8f9fa;
+}
+ul {
+	margin-top: 1em;
+}
+ul > li{
+	border-top: 2px;
+	border-color: #e9ecef;
+	border-style: solid;
+	position: relative;
+	padding: 1em 2em 1em 2em;
+	transition: 0.4s
+}
+ul > li:hover{
+	background-color: #e9ecef;
+}
+ul > .title-with-expandable > div:first-child{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+ul > .title-with-expandable > div:first-child > div:nth-child(1){
+	width: 14em;
+}
+ul > .title-with-expandable > div:first-child > div:nth-child(2){
+	color: #52b788;
+}
+ul > .title-with-expandable > div:first-child > div:nth-child(3){
+	color: #ee6055;
+}
+ul > .dot:before{
+	position: absolute;
+	top:1.25em;
+	left:1em;
+	content: "";
+	width: .5em;
+	height: .5em;
+	border-radius: 50%;
+}
+ul > .valid-dot::before{
+	background-color: #52b788;
+}
+ul > .pending-dot::before{
+	background-color: #ffd97d;
+}
+ul > .invalid-dot::before{
+	background-color: #ee6055;
+}
+.deck{
+	padding: 20px;
+	background-color: white;
+	box-shadow: 1px 1px 10px #8c8c8c;
+	border-radius: 10px;
+	margin-top: 1em;
+	height: 44vh;
+}
+.button{
+	border-radius:4px;
+	border-width: 2px;
+	border-color: #e9ecef;
+	border-style: solid;
+	min-width: 1em;
+	min-height: 1em;
+}
+.button-green{
+	border-color:#52b788;
+}
+.button-red{
+	border-color: #ee6055;
+}
+#data-stream-module-monitor-page{
+	padding: 1em;
+	box-sizing: border-box;
+}

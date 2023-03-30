@@ -1,0 +1,22 @@
+{
+  "name": "server_user_interface",
+  "version": "0.0.1",
+  "description": "user interface for easier useage of the program",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ARandomStrangerr/MassiveModularMonolith.git"
+  },
+  "author": "T",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ARandomStrangerr/MassiveModularMonolith/issues"
+  },
+  "homepage": "https://github.com/ARandomStrangerr/MassiveModularMonolith#readme",
+  "dependencies": {
+    "electron": "^23.2.0"
+  }
+}

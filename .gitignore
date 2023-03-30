@@ -1,7 +1,8 @@
 # Project exclude paths
 *.iml
 /out/
-/UserInterface/node_modules
+UserInterface/node_modules
+ServerUserInterface/node_modules
 *.pem
 *.txt
 *.jks

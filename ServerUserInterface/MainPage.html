@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="master.css">
+    <title>Server Messaging User Interface</title>
+  </head>
+  <body>
+    <div id="data-stream-module-monitor-page">
+      <h1>Data Stream Module</h1>
+      <div class="deck" id="data-stream-module-log">
+         <h2>Ghi chép</h2>
+         <ul>
+           <li class="dot valid-dot">
+             Valid requet
+           </li>
+           <li class="dot pending-dot">
+             Pending request
+           </li>
+           <li class="dot invalid-dot">
+             Invalid request
+           </li>
+         </ul>
+      </div>
+      <div class="deck" id="data-stream-module-connection">
+        <h2>Danh sách dịch vụ đang hoạt động</h2>
+        <ul>
+          <li class="dot valid-dot title-with-expandable">
+            <div>
+              <div class="">
+                MailSMTP
+              </div>
+              <div>
+                26 Requests
+              </div>
+              <div>
+                10 Requests
+              </div>
+              <div class="button button-red"></div>
+            </div>
+          </li>
+          <li class="dot invalid-dot title-with-expandable">
+            <div>
+              <div class="">
+                PublicFinance
+              </div>
+              <div>
+                27 Requests
+              </div>
+              <div>
+                8 Requests
+              </div>
+              <div class="button button-red"></div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>
