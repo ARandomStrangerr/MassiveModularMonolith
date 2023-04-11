@@ -1,4 +1,4 @@
-package socket_manager.gmail;
+package socket_handler.gmail;
 
 import socket_handler.ListenerWrapper;
 import socket_handler.SocketWrapper;
