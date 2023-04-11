@@ -1,6 +1,6 @@
 /* http://meyerweb.com/eric/tools/css/reset/
-   v2.0 | 20110126
-   License: none (public domain)
+v2.0 | 20110126
+License: none (public domain)
 */
 
 html, body, div, span, applet, object, iframe,
@@ -42,6 +42,7 @@ q:before, q:after {
 	content: '';
 	content: none;
 }
+actual
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
@@ -50,12 +51,14 @@ body{
 	box-sizing: border-box;
 	width: 90vw;
 	height: 100vh;
-  font-size: 20px;
+	font-size: 20px;
 	padding: 20px;
 	background-color: #f8f9fa;
 }
 ul {
 	margin-top: 1em;
+	max-height: 20em;
+	overflow-y: scroll;
 }
 ul > li{
 	border-top: 2px;
@@ -67,20 +70,6 @@ ul > li{
 }
 ul > li:hover{
 	background-color: #e9ecef;
-}
-ul > .title-with-expandable > div:first-child{
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-}
-ul > .title-with-expandable > div:first-child > div:nth-child(1){
-	width: 14em;
-}
-ul > .title-with-expandable > div:first-child > div:nth-child(2){
-	color: #52b788;
-}
-ul > .title-with-expandable > div:first-child > div:nth-child(3){
-	color: #ee6055;
 }
 ul > .dot:before{
 	position: absolute;
@@ -106,7 +95,22 @@ ul > .invalid-dot::before{
 	box-shadow: 1px 1px 10px #8c8c8c;
 	border-radius: 10px;
 	margin-top: 1em;
-	height: 44vh;
+	max-height: 44vh;
+}
+.title-with-expandable > div:first-child{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+.title-with-expandable > div:first-child > div:nth-child(1){
+	width: 20em;
+}
+.title-with-expandable > div:last-child{
+	overflow-y: hidden;
+	transition: height .4s;
+}
+.collapse{
+	height:0px;
 }
 .button{
 	border-radius:4px;

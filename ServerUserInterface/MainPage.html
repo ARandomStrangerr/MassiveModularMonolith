@@ -1,60 +1,77 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="master.css">
-    <title>Server Messaging User Interface</title>
-  </head>
-  <body>
-    <div id="data-stream-module-monitor-page">
-      <h1>Data Stream Module</h1>
-      <div class="deck" id="data-stream-module-log">
-         <h2>Ghi chép</h2>
-         <ul>
-           <li class="dot valid-dot">
-             Valid requet
-           </li>
-           <li class="dot pending-dot">
-             Pending request
-           </li>
-           <li class="dot invalid-dot">
-             Invalid request
-           </li>
-         </ul>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="master.css">
+  <title>Server Messaging User Interface</title>
+</head>
+<body>
+  <div id="data-stream-module-monitor-page">
+    <h1>Data Stream Module</h1>
+    <div class="deck title-with-expandable" id="data-stream-module-setting">
+      <div>
+        <div>
+          <h2>Cài Đặt</h2>
+        </div>
+        <i class="button button-green" id="start-data-stream-module-button"></i>
+        <i class="button expand-button"></i>
       </div>
-      <div class="deck" id="data-stream-module-connection">
-        <h2>Danh sách dịch vụ đang hoạt động</h2>
+      <div>
+        <input type="text" placeholder="Địa điểm tệp tin khởi động" id="data-stream-module-classpath-input" class="file-input">
+        <input type="number" placeholder="Cổng hoạt động" id="data-stream-module-port-input">
+        <input type="text" placeholder="Địa điểm tệp tin JKS" id="data-stream-module-jks-input" class="file-input">
+        <input type="text" placeholder="Mật khẩu tệp tin JKS" id="data-stream-module-jks-password-input">
+        <input type="number" placeholder="Thời gian ngắt kết nối với máy con chưa ủy quyền" id="data-stream-module-timeout-input">
+      </div>
+    </div>
+    <div class="deck title-with-expandable" id="data-stream-module-log">
+      <div>
+        <div>
+          <h2>Ghi chép</h2>
+        </div>
+        <i class="button expand-button"></i>
+      </div>
+      <div>
         <ul>
-          <li class="dot valid-dot title-with-expandable">
+          <li class="dot valid-dot">
+            Valid requet
+          </li>
+          <li class="dot pending-dot">
+            Pending request
+          </li>
+          <li class="dot invalid-dot">
+            Invalid request
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="deck title-with-expandable" id="data-stream-module-connection">
+      <div>
+        <div>
+          <h2>Danh sách dịch vụ đang hoạt động</h2>
+        </div>
+        <i class="button expand-button"></i>
+      </div>
+      <div>
+        <ul>
+          <li class="dot valid-dot">
             <div>
               <div class="">
                 MailSMTP
               </div>
-              <div>
-                26 Requests
-              </div>
-              <div>
-                10 Requests
-              </div>
-              <div class="button button-red"></div>
             </div>
           </li>
-          <li class="dot invalid-dot title-with-expandable">
+          <li class="dot invalid-dot">
             <div>
-              <div class="">
+              <div>
                 PublicFinance
               </div>
-              <div>
-                27 Requests
-              </div>
-              <div>
-                8 Requests
-              </div>
-              <div class="button button-red"></div>
             </div>
           </li>
         </ul>
       </div>
     </div>
-  </body>
+  </div>
+</body>
 </html>
+<script type="text/javascript" src="./script/script.js"></script>
