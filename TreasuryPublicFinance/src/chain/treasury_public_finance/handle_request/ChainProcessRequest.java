@@ -7,5 +7,6 @@ public class ChainProcessRequest extends Chain {
     public ChainProcessRequest(JsonObject processObject) {
         super(processObject);
         addLink(new LinkLogin(this));
+//        addLink(new LinkLengthenChain(this));
     }
 }

@@ -9,6 +9,7 @@ import memorable.DataStream;
 import socket_handler.ListenerWrapper;
 import socket_handler.SocketHandler;
 import socket_handler.SocketWrapper;
+import system_monitor.MonitorHandler;
 
 import javax.net.ssl.SSLException;
 import java.io.IOException;
@@ -77,14 +78,14 @@ public class ListenerHandler extends socket_handler.ListenerHandler {
                 // set the name for the socket
                 socket.setName(authenticateJson.get("moduleName").getAsString());
                 // print out the socket accepted
-                System.out.printf("Accepted a socket from module with name of %s\n",socket.getName());
+                MonitorHandler.addQueue("SUCCESS accepted a socket from module with name of " + socket.getName());
                 return true;
             }
 
             public void cleanup(){
                 if (socket.getName() != null) {
-                    System.out.printf("Socket from module with name of %s disconnected\n",socket.getName());
                     DataStream.getInstance().getListener().removeSocket(socket.getName());
+                    MonitorHandler.addQueue("SUCCESS instance socket from module with name of " + socket.getName() + " is closed and removed");
                 }
             }
         };

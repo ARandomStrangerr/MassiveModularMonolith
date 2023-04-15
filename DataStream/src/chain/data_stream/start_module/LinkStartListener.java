@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import memorable.DataStream;
 import socket_handler.data_stream.ListenerHandler;
 import socket_handler.ListenerWrapper;
+import system_monitor.MonitorHandler;
 
 import java.io.IOException;
 import java.security.KeyManagementException;
@@ -32,7 +33,7 @@ class LinkStartListener extends Link {
         }
         new Thread(new ListenerHandler(listener, processObject.get("timeout").getAsInt())).start();
         DataStream.getInstance().setListener(listener);
-        System.out.println("A TLS socket is running at port " + processObject.get("port").getAsString());
+        MonitorHandler.addQueue("SUCCESS open a TLS socket at port " + processObject.get("port").getAsString());
         return true;
     }
 }

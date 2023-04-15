@@ -22,6 +22,7 @@ public class LinkLogin extends Link {
         sendObject.add("ComputerIP", bodyObject.get("ip"));
         sendObject.add("ComputerName", bodyObject.get("comName"));
         sendObject.add("Description", bodyObject.get("desc"));
+        System.out.println(sendObject);
         try{
             System.out.println(RESTRequest.untrustPost(Route.LOGIN.route(),sendObject.toString(), null));
         } catch (IOException e){
