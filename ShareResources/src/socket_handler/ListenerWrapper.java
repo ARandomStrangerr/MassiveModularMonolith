@@ -96,4 +96,8 @@ public class ListenerWrapper {
     public int getPort() {
         return serverSocket.getLocalPort();
     }
+
+    public void close() throws IOException {
+        serverSocket.close();
+    }
 }
