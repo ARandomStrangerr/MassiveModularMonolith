@@ -3,8 +3,11 @@ package chain.data_stream.start_module;
 import chain.Chain;
 import chain.Link;
 import com.google.gson.JsonObject;
+import socket_handler.ListenerWrapper;
+import socket_handler.SocketWrapper;
 import system_monitor.MonitorHandler;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -15,7 +18,19 @@ public class LinkStartSystemMonitor extends Link {
 
     @Override
     public boolean execute() {
-        new Thread(new MonitorHandler(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) + ".txt")).start();
+        if (chain.getProcessObject().has("monitorToolPort")){
+            SocketWrapper socket;
+            try {
+                ListenerWrapper listener = new ListenerWrapper(chain.getProcessObject().get("monitorToolPort").getAsInt());
+                socket = listener.accept();
+                listener.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+            new Thread(new MonitorHandler(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) + ".txt", socket)).start();
+        }
+        else new Thread(new MonitorHandler(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) + ".txt")).start();
         JsonObject monitorObject = new JsonObject();
         monitorObject.addProperty("status", "SUCCESS");
         monitorObject.addProperty("notification", "start thread for monitoring tool");
