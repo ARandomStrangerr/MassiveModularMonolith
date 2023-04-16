@@ -14,22 +14,27 @@ class LinkFormatRequest extends Link {
     @Override
     public boolean execute() {
         // set header.from field
-        chain.getProcessObject().get("header").getAsJsonObject().addProperty("from", fromModuleName);
+        try{
+            chain.getProcessObject().get("header").getAsJsonObject().addProperty("from", fromModuleName);
+        } catch (NullPointerException e){
+            chain.getProcessObject().addProperty("notification", "request missing header");
+            return false;
+        }
         // check the parameters on the header
         if (!chain.getProcessObject().get("header").getAsJsonObject().has("to")) {
-            System.err.println("cannot find the 'to' filed on the header");
+            chain.getProcessObject().addProperty("notification",  "cannot find the 'to' filed on the header");
             return false;
         }
         if (!chain.getProcessObject().get("header").getAsJsonObject().has("clientId")){
-            System.err.println("cannot find the 'clientId' field on the header");
+            chain.getProcessObject().addProperty("notification",  "cannot find the 'clientId' field on the header");
             return false;
         }
         if (!chain.getProcessObject().get("header").getAsJsonObject().has("status")) {
-            System.err.println("cannot find the 'status' on the header");
+            chain.getProcessObject().addProperty("notification",  "cannot find the 'status' on the header");
             return false;
         }
         if (!chain.getProcessObject().has("body")) {
-            System.err.println("the body of the request does not exists");
+            chain.getProcessObject().addProperty("notification",  "the body of the request does not exists");
             return false;
         }
         return true;

@@ -78,14 +78,20 @@ public class ListenerHandler extends socket_handler.ListenerHandler {
                 // set the name for the socket
                 socket.setName(authenticateJson.get("moduleName").getAsString());
                 // print out the socket accepted
-                MonitorHandler.addQueue("SUCCESS accepted a socket from module with name of " + socket.getName());
+                JsonObject monitorObject = new JsonObject();
+                monitorObject.addProperty("status", "SUCCESS");
+                monitorObject.addProperty("notification", "accepted a socket from module with name of " + socket.getName());
+                MonitorHandler.addQueue(monitorObject);
                 return true;
             }
 
             public void cleanup(){
                 if (socket.getName() != null) {
                     DataStream.getInstance().getListener().removeSocket(socket.getName());
-                    MonitorHandler.addQueue("SUCCESS instance socket from module with name of " + socket.getName() + " is closed and removed");
+                    JsonObject monitorObject = new JsonObject();
+                    monitorObject.addProperty("status", "SUCCESS");
+                    monitorObject.addProperty("notification", "instance socket from module with name of " + socket.getName() + " is closed and removed");
+                    MonitorHandler.addQueue(monitorObject);
                 }
             }
         };

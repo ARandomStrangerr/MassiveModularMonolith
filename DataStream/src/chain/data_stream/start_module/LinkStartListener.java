@@ -33,7 +33,10 @@ class LinkStartListener extends Link {
         }
         new Thread(new ListenerHandler(listener, processObject.get("timeout").getAsInt())).start();
         DataStream.getInstance().setListener(listener);
-        MonitorHandler.addQueue("SUCCESS open a TLS socket at port " + processObject.get("port").getAsString());
+        JsonObject monitorObject = new JsonObject();
+        monitorObject.addProperty("status", "SUCCESS");
+        monitorObject.addProperty("notification", "open a TLS socket at port " + processObject.get("port").getAsString());
+        MonitorHandler.addQueue(monitorObject);
         return true;
     }
 }

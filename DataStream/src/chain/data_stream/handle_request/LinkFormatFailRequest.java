@@ -12,12 +12,18 @@ public class LinkFormatFailRequest extends Link {
 
     @Override
     public boolean execute() {
-        JsonObject newBody = new JsonObject(),
-            header = chain.getProcessObject().get("header").getAsJsonObject();
-        newBody.add("error", chain.getProcessObject().remove("error"));
-        chain.getProcessObject().add("body", newBody);
-        header.add("to", header.remove("from"));
-        header.addProperty("from", DataStream.getInstance().getModuleName());
+        try {
+            JsonObject newBody = new JsonObject(),
+                header = chain.getProcessObject().get("header").getAsJsonObject();
+            // remove the entire body then change it with the error message
+            newBody.add("error", chain.getProcessObject().remove("error"));
+            chain.getProcessObject().add("body", newBody);
+            // swap from and to field;
+            header.add("to", header.remove("from"));
+            header.addProperty("from", DataStream.getInstance().getModuleName());
+        } catch (Exception e){
+            chain.endEarly();
+        }
         return true;
     }
 }
