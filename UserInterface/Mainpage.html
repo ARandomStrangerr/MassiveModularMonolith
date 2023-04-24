@@ -14,6 +14,7 @@
 		<a class="button"> <div></div><div></div><div></div> </a>
 		<div class="float-div float-div-inactive">
 			<div class="toggle-pane-button" id="smtp-mail">SMTP Mail</div>
+			<div class="toggle-pane-button" id="public-finance">Tài Chính Công</div>
 			<div class="toggle-pane-button" id="setting">Cài đặt</div>
 		</div>
 	</div>
@@ -49,7 +50,7 @@
 			Nội dung thư
 			<textarea id="smtp-mail-body"></textarea>
 		</div>
-		<div class="tree-view"> <!-- mail list -->
+		<div> <!-- mail list -->
 			<div class="header">
 				Danh sách hộp thư :
 				<div>
@@ -63,7 +64,54 @@
 					</div>
 				</div>
 			</div>
-			<ul id="email-list">
+			<ul class="tree-view" id="email-list">
+			</ul>
+		</div>
+	</div>
+	<div class="major-pane float-div-inactive" id="public-finance-pane"> <!-- public finance pane -->
+		<div class="header"> <!-- header -->
+			<h1>Dịch Vụ Tài chính Công</h1> <!-- title pane -->
+			<div class="dropdown"> <!-- config area -->
+				<a class="button config-button" id="public-finance-setting-button"></a>
+				<div class="float-div float-div-right float-div-inactive" id="public-finance-setting-div">
+					<div>
+						Tên người dùng<br>
+						<input class="setting-input" id="public-finance-username">
+					</div>
+					<div>
+						Mật khẩu<br>
+						<input class="setting-input" id="public-finance-password">
+					</div>
+					<div>
+						Mã quan hệ ngân sách<br>
+						<input class="setting-input" id="public-finance-budeget-code">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="three-view"> <!-- body -->
+			<div class="header">
+				Danh Sách Thông Tin
+				<div class="dropdown hide-on-click">
+					<a class="button green-button">+</a>
+					<div class="float-div float-div-right float-div-inactive">
+						<div id="public-finance-form-1">Mẫu Chứng Từ 16a1 (C2-02a/NS)</div>
+						<div id="public-finance-form-2">Mẫu Chứng Từ 16a2 (C2-02b/NS)</div>
+						<div id="public-finance-form-3">Hạch Toán 16a1 (C2-02a/NS) hoặc 16a2 (C2-02b/NS)</div>
+						<div id="from16c1">Mẫu Chứng Từ 16c1 (C4-02a/KB)</div>
+						<div id="form16c3">Mẫu Chứng Từ 16c3 (C4-02c/KB)</div>
+						<div id="">Hạch Toán 16c1 (C4-02a/KB)</div>
+						<div id="">Hạch Toán 16c3 (C4-02c/KB)</div>
+						<div id="formm01">Bảng Kê 07 (M01)</div>
+						<div id="">Chi Tiết bản kê 07 (M01)</div>
+						<div id="form05a">Mẫu Chứng Từ 05a (C2-03/NS)</div>
+						<div id="">Hạch Toán 05a (C2-03/NS)</div>
+						<div id="form06">Mẫu Chứng Từ 06 (C2-05a/NS)</div>
+						<div id="">Hạch Toán 06 (C2-05a/NS)</div>
+					</div>
+				</div>
+			</div>
+			<ul class="tree-view" id="public-finance-list">
 			</ul>
 		</div>
 	</div>
@@ -78,4 +126,4 @@
 	</div>
 </body>
 </html>
-<script type="text/javascript" src="script.js"></script>
+<script type="text/javascript" src="./script/Script.js"></script>

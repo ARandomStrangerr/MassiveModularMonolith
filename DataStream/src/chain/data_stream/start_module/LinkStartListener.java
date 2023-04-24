@@ -28,7 +28,10 @@ class LinkStartListener extends Link {
             listener = new ListenerWrapper(processObject.get("port").getAsInt(), processObject.get("keyStorePath").getAsString(), processObject.get("keyStorePassword").getAsString());
         } catch (IOException | KeyStoreException | NoSuchAlgorithmException | CertificateException |
                  UnrecoverableKeyException | KeyManagementException e) {
-            e.printStackTrace();
+            JsonObject monitorObject = new JsonObject();
+            monitorObject.addProperty("status", "FAILURE");
+            monitorObject.addProperty("notification", e.getMessage());
+            MonitorHandler.addQueue(monitorObject);
             return false;
         }
         new Thread(new ListenerHandler(listener, processObject.get("timeout").getAsInt())).start();

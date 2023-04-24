@@ -2,6 +2,7 @@ const inputOutputModule = require("./InputOutputOperation.js");
 const textFileOperation = new inputOutputModule.TextFileOperation();
 const netInterfaces = require("os").networkInterfaces();
 const isWindows = require("os").platform() === "win32";
+const publicFinance = new (require("./script/PublicFinance.js"))();
 let lock;
 
 let macAddr;
@@ -103,7 +104,7 @@ function addEmailSMTP(mailName){
 	deleteButton.innerText = "-";
 	deleteButton.classList.add("button");
 	deleteButton.classList.add("red-button");
-	deleteButton.addEventListener("click", () => {
+	deleteBuconst tton.addEventListener("click", () => {
 		emailList.removeChild(emailLi);
 	});
 	editButton.classList.add("button");

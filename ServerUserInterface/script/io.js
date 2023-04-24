@@ -1,12 +1,35 @@
-const exec = require("child_process");
+class Socket{
+  #socket;
+  constructor(serverAddress, port){
+    let socket = require("net");
+    this.#socket = socket.connect(port, serverAddress,() => {
+      this.#socket.setEncoding("utf-8");
+    });
+  }
 
-exec.exec("ls", (err, stdout, stderr) => {
-  if (err){
-    console.log(err);
-    return;
+  setOnDataReceive(callback){
+    this.#socket.on("data",callback);
   }
-  if (stderr){
-    console.log(stderr);
+}
+
+class TextFile{
+  #fileSystem;
+  constructor(){
+    this.#fileSystem = require("fs");
   }
-  console.log(stdout);
-})
+
+  writeToFile(path, data){
+    this.#fileSystem.writeFile(path, data, function (error) {
+			if (error) console.log(error);
+		});
+  }
+
+  readFromFile(path){
+    return this.#fileSystem.readFileSync(path, "utf8");
+  }
+}
+
+module.exports = {
+  Socket: Socket,
+  TextFile: TextFile
+};

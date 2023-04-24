@@ -135,16 +135,19 @@ img{
 	box-shadow: 0.5em 0.5em 1em #D099E3;
 	z-index: 10;
 }
+.float-div > div {
+	padding: 0.5em;
+}
 .float-div-right{
 	right: 0em;
+}
+.float-div-right > div{
+	min-width: 10em;
 }
 .float-div-inactive {
 	height: 0px;
 	padding: 0px;
 	overflow-y:hidden;
-}
-.float-div div {
-	padding: 0.5em;
 }
 
 .tree-view ul {

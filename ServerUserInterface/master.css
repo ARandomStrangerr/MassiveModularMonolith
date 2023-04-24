@@ -42,7 +42,7 @@ q:before, q:after {
 	content: '';
 	content: none;
 }
-actual
+/* actual */
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
@@ -88,6 +88,11 @@ ul > .pending-dot::before{
 }
 ul > .invalid-dot::before{
 	background-color: #ee6055;
+}
+input {
+	font-size: 20px;
+	padding:0.5em;
+	margin: 0.5em;
 }
 .deck{
 	padding: 20px;
