@@ -79,7 +79,7 @@ public class ListenerHandler extends socket_handler.ListenerHandler {
                 socket.setName(authenticateJson.get("moduleName").getAsString());
                 // print out the socket accepted
                 JsonObject monitorObject = new JsonObject();
-                monitorObject.addProperty("status", "SUCCESS");
+                monitorObject.addProperty("status", true);
                 monitorObject.addProperty("notification", "accepted a socket from module with name of " + socket.getName());
                 MonitorHandler.addQueue(monitorObject);
                 return true;
@@ -89,7 +89,7 @@ public class ListenerHandler extends socket_handler.ListenerHandler {
                 if (socket.getName() != null) {
                     DataStream.getInstance().getListener().removeSocket(socket.getName());
                     JsonObject monitorObject = new JsonObject();
-                    monitorObject.addProperty("status", "SUCCESS");
+                    monitorObject.addProperty("status", true);
                     monitorObject.addProperty("notification", "instance socket from module with name of " + socket.getName() + " is closed and removed");
                     MonitorHandler.addQueue(monitorObject);
                 }

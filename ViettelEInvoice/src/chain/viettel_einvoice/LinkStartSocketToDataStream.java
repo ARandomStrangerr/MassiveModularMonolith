@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import memorable.ViettelEInvoice;
 import socket_hander.viettel_einvoice.SocketHandler;
 import socket_handler.SocketWrapper;
+import system_monitor.MonitorHandler;
 
 import java.net.InetAddress;
 
@@ -30,8 +31,9 @@ public class LinkStartSocketToDataStream extends Link {
             return false;
         }
         JsonObject monitorObject = new JsonObject();
-        monitorObject.addProperty("status", "SUCCESS");
+        monitorObject.addProperty("status", true);
         monitorObject.addProperty("notification", "Success start and connect to Data Stream module");
+        MonitorHandler.addQueue(monitorObject);
         return true;
     }
 }

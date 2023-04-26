@@ -32,7 +32,7 @@ public class LinkStartSystemMonitor extends Link {
         }
         else new Thread(new MonitorHandler(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) + ".txt")).start();
         JsonObject monitorObject = new JsonObject();
-        monitorObject.addProperty("status", "SUCCESS");
+        monitorObject.addProperty("status", true);
         monitorObject.addProperty("notification", "start thread for monitoring tool");
         MonitorHandler.addQueue(monitorObject);
         return true;

@@ -29,7 +29,7 @@ class LinkStartListener extends Link {
         } catch (IOException | KeyStoreException | NoSuchAlgorithmException | CertificateException |
                  UnrecoverableKeyException | KeyManagementException e) {
             JsonObject monitorObject = new JsonObject();
-            monitorObject.addProperty("status", "FAILURE");
+            monitorObject.addProperty("status", false);
             monitorObject.addProperty("notification", e.getMessage());
             MonitorHandler.addQueue(monitorObject);
             return false;
@@ -37,7 +37,7 @@ class LinkStartListener extends Link {
         new Thread(new ListenerHandler(listener, processObject.get("timeout").getAsInt())).start();
         DataStream.getInstance().setListener(listener);
         JsonObject monitorObject = new JsonObject();
-        monitorObject.addProperty("status", "SUCCESS");
+        monitorObject.addProperty("status", true);
         monitorObject.addProperty("notification", "open a TLS socket at port " + processObject.get("port").getAsString());
         MonitorHandler.addQueue(monitorObject);
         return true;

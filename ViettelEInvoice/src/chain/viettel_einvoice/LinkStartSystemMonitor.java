@@ -18,9 +18,9 @@ public class LinkStartSystemMonitor extends Link {
         String fileName = String.format("%s %s.txt",chain.getProcessObject().get("moduleName").getAsString(), LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         new Thread(new MonitorHandler(fileName)).start();
         JsonObject monitorObject = new JsonObject();
-        monitorObject.addProperty("status", "SUCCESS");
+        monitorObject.addProperty("status", true);
         monitorObject.addProperty("notification", "Successfully start monitor thread");
         MonitorHandler.addQueue(monitorObject);
-        return false;
+        return true;
     }
 }

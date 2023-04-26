@@ -1,6 +1,8 @@
 package socket_hander.viettel_einvoice;
 
 import chain.Chain;
+import chain.viettel_einvoice.ChainHandleFailure;
+import chain.viettel_einvoice.ChainHandleRequest;
 import com.google.gson.JsonObject;
 import socket_handler.SocketWrapper;
 
@@ -15,12 +17,12 @@ public class SocketHandler extends socket_handler.SocketHandler {
 
     @Override
     public Chain handleRequest(JsonObject request) {
-        return null;
+        return new ChainHandleRequest(request);
     }
 
     @Override
     public Chain handleFailure(JsonObject request) {
-        return null;
+        return new ChainHandleFailure(request);
     }
 
     @Override

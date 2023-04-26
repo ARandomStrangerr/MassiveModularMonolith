@@ -16,7 +16,7 @@ class LinkSetInfo extends Link {
         DataStream memorableObject = DataStream.getInstance();
         memorableObject.setModuleName(chain.getProcessObject().get("moduleName").getAsString());
         JsonObject monitorObject = new JsonObject();
-        monitorObject.addProperty("status", "SUCCESS");
+        monitorObject.addProperty("status", true);
         monitorObject.addProperty("notification", "declare initial information");
         MonitorHandler.addQueue(monitorObject);
         return true;
