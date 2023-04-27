@@ -1,4 +1,4 @@
-package chain.connection_manager.start_module;
+package chain.connection_manager;
 
 import chain.Chain;
 import com.google.gson.JsonObject;
@@ -6,7 +6,8 @@ import com.google.gson.JsonObject;
 public class ChainStartModule extends Chain {
     public ChainStartModule(JsonObject processObject) {
         super(processObject);
-        addLink(new LinkSetInfo(this),
+        addLink(new LinkStartMonitorThread(this),
+            new LinkSetInfo(this),
             new LinkStartConnectionPool(this),
             new LinkStartSocket(this),
             new LinkStartListener(this));

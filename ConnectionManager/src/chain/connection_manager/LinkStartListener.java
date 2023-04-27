@@ -1,10 +1,12 @@
-package chain.connection_manager.start_module;
+package chain.connection_manager;
 
 import chain.Chain;
 import chain.Link;
+import com.google.gson.JsonObject;
 import memorable.ConnectionManager;
 import socket_handler.ListenerWrapper;
 import socket_handler.connection_manager.ListenerHandler;
+import system_monitor.MonitorHandler;
 
 class LinkStartListener extends Link {
     LinkStartListener(Chain chain) {
@@ -29,7 +31,10 @@ class LinkStartListener extends Link {
         ListenerHandler listenerHandler = new ListenerHandler(listener, timeout);
         new Thread(listenerHandler).start();
         ConnectionManager.getInstance().listenerHandler = listenerHandler;
-        System.out.printf("A listener is operating at port %d\n", port);
+        JsonObject monitorObj = new JsonObject();
+        monitorObj.addProperty("status", true);
+        monitorObj.addProperty("notification", "Thành cồng mở cổng để kết nối với máy con bên ngoài");
+        MonitorHandler.addQueue(monitorObj);
         return true;
     }
 }

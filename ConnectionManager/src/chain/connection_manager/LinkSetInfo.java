@@ -1,4 +1,4 @@
-package chain.connection_manager.start_module;
+package chain.connection_manager;
 
 import chain.Chain;
 import chain.Link;

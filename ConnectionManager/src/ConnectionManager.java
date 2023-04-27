@@ -1,9 +1,6 @@
-import chain.connection_manager.start_module.ChainStartModule;
+import chain.connection_manager.ChainStartModule;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import socket_handler.SocketWrapper;
-
-import java.net.InetAddress;
 
 public class ConnectionManager {
     public static void main(String[] args) {

@@ -1,8 +1,10 @@
-package chain.connection_manager.start_module;
+package chain.connection_manager;
 
 import chain.Chain;
 import chain.Link;
+import com.google.gson.JsonObject;
 import database.ConnectionManager;
+import system_monitor.MonitorHandler;
 
 import java.sql.SQLException;
 
@@ -24,7 +26,10 @@ class LinkStartConnectionPool extends Link {
             return false;
         }
         memorable.ConnectionManager.getInstance().database = connectionPool;
-        System.out.printf("connected to the database at %s\n", url);
+        JsonObject monitorObj = new JsonObject();
+        monitorObj.addProperty("status", true);
+        monitorObj.addProperty("notification", "Thành cồng kết nối đến cơ sở dữ liệu");
+        MonitorHandler.addQueue(monitorObj);
         return true;
     }
 }

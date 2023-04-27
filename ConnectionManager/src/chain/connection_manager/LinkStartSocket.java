@@ -1,10 +1,12 @@
-package chain.connection_manager.start_module;
+package chain.connection_manager;
 
 import chain.Chain;
 import chain.Link;
+import com.google.gson.JsonObject;
 import memorable.ConnectionManager;
 import socket_handler.connection_manager.SocketHandler;
 import socket_handler.SocketWrapper;
+import system_monitor.MonitorHandler;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -36,7 +38,10 @@ class LinkStartSocket extends Link {
         }
         ConnectionManager.getInstance().socket = socket;
         new Thread(new SocketHandler(socket)).start();
-        System.out.printf("Connected to the host at %s:%d\n", hostAddress, port);
+        JsonObject monitorObj = new JsonObject();
+        monitorObj.addProperty("status", true);
+        monitorObj.addProperty("notification", "Thành cồng kết nối đến Data Stream module");
+        MonitorHandler.addQueue(monitorObj);
         return true;
     }
 }
