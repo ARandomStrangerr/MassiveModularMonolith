@@ -1,9 +1,11 @@
-package chain.connection_manager.request_handler;
+package chain.connection_manager;
 
 import chain.Chain;
 import chain.Link;
+import com.google.gson.JsonObject;
 import memorable.ConnectionManager;
 import socket_handler.SocketWrapper;
+import system_monitor.MonitorHandler;
 
 import java.io.IOException;
 
@@ -19,7 +21,11 @@ public class LinkSendToClient extends Link {
         try {
             soc.write(chain.getProcessObject().get("body").toString());
         } catch (IOException e) {
-            e.printStackTrace();
+            JsonObject monitorObj = new JsonObject();
+            monitorObj.addProperty("status", false);
+            monitorObj.addProperty("notification", "Không thể gửi tin nhắn đến client");
+            monitorObj.add("request", chain.getProcessObject());
+            MonitorHandler.addQueue(monitorObj);
         }
         return true;
     }

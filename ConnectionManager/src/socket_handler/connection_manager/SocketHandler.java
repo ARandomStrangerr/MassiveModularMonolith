@@ -1,7 +1,7 @@
 package socket_handler.connection_manager;
 
 import chain.Chain;
-import chain.connection_manager.request_handler.ChainProcessReturnRequest;
+import chain.connection_manager.ChainProcessOutGoingRequest;
 import memorable.ConnectionManager;
 import socket_handler.SocketWrapper;
 import com.google.gson.JsonObject;
@@ -15,7 +15,7 @@ public class SocketHandler extends socket_handler.SocketHandler {
 
     @Override
     public Chain handleRequest(JsonObject request) {
-        return new ChainProcessReturnRequest(request);
+        return new ChainProcessOutGoingRequest(request);
     }
 
     @Override

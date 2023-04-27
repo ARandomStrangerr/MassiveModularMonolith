@@ -1,4 +1,4 @@
-package chain.connection_manager.request_handler;
+package chain.connection_manager;
 
 import chain.Chain;
 import chain.Link;

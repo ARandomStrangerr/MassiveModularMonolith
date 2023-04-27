@@ -1,4 +1,4 @@
-package chain.connection_manager.request_handler;
+package chain.connection_manager;
 
 import chain.Chain;
 import chain.Link;
@@ -6,8 +6,8 @@ import memorable.ConnectionManager;
 
 import java.io.IOException;
 
-public class LinkSendRequest extends Link {
-    public LinkSendRequest(Chain chain) {
+public class LinkSendRequestToDataSteam extends Link {
+    public LinkSendRequestToDataSteam(Chain chain) {
         super(chain);
     }
 
@@ -16,7 +16,7 @@ public class LinkSendRequest extends Link {
         try {
             ConnectionManager.getInstance().socket.write(chain.getProcessObject().toString());
         } catch (IOException e){
-            e.printStackTrace();
+            chain.getProcessObject().addProperty("error", "Không thể chuyển dữ liệu đến Stream");
             return false;
         }
         return true;

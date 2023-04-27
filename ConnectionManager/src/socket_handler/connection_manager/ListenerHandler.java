@@ -1,8 +1,8 @@
 package socket_handler.connection_manager;
 
 import chain.Chain;
-import chain.connection_manager.request_handler.ChainHandleFailure;
-import chain.connection_manager.request_handler.ChainProcessIncomeRequest;
+import chain.connection_manager.ChainHandleFailure;
+import chain.connection_manager.ChainProcessIncomingRequest;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import memorable.ConnectionManager;
@@ -28,7 +28,7 @@ public class ListenerHandler extends socket_handler.ListenerHandler {
         return new SocketHandler(socket) {
             @Override
             public Chain handleRequest(JsonObject request) {
-                return new ChainProcessIncomeRequest(request, socket.getName());
+                return new ChainProcessIncomingRequest(request, socket.getName());
             }
 
             @Override
