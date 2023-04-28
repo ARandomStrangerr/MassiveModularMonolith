@@ -12,14 +12,11 @@ public class LinkLogFalseRequest extends Link {
 
     @Override
     public boolean execute() {
-        JsonObject monitorObject = new JsonObject(),
-            request = new JsonObject();
-        monitorObject.addProperty("status", "FAILURE");
-        monitorObject.add("notification", chain.getProcessObject().remove("notification"));
-        request.add("header",  chain.getProcessObject().get("header"));
-        request.add("body", chain.getProcessObject().get("body"));
-        monitorObject.add("request", request);
+        JsonObject monitorObject = new JsonObject();
+        monitorObject.addProperty("status", false);
+        monitorObject.addProperty("notification", chain.getProcessObject().get("error").getAsString());
+        monitorObject.add("request", chain.getProcessObject());
         MonitorHandler.addQueue(monitorObject);
-        return false;
+        return true;
     }
 }

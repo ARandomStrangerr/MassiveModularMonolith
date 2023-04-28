@@ -18,6 +18,7 @@ public class LinkStartSystemMonitor extends Link {
 
     @Override
     public boolean execute() {
+        String logFileName = String.format("%s %s.txt", chain.getProcessObject().get("moduleName").getAsString(), LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         if (chain.getProcessObject().has("monitorToolPort")){
             SocketWrapper socket;
             try {
@@ -28,9 +29,9 @@ public class LinkStartSystemMonitor extends Link {
                 e.printStackTrace();
                 return false;
             }
-            new Thread(new MonitorHandler(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) + ".txt", socket)).start();
+            new Thread(new MonitorHandler(logFileName)).start();
         }
-        else new Thread(new MonitorHandler(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) + ".txt")).start();
+        else new Thread(new MonitorHandler(logFileName)).start();
         JsonObject monitorObject = new JsonObject();
         monitorObject.addProperty("status", true);
         monitorObject.addProperty("notification", "start thread for monitoring tool");

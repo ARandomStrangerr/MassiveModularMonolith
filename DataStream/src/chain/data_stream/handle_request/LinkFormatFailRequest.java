@@ -22,6 +22,7 @@ public class LinkFormatFailRequest extends Link {
             header.add("to", header.remove("from"));
             header.addProperty("from", DataStream.getInstance().getModuleName());
         } catch (Exception e){
+            e.printStackTrace();
             chain.endEarly();
         }
         return true;

@@ -40,8 +40,9 @@ public class MonitorHandler implements Runnable {
                 JsonObject data = queue.take();
                 data.addProperty("time", LocalDateTime.now().format(dateTimeFormatter));
                 if (socket != null) socket.write(data.toString());
-                String recordData = String.format("%s | %s | %s\n", data.remove("time").getAsString(), data.remove("status").getAsBoolean()? "Success":"Failure", data.remove("notification").getAsString());
+                String recordData = String.format("%s | %s | %s", data.remove("time").getAsString(), data.remove("status").getAsBoolean()? "Success":"Failure", data.remove("notification").getAsString());
                 if(data.has("request")) recordData += " | " + data.remove("request").toString();
+                recordData += "\n";
                 writeToFile.write(recordData);
                 writeToFile.flush();
                 System.out.print(recordData);

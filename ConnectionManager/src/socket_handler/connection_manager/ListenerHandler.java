@@ -5,10 +5,12 @@ import chain.connection_manager.ChainHandleFailure;
 import chain.connection_manager.ChainProcessIncomingRequest;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import memorable.ConnectionManager;
 import socket_handler.ListenerWrapper;
 import socket_handler.SocketHandler;
 import socket_handler.SocketWrapper;
+import system_monitor.MonitorHandler;
 
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLHandshakeException;
@@ -70,7 +72,22 @@ public class ListenerHandler extends socket_handler.ListenerHandler {
                     return false;
                 }
                 // convert the string into json object
-                JsonObject authenticationJson = new Gson().fromJson(authenticationString, JsonObject.class);
+                JsonObject authenticationJson;
+                try {
+                    authenticationJson = new Gson().fromJson(authenticationString, JsonObject.class);
+                } catch (JsonSyntaxException e) {
+                    try {
+                        socket.write("{error: \"Thông tin nhận được không thể được dịch sang JSON\"}");
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                    JsonObject monitorObj = new JsonObject();
+                    monitorObj.addProperty("status", false);
+                    monitorObj.addProperty("notification", "Thông tin nhận được không thể dịch sang định dạng JSON");
+                    monitorObj.addProperty("request", authenticationString);
+                    MonitorHandler.addQueue(monitorObj);
+                    return false;
+                }
                 // check if there is already socket under this nameConnectionManager.getInstance().listenerWrapper.getSocket(socket.getName())
                 if (ConnectionManager.getInstance().listenerWrapper.getSocket(authenticationJson.get("macAddress").getAsString()) != null) {
                     try {
@@ -78,6 +95,10 @@ public class ListenerHandler extends socket_handler.ListenerHandler {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    JsonObject monitorObj = new JsonObject();
+                    monitorObj.addProperty("status", false);
+                    monitorObj.addProperty("notification", String.format("Đã có kết nối %s thiết lập với máy chủ", socket.getName()));
+                    MonitorHandler.addQueue(monitorObj);
                     return false;
                 }
                 // set the name of the socket
@@ -85,14 +106,20 @@ public class ListenerHandler extends socket_handler.ListenerHandler {
                 // put socket into the storage
                 ConnectionManager.getInstance().listenerWrapper.putSocket(socket.getName(), socket);
                 // print out message
-                System.out.printf("Client with mac address %s has connected to the network\n", socket.getName());
+                JsonObject monitorObj = new JsonObject();
+                monitorObj.addProperty("status", true);
+                monitorObj.addProperty("notification", String.format("Máy tính với địa chỉ MAC %s kết nối đến máy chủ", socket.getName()));
+                MonitorHandler.addQueue(monitorObj);
                 return true;
             }
 
             public void cleanup() {
                 if (socket.getName() != null) {
                     ConnectionManager.getInstance().listenerWrapper.removeSocket(socket.getName());
-                    System.out.printf("Socket with mac address %s has been disconnected\n", socket.getName());
+                    JsonObject monitorObj = new JsonObject();
+                    monitorObj.addProperty("status", false);
+                    monitorObj.addProperty("notification", String.format("Máy tính với địa chỉ MAC %s ngắt kết nối đến máy chủ", socket.getName()));
+                    MonitorHandler.addQueue(monitorObj);
                 }
             }
         };
