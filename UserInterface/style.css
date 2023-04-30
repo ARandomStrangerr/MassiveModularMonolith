@@ -89,12 +89,13 @@ img{
 	transition: 0.2s;
 	margin-left: 0.5em;
 	border-radius: 0.5em;
+	background-color: #f8f9fa;
 }
 .button-active{
-	background-color:#f7ebfd;
+	background-color:#dee2e6;
 }
 .button:hover{
-	background-color:#f7ebfd;
+	background-color:#e9ecef;
 }
 .green-button {
 	background-color:#B7EFC5;
@@ -128,11 +129,11 @@ img{
 	top: 3em;
 	position: absolute;
 	padding: 0.5em;
-	background-color: #f7ebfd;
+	background-color: #dee2e6;
 	border-radius: 0.5em;
 	transition: 0.2s;
 	overflow-y: hidden;
-	box-shadow: 0.5em 0.5em 1em #D099E3;
+	box-shadow: 0.5em 0.5em 1em #dee2e6;
 	z-index: 10;
 }
 .float-div > div {
@@ -180,7 +181,7 @@ img{
 	height: 100%;
 }
 .tree-view li:hover{
-	background-color:#f7ebfd;
+	background-color:#f8f9fa;
 }
 .tree-view li:last-child:after {
 	height: 2em;
