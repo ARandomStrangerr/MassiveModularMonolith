@@ -1,8 +1,11 @@
 module.exports = class PublicFinace {
 	constructor(){
-		document.querySelector("#public-finance-form-1").addEventListener("click", () => this.#chungTu16a1());
-		document.querySelector("#public-finance-form-2").addEventListener("click", () => this.#chungTu16a1());
-		document.querySelector("#public-finance-form-3").addEventListener("click", () => this.#hachToan16a1());
+		//Q: why do you use vietnamese as name for variables?
+		//A: I have no clue what those terminologies are for, nobody explain to for me, i basically have the document and that is that.
+		document.querySelector("#public-finance-form-1").addEventListener("click", () => this.#chungTu16a1("Thông tin chung của mẫu chứng từ 16a1 (C2-02a/NS)"));
+		document.querySelector("#public-finance-form-2").addEventListener("click", () => this.#chungTu16a1("Thông tin chung của mẫu chứng từ 16a2 (C2-02b/NS)"));
+		document.querySelector("#public-finance-form-3").addEventListener("click", () => this.#hachToan16a1Hoac16a2("Thông tin hạch toán của mẫu chứng từ 16a1 (C2-02a/NS)"));
+		document.querySelector("#public-finance-form-4").addEventListener("click", () => this.#hachToan16a1Hoac16a2("Thông tin hạch toán của mẫu chứng từ 16a2 (C2-02b/NS)"));
 		document.querySelector("#public-finance-form-8").addEventListener("click", () => this.#bangKe07());
 		document.querySelector("#public-finance-form-9").addEventListener("click", () => this.#chiTietBang07());
 		document.querySelector("#public-finance-form-10").addEventListener("click", () => this.#chungTu05a());
@@ -11,7 +14,7 @@ module.exports = class PublicFinace {
 		document.querySelector("#public-finance-form-13").addEventListener("click", () => this.#hachToan06());
 	}
 
-	#chungTu16a1(){
+	#chungTu16a1Hoac16a2(title){
 		let items = ["Mã hồ sơ gửi lên hệ thống DVC",
 		"Số chứng từ sinh theo quy định DVC",
 		"Là Tiền Mặt",
@@ -58,10 +61,10 @@ module.exports = class PublicFinace {
 		"Thời gian chủ tài khoản ký",
 		"Kế toán trưởng",
 		"Chủ tài khoản"];
-		this.#createDocument("Thông tin chung của mẫu chứng từ 16a1 (C2-02a/NS)", items);
+		this.#createDocument(title, items);
 	}
 
-	#hachToan16a1(){
+	#hachToan16a1Hoac16a2(title){
 		let items = ["Số chứng từ trên hệ thống  DVC",
 		"Nội dung chi tiết",
 		"Mã nội dung kinh tế",
@@ -72,7 +75,61 @@ module.exports = class PublicFinace {
 		"Số tiền nộp thuế",
 		"Số tiền nhận",
 		"Số thứ tự dòng chi tiết"];
-		this.#createDocument("Thông tin hạch toán của mẫu chứng từ 16a1 (C2-02a/NS), 16a2 (C2-02b/NS)", items);
+		this.#createDocument(title, items);
+	}
+
+	#chungTu16c1Hoac16c3(){
+		const items = ["Mã Hồ sơ gửi DVC",
+			"ID tài liệu",
+			"Số chứng từ sinh theo quy định DVC",
+			"Có sử dụng tiền mặt hay không",
+			"Số thứ tự của các chứng từ",
+			"Tổng số tiền của chứng từ",
+			"Số chứng từ lấy trên phần mềm ứng dụng",
+			"Số tài khoản giao dịch với kho bạc",
+			"Đơn vị tiền tệ sử dụng",
+			"Ngày lập chứng từ",
+			"Mã đơn vị quan hệ ngân sách giao dịch",
+			"Tên viết tắt của đơn vị",
+			"Địa chỉ đơn vị",
+			"Mã đơn vị nộp thuế",
+			"Tên đơn vị nộp thuế",
+			"Mã nội dung kinh tế đơn vị nộp thuế",
+			"Mã chương đơn vị nộp thuế",
+			"Mã cơ quan thu đơn vị nộp thuế",
+			"Thông tin kho bạc hạch toán",
+			"Tên đơn vị nhận tiền",
+			"Địa chỉ đơn vị nhận tiền",
+			"Số tài khoản đơn vị nhận tiền",
+			"Năm ngân sách",
+			"Thông tin kỳ thuế",
+			"Thông tin số tờ khai nộp thuế",
+			"Tên kho bạc đơn vị trả tiền",
+			"Tên kho bạc đơn vị nhận tiền",
+			"Loại cơ quan thanh toán đơn vị trả tiền",
+			"Loại cơ quan thanh toán đơn vị nhận tiền",
+			"Số tài khoản đơn vị trả tiền",
+			"Mã cấp ngân sách đơn vị trả tiền",
+			"Mã ngân hàng đơn vị trả tiền",
+			"Mã ngân hàng đơn vị nhận tiền",
+			"Số tiền nhận",
+			"Tổng số tiền của chứng từ",
+			"Thực chi hay là tạm ứng",
+			"Chuyển khoản hay là tiền mặt",
+			"Họ và tên người nhận",
+			"Số CMND người nhận",
+			"Nơi cấp CMND người nhận",
+			"Ngày cấp CMND người nhận",
+			"Mã nhà tài trợ",
+			"Mã đơn vị QHNS của đơn vị giao dịch",
+			"Mã đơn vị giao dịch",
+			"Dữ liệu ký số của chủ tài khoản theo cấu trúc DVC",
+			"Dữ liệu ký số của kế toán trường theo cấu trúc DVC",
+			"Thời gian kế toán trưởng ký",
+			"Thời gian chủ tài khoản ký",
+			"Kế toán trưởng",
+			"Chủ tài khoản"];
+		this.#createDocument("Thông tin chung của mẫu chứng từ 16c1 (C4-02a/KB)", items);
 	}
 
 	#bangKe07(){
