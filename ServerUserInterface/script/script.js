@@ -42,14 +42,3 @@ for (let i of expandable){
     i.querySelector("div:last-child").classList.toggle("collapse"); //i fu**ing hate js, whoever designs this progamming language should be reserved a special place in hell next to Satan.
   });
 }
-
-
-// start data stream module
-document.querySelector("#start-data-stream-module-button").addEventListener("click", () => {
-  let classPath = document.querySelector("#data-stream-module-classpath-input").value;
-  let port = document.querySelector("#data-stream-module-port-input").value;
-  let jksPath = document.querySelector("#data-stream-module-jks-input").value;
-  let jksPassword = document.querySelector("#data-stream-module-jks-password-input").value;
-  let timeout = document.querySelector("#data-stream-module-timeout-input").value;
-  dataStreamPageControl.startModule(classPath, port, jksPath, jksPassword, timeout)
-});
