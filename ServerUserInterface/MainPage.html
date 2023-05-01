@@ -13,13 +13,14 @@
         <div>
           <h2>Cài Đặt</h2>
         </div>
+	<i class="button button-red" id="stop-data-stream-module-button"></i>
         <i class="button button-green" id="start-data-stream-module-button"></i>
         <i class="button expand-button"></i>
       </div>
       <div class="collapse">
         <input type="text" placeholder="Địa điểm tệp tin khởi động" id="data-stream-module-classpath-input" class="file-input">
         <input type="number" placeholder="Cổng hoạt động" id="data-stream-module-port-input" class="input">
-        <input type="number" placeholder="Cổng cho manager tool" id="data-stream-module-port-ui" class="input">
+        <input type="number" placeholder="Cổng cho manager tool" id="data-stream-module-monitor-port-input" class="input">
         <input type="text" placeholder="Địa điểm tệp tin JKS" id="data-stream-module-jks-input" class="file-input">
         <input type="text" placeholder="Mật khẩu tệp tin JKS" id="data-stream-module-jks-password-input" class="input">
         <input type="number" placeholder="Thời gian ngắt kết nối với máy con chưa ủy quyền" id="data-stream-module-timeout-input" class="input">
@@ -47,18 +48,10 @@
       <div>
         <ul>
           <li class="dot valid-dot">
-            <div>
-              <div class="">
-                MailSMTP
-              </div>
-            </div>
+              <span>MailSMTP</span>
           </li>
           <li class="dot invalid-dot">
-            <div>
-              <div>
-                PublicFinance
-              </div>
-            </div>
+              <span>PublicFinance</span>
           </li>
         </ul>
       </div>
