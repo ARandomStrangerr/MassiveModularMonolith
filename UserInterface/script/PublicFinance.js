@@ -2,8 +2,8 @@ module.exports = class PublicFinace {
 	constructor(){
 		//Q: why do you use vietnamese as name for variables?
 		//A: I have no clue what those terminologies are for, nobody explain to for me, i basically have the document and that is that.
-		document.querySelector("#public-finance-form-1").addEventListener("click", () => this.#chungTu16a1("Thông tin chung của mẫu chứng từ 16a1 (C2-02a/NS)"));
-		document.querySelector("#public-finance-form-2").addEventListener("click", () => this.#chungTu16a1("Thông tin chung của mẫu chứng từ 16a2 (C2-02b/NS)"));
+		document.querySelector("#public-finance-form-1").addEventListener("click", () => this.#chungTu16a1Hoac16a2("Thông tin chung của mẫu chứng từ 16a1 (C2-02a/NS)"));
+		document.querySelector("#public-finance-form-2").addEventListener("click", () => this.#chungTu16a1Hoac16a2("Thông tin chung của mẫu chứng từ 16a2 (C2-02b/NS)"));
 		document.querySelector("#public-finance-form-3").addEventListener("click", () => this.#hachToan16a1Hoac16a2("Thông tin hạch toán của mẫu chứng từ 16a1 (C2-02a/NS)"));
 		document.querySelector("#public-finance-form-4").addEventListener("click", () => this.#hachToan16a1Hoac16a2("Thông tin hạch toán của mẫu chứng từ 16a2 (C2-02b/NS)"));
 		document.querySelector("#public-finance-form-8").addEventListener("click", () => this.#bangKe07());
