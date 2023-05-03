@@ -1,8 +1,11 @@
 module.exports = class {
   #logUnorderedList;
+	#spawn;
+	
   constructor(logUnorderedList){
     this.#logUnorderedList = logUnorderedList;
 		document.querySelector("#start-data-stream-module-button").addEventListener("click", () => this.#startModule());
+		document.querySelector("#stop-data-stream-module-button").addEventListener("click", () => this.#endModule());
   }
 
 	#startModule(){ // action starting datastream module
@@ -36,7 +39,6 @@ module.exports = class {
 			this.#addInvalidLog("Thời gian ngắt cho kết nối chưa được uỷ quyền chưa được điền");
 			return;
 		}
-    let childProcess = require("child_process");
     let param = {
       port: port,
       timeout: timeout,
@@ -49,15 +51,22 @@ module.exports = class {
     temp = temp[temp.length-1];
     let cp = javaClassPath.slice(0, javaClassPath.length-temp.length-1);
     let moduleName = temp.split(".")[0];
-    let cmd = `java --enable-preview -cp ${cp} ${moduleName} '${JSON.stringify(param)}'`;
-    childProcess.exec(cmd);
+    let args = ["--enable-preview", "-cp", cp, moduleName, JSON.stringify(param)];
+		this.#spawn = require("child_process").spawn("java", args);
+		this.#spawn.stdout.setEncoding("utf8");
+		this.#spawn.stdout.on("data", data => {
+			this.#addValidLog(data);
+		});
+		this.#spawn.stderr.setEncoding("utf8");
+		this.#spawn.stderr.on("data", data => {
+			this.#addInvalidLog(data);
+		});
+	}
 
-    let socket;
-    setTimeout(() => {
-      socket = new (require('./io.js')).Socket("127.0.0.1", monitorToolPort);
-      socket.setOnDataReceive((data)=>this.#onDataEvent(data)); // f*** this but where does this points to? i don't f***ing know :)
-    }, 1000);
-  }
+	#endModule(){
+		this.#spawn.kill();
+		this.#addInvalidLog("Ngưng hoạt động của DataStream");
+	}
 
   #onDataEvent(data){ // things to do when information arrive
 		console.log(data);
