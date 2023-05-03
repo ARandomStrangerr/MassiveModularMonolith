@@ -20,15 +20,9 @@ public class MonitorHandler implements Runnable {
     }
 
     private final String logFileName;
-    private SocketWrapper socket;
 
     public MonitorHandler(String logFileName) {
         this.logFileName = logFileName;
-    }
-
-    public MonitorHandler(String logFileName, SocketWrapper socket){
-        this(logFileName);
-        this.socket = socket;
     }
 
     @Override
@@ -39,13 +33,13 @@ public class MonitorHandler implements Runnable {
             while (true) {
                 JsonObject data = queue.take();
                 data.addProperty("time", LocalDateTime.now().format(dateTimeFormatter));
-                if (socket != null) socket.write(data.toString());
                 String recordData = String.format("%s | %s | %s", data.remove("time").getAsString(), data.remove("status").getAsBoolean()? "Success":"Failure", data.remove("notification").getAsString());
                 if(data.has("request")) recordData += " | " + data.remove("request").toString();
                 recordData += "\n";
                 writeToFile.write(recordData);
                 writeToFile.flush();
-                System.out.print(recordData);
+                if (data.remove("status").getAsBoolean()) System.out.print(recordData);
+                else System.err.print(recordData);
             }
         } catch (Exception e) {
             e.printStackTrace();
