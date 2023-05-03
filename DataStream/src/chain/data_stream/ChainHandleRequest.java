@@ -1,4 +1,4 @@
-package chain.data_stream.handle_request;
+package chain.data_stream;
 
 import chain.Chain;
 import com.google.gson.JsonObject;

@@ -1,4 +1,4 @@
-package chain.data_stream.start_module;
+package chain.data_stream;
 
 import chain.Chain;
 import chain.Link;
