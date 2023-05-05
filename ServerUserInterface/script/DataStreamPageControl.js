@@ -1,12 +1,12 @@
 module.exports = class {
-  #logUnorderedList;
+	#logUnorderedList;
 	#spawn;
 	
-  constructor(logUnorderedList){
-    this.#logUnorderedList = logUnorderedList;
+	constructor(){
+		this.#logUnorderedList = document.querySelector("#data-stream-module-log > div:last-child > ul");
 		document.querySelector("#start-data-stream-module-button").addEventListener("click", () => this.#startModule());
 		document.querySelector("#stop-data-stream-module-button").addEventListener("click", () => this.#endModule());
-  }
+	}
 
 	#startModule(){ // action starting datastream module
 		let javaClassPath = document.querySelector("#data-stream-module-classpath-input").value;
@@ -39,28 +39,24 @@ module.exports = class {
 			this.#addInvalidLog("Thời gian ngắt cho kết nối chưa được uỷ quyền chưa được điền");
 			return;
 		}
-    let param = {
-      port: port,
-      timeout: timeout,
-      keyStorePath: jksPath,
-      keyStorePassword :jksPassword,
-      moduleName: "DataStream",
-      monitorToolPort: monitorToolPort
-    }
-    let temp = javaClassPath.split("/");
-    temp = temp[temp.length-1];
-    let cp = javaClassPath.slice(0, javaClassPath.length-temp.length-1);
-    let moduleName = temp.split(".")[0];
-    let args = ["--enable-preview", "-cp", cp, moduleName, JSON.stringify(param)];
+		let param = {
+			port: port,
+			timeout: timeout,
+			keyStorePath: jksPath,
+			keyStorePassword :jksPassword,
+			moduleName: "DataStream",
+			monitorToolPort: monitorToolPort
+		}
+		let temp = javaClassPath.split("/");
+		temp = temp[temp.length-1];
+		let cp = javaClassPath.slice(0, javaClassPath.length-temp.length-1);
+		let moduleName = temp.split(".")[0];
+		let args = ["--enable-preview", "-cp", cp, moduleName, JSON.stringify(param)];
 		this.#spawn = require("child_process").spawn("java", args);
 		this.#spawn.stdout.setEncoding("utf8");
-		this.#spawn.stdout.on("data", data => {
-			this.#addValidLog(data);
-		});
+		this.#spawn.stdout.on("data", data => this.#addValidLog(data));
 		this.#spawn.stderr.setEncoding("utf8");
-		this.#spawn.stderr.on("data", data => {
-			this.#addInvalidLog(data);
-		});
+		this.#spawn.stderr.on("data", data => this.#addInvalidLog(data));
 	}
 
 	#endModule(){
