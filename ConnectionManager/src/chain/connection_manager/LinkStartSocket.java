@@ -32,8 +32,10 @@ class LinkStartSocket extends Link {
             socket = new SocketWrapper(InetAddress.getByName(hostAddress), port, certPath, certPass);
         } catch (IOException | NoSuchAlgorithmException | CertificateException | KeyStoreException |
                  UnrecoverableKeyException | KeyManagementException e) {
-            System.err.println("Cannot connect to host");
-            e.printStackTrace();
+            JsonObject monitorObj = new JsonObject();
+            monitorObj.addProperty("status", false);
+            monitorObj.addProperty("notification", String.format("Không thể kết nối đến DataStream ở địa chỉ %s:%d", hostAddress, port));
+            MonitorHandler.addQueue(monitorObj);
             return false;
         }
         ConnectionManager.getInstance().socket = socket;
