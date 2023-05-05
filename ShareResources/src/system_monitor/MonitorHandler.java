@@ -1,7 +1,6 @@
 package system_monitor;
 
 import com.google.gson.JsonObject;
-import socket_handler.SocketWrapper;
 
 import java.io.FileWriter;
 import java.time.LocalDateTime;
@@ -28,12 +27,11 @@ public class MonitorHandler implements Runnable {
     @Override
     public void run() {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-        try {
-            FileWriter writeToFile = new FileWriter(logFileName, true);
+        try (FileWriter writeToFile = new FileWriter(logFileName, true)) {
             while (true) {
                 JsonObject data = queue.take();
                 data.addProperty("time", LocalDateTime.now().format(dateTimeFormatter));
-                String recordData = String.format("%s | %s | %s", data.remove("time").getAsString(), data.remove("status").getAsBoolean()? "Success":"Failure", data.remove("notification").getAsString());
+                String recordData = String.format("%s | %s | %s", data.remove("time").getAsString(), data.get("status").getAsBoolean()? "Success":"Failure", data.remove("notification").getAsString());
                 if(data.has("request")) recordData += " | " + data.remove("request").toString();
                 recordData += "\n";
                 writeToFile.write(recordData);
