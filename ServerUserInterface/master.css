@@ -124,6 +124,7 @@ input {
 	border-style: solid;
 	min-width: 1em;
 	min-height: 1em;
+	display: inline-block;
 }
 .button-green{
 	border-color:#52b788;
