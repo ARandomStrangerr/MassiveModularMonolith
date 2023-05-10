@@ -21,8 +21,10 @@ class LinkStartConnectionPool extends Link {
         try {
             connectionPool = new ConnectionManager(url, poolSize);
         } catch (SQLException e) {
-            System.err.println("Cannot connect to the database");
-            e.printStackTrace();
+            JsonObject monitorObject = new JsonObject();
+            monitorObject.addProperty("status", false);
+            monitorObject.addProperty("notification", "Lỗi khi kết nối đến cơ sở dữ liệu");
+            MonitorHandler.addQueue(monitorObject);
             return false;
         }
         memorable.ConnectionManager.getInstance().database = connectionPool;
