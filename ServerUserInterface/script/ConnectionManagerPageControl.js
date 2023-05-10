@@ -18,6 +18,26 @@ module.exports = class{
 			poolSize: 2, 
 			timeout: 5000
 		};
+		if(params.hostAddress === "") {
+			this.#addInvalidLog("Địa chỉ DataStream chưa được điền");
+			return;
+		}
+		if(params.hostPort === ""){
+			this.#addInvalidLog("Cổng DataStream chưa được điền");
+			return;
+		}
+		if(params.listernerPort === ""){
+			this.#addInvalidLog("Cổng tiếp nhận máy con chưa được điền");
+			return;
+		}
+		if(params.keyStorePath === ""){
+			this.#addInvalidLog("Địa chỉ tệp tin TLS cert chưa được điền");
+			return;
+		}
+		if(params.keyStorePassword === ""){ 
+			this.#addInvalidLog("Mật khẩu TLS cert chưa được điền");
+			return;
+		}
 		let cp = document.querySelector("#connection-manager-module-classpath-input").value;
 		let className = cp.split("/");
 		className = className[className.length-1];
