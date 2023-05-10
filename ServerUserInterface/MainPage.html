@@ -36,50 +36,38 @@
         </ul>
       </div>
     </div>
-    <div class="deck title-with-expandable" id="data-stream-module-connection">
-      <div>
-        <h2>Danh sách dịch vụ đang hoạt động</h2>
+    <div class="deck title-with-expandable" id="connection-manager-page">
+      <div class="dot valid-dot">
+        <h2>ConnectionManager</h2>
+        <i class="button button-red" id="stop-connection-manager-module-button"></i>
+        <i class="button button-green" id="start-connection-manager-module-button"></i>
         <i class="button expand-button"></i>
       </div>
       <div>
-        <ul>
-          <li class="dot invalid-dot" id="connection-manager-page">
-            <div class="title-with-expandable">
-              <div>
-                <span>ConnectionManager</span>
-                <i class="button button-red" id="stop-connection-manager-module-button"></i>
-                <i class="button button-green" id="start-connection-manager-module-button"></i>
-                <i class="button expand-button"></i>
-              </div>
-              <div>
-                <div class="title-with-expandable">
-                  <div>
-                    <h2>Cài Đặt</h2>
-                    <i class="button expand-button"></i>
-                  </div>
-                  <div class="collapse">
-                    <input placeholder="Tệp tin khởi động" class="file-input input" id="connection-manager-module-classpath-input">
-                    <input type="number" placeholder="Cổng tiếp nhận máy con" class="input" id="connection-manager-module-port-input">
-                    <input placeholder="Địa chỉ DataStreamModule" class="input" id="connection-manager-module-host-address-input">
-                    <input type="number" placeholder="Cổng DataStreamModule" class="input" id="connection-manager-module-host-port-input">
-                    <input placeholder="Tệp tin JKS" class="input file-input" id="connection-manager-module-jks-path-input">
-                    <input placeholder="Mật khẩu tệp tin JKS" class="input" id="connection-manager-module-jks-password-input">
-                  </div>
-                </div>
-                <div class="title-with-expandable">
-                  <div>
-                    <h2>Ghi chép</h2>
-                    <i class="button expand-button"></i>
-                  </div>
-                  <div>
-                    <ul id="connection-manager-log">
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </li>
-        </ul>
+        <div class="title-with-expandable">
+          <div>
+            <h2>Cài Đặt</h2>
+            <i class="button expand-button"></i>
+          </div>
+          <div class="collapse">
+            <input placeholder="Tệp tin khởi động" class="file-input input" id="connection-manager-module-classpath-input">
+            <input type="number" placeholder="Cổng tiếp nhận máy con" class="input" id="connection-manager-module-port-input">
+            <input placeholder="Địa chỉ DataStreamModule" class="input" id="connection-manager-module-host-address-input">
+            <input type="number" placeholder="Cổng DataStreamModule" class="input" id="connection-manager-module-host-port-input">
+            <input placeholder="Tệp tin JKS" class="input file-input" id="connection-manager-module-jks-path-input">
+            <input placeholder="Mật khẩu tệp tin JKS" class="input" id="connection-manager-module-jks-password-input">
+          </div>
+        </div>
+        <div class="title-with-expandable">
+          <div>
+            <h2>Ghi chép</h2>
+            <i class="button expand-button"></i>
+          </div>
+          <div>
+            <ul id="connection-manager-log">
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </div>
