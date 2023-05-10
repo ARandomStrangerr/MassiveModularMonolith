@@ -100,7 +100,6 @@ input {
 	box-shadow: 1px 1px 10px #8c8c8c;
 	border-radius: 10px;
 	margin-top: 1em;
-	max-height: 44vh;
 }
 .title-with-expandable > div:first-child{
 	display: flex;
