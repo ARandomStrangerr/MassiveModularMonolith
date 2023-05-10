@@ -8,7 +8,6 @@
       <module fileurl="file://$PROJECT_DIR$/MassiveModularMonolith.iml" filepath="$PROJECT_DIR$/MassiveModularMonolith.iml" />
       <module fileurl="file://$PROJECT_DIR$/SMTPMail/SMTPMail.iml" filepath="$PROJECT_DIR$/SMTPMail/SMTPMail.iml" />
       <module fileurl="file://$PROJECT_DIR$/ShareResources/ShareResources.iml" filepath="$PROJECT_DIR$/ShareResources/ShareResources.iml" />
-      <module fileurl="file://$PROJECT_DIR$/TreasuryPublicFinance/TreasuryPublicFinance.iml" filepath="$PROJECT_DIR$/TreasuryPublicFinance/TreasuryPublicFinance.iml" />
       <module fileurl="file://$PROJECT_DIR$/ViettelEInvoice/ViettelEInvoice.iml" filepath="$PROJECT_DIR$/ViettelEInvoice/ViettelEInvoice.iml" />
     </modules>
   </component>
