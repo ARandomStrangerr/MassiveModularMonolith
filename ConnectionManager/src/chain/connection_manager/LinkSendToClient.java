@@ -26,6 +26,12 @@ public class LinkSendToClient extends Link {
             monitorObj.addProperty("notification", "Không thể gửi tin nhắn đến client");
             monitorObj.add("request", chain.getProcessObject());
             MonitorHandler.addQueue(monitorObj);
+        } catch (NullPointerException e) {
+            JsonObject monitorObj = new JsonObject();
+            monitorObj.addProperty("status", false);
+            monitorObj.addProperty("notification", String.format("Không tìm thấy socket với tên %s", socketName));
+            monitorObj.add("request", chain.getProcessObject());
+            MonitorHandler.addQueue(monitorObj);
         }
         return true;
     }
