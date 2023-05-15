@@ -3,7 +3,6 @@ package chain.connection_manager;
 import chain.Chain;
 import chain.Link;
 import memorable.ConnectionManager;
-import socket_handler.SocketWrapper;
 
 import java.io.IOException;
 
@@ -17,8 +16,7 @@ public class LinkTerminateSocketFromClient extends Link {
         if (!chain.getProcessObject().get("header").getAsJsonObject().get("status").getAsBoolean()) {
             try {
                 ConnectionManager.getInstance().listenerWrapper.removeSocket(chain.getProcessObject().get("header").getAsJsonObject().get("clientId").getAsString()).close();
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException | NullPointerException ignore) {
             }
         }
         return true;
