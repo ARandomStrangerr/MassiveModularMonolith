@@ -2,7 +2,6 @@ package database;
 
 import java.sql.*;
 import java.util.LinkedList;
-import java.util.NoSuchElementException;
 
 public abstract class ConnectionPool {
     private final LinkedList<Connection> connectionPool;
@@ -29,30 +28,11 @@ public abstract class ConnectionPool {
     }
 
     private synchronized Connection getConnection() throws InterruptedException {
-        /*
-        todo resolve this problem.
-        it is quite strange when one thread return connection notify another thread,
-        it has 0 available connection in the pool when there is supposed to be 1.
-        it is supposed to be:
-        0 connection -> a thread return connection ( 1 connection ) -> notify the next thread ( 1 connection )
-        -> the next thread claim the connection ( 0 connection )
-        instead :
-        0 connection -> a thread return connection ( 1 connection ) -> ? something happened here ( 0 connection )
-        -> notify the next thread ( 0 connection ) -> the next thread claim the connection ( 0 connection ) ERROR !
-        one possible answer is to queue the line again if fail to retread a connection. which is implemented as follow.
-        however, I wish to do this one time only without this safe net.
-         */
-        while (true) {
-            if (connectionPool.size() == 0 || queue.size() != 0) {
-                queue.add(this);
-                wait();
-            }
-            try {
-                return connectionPool.removeFirst();
-            } catch (NoSuchElementException e) {
-                continue;
-            }
+        if (connectionPool.size() == 0 || queue.size() != 0) {
+            queue.add(this);
+            wait();
         }
+        return connectionPool.removeFirst();
     }
 
     private synchronized void returnConnection(Connection con) {
