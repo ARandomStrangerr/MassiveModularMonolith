@@ -14,9 +14,9 @@ public class LinkLogFailureRequest extends Link {
     public boolean execute() {
         JsonObject monitorObj = new JsonObject();
         monitorObj.addProperty("status", false);
-        monitorObj.add("notification", chain.getProcessObject().get("body").getAsJsonObject().get("error"));
+        monitorObj.add("notification", chain.getProcessObject().get("error"));
         monitorObj.add("request", chain.getProcessObject());
         MonitorHandler.addQueue(monitorObj);
-        return false;
+        return true;
     }
 }
