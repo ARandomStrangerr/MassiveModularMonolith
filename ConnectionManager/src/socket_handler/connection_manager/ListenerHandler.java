@@ -89,11 +89,28 @@ public class ListenerHandler extends socket_handler.ListenerHandler {
                     return false;
                 }
                 // check if there is already socket under this nameConnectionManager.getInstance().listenerWrapper.getSocket(socket.getName())
-                if (ConnectionManager.getInstance().listenerWrapper.getSocket(authenticationJson.get("macAddress").getAsString()) != null) {
+                String key;
+                try {
+                    key = authenticationJson.get("macAddress").getAsString();
+                } catch (NullPointerException e) {
+                    try {
+                        socket.write("{error: \"Trường thông tin macAddress không tồn tại\"}");
+                    } catch (IOException e1) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                    JsonObject monitorObj = new JsonObject();
+                    monitorObj.addProperty("status", false);
+                    monitorObj.addProperty("notification", "Kết nối không khai báo macAddress");
+                    MonitorHandler.addQueue(monitorObj);
+                    return false;
+                }
+                if (ConnectionManager.getInstance().listenerWrapper.getSocket(key) != null) {
                     try {
                         socket.write("{error: \"Có kết nối khác đã được thiết lập với máy chủ\"}");
                     } catch (IOException e) {
                         e.printStackTrace();
+                        return false;
                     }
                     JsonObject monitorObj = new JsonObject();
                     monitorObj.addProperty("status", false);
