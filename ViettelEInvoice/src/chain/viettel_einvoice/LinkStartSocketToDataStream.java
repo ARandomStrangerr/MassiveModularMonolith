@@ -32,7 +32,7 @@ public class LinkStartSocketToDataStream extends Link {
         }
         JsonObject monitorObject = new JsonObject();
         monitorObject.addProperty("status", true);
-        monitorObject.addProperty("notification", "Success start and connect to Data Stream module");
+        monitorObject.addProperty("notification", "kết nối đến Data Stream module");
         MonitorHandler.addQueue(monitorObject);
         return true;
     }
