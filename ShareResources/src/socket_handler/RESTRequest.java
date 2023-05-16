@@ -66,7 +66,7 @@ public class RESTRequest {
         return reader.readLine();
     }
     public static String post(String uri, String body, HashMap<String, String> header) throws IOException {
-        HttpURLConnection con = (HttpURLConnection) new URL(uri).openConnection();
+        HttpsURLConnection con = (HttpsURLConnection) new URL(uri).openConnection();
         con.setDoOutput(true);
         con.setRequestMethod("POST");
         if (header != null)
