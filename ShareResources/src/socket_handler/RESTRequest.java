@@ -66,7 +66,7 @@ public class RESTRequest {
         return reader.readLine();
     }
     public static String post(String uri, String body, HashMap<String, String> header) throws IOException {
-        HttpsURLConnection con = (HttpsURLConnection) new URL(uri).openConnection();
+        HttpURLConnection con = (HttpURLConnection) new URL(uri).openConnection();
         con.setDoOutput(true);
         con.setRequestMethod("POST");
         if (header != null)
@@ -75,9 +75,12 @@ public class RESTRequest {
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(con.getOutputStream()));
         writer.write(body);
         writer.flush();
-        writer.close();
         BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
-        return reader.readLine();
+        String returnString =  reader.readLine();
+        writer.close();
+        reader.close();
+        con.disconnect();
+        return returnString;
     }
 
     public static String get(String uri) throws IOException {
