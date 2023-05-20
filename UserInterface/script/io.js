@@ -23,10 +23,11 @@ async function readExcelFile(path){
 	const data = await excelReader(path);
 	return data;
 }
+
 class SocketOperation {
 	#socket; // the socket itself
 
-	constructor (certificatePath, keyPath, address, port, macAddress, errHandler){
+	constructor (certificatePath, keyPath, address, port){
 		process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 		const fileSystem = require("fs");
 		const tls = require("tls");
@@ -34,27 +35,38 @@ class SocketOperation {
 			key: fileSystem.readFileSync(keyPath),
 			cert: fileSystem.readFileSync(certificatePath)
 		};
-		// declare another variable due to JS prevent to use the private element of the class
-		let socket = tls.connect(port, address, option, function() {
-			socket.setEncoding("utf8");
+		this.#socket = tls.connect(port, address, option, () => {
+			this.#socket.setEncoding("utf8");
 		});
 		const writeData = {
-			macAddress: macAddress
+			macAddress: this.#getMacAddress()
 		};
-		socket.on("error", errHandler)
-		socket.write(`${JSON.stringify(writeData)}\n`);
-		// set the local variables to this class private variables
-		this.#socket = socket;
+		this.#socket.on("data", (data) => console.log(data));
+		this.#socket.write(`${JSON.stringify(writeData)}\n`);;
 	}
 
-	read(callback) {
-		this.#socket.on("data", callback);
-	}
 	write(data){
 		this.#socket.write(`${data}\n`);
 	}
+
 	close() {
 		this.#socket.destroy();
+	}
+
+	#getMacAddress(){
+		let netInterfaces = require("os").networkInterfaces();
+		let macAddr;
+		for (let key in netInterfaces) {
+			let netInterface = netInterfaces[key];
+			for (let i of netInterface) {
+				if (i.mac!=="00:00:00:00:00:00") {
+					macAddr = i.mac;
+					break;
+				}
+			}
+			if (macAddr) break;
+		}
+		return macAddr;
 	}
 }
 
@@ -63,6 +75,6 @@ module.exports = {
 	readTextFile: readTextFile,
 	readFileBase64: readBase64,
 	readBlob: readBuffer,
-	writeTextFile: writeTextFile
+	writeTextFile: writeTextFile,
+	socket: SocketOperation
 };
-
