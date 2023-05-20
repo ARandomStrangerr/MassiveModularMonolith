@@ -17,7 +17,7 @@ class LinkSetInfo extends Link {
         memorableObject.setModuleName(chain.getProcessObject().get("moduleName").getAsString());
         JsonObject monitorObject = new JsonObject();
         monitorObject.addProperty("status", true);
-        monitorObject.addProperty("notification", "declare initial information");
+        monitorObject.addProperty("notification", "Khai báo dữ liệu ban đầu");
         MonitorHandler.addQueue(monitorObject);
         return true;
     }

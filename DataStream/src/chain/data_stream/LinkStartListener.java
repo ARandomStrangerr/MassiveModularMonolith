@@ -38,7 +38,7 @@ class LinkStartListener extends Link {
         DataStream.getInstance().setListener(listener);
         JsonObject monitorObject = new JsonObject();
         monitorObject.addProperty("status", true);
-        monitorObject.addProperty("notification", "open a TLS socket at port " + processObject.get("port").getAsString());
+        monitorObject.addProperty("notification", "Mở TLS socket " + processObject.get("port").getAsString());
         MonitorHandler.addQueue(monitorObject);
         return true;
     }

@@ -19,7 +19,7 @@ public class LinkStartSystemMonitor extends Link {
         new Thread(new MonitorHandler(logFileName)).start();
         JsonObject monitorObject = new JsonObject();
         monitorObject.addProperty("status", true);
-        monitorObject.addProperty("notification", "start thread for monitoring tool");
+        monitorObject.addProperty("notification", "Khởi động hệ thống ghi chép thông tin");
         MonitorHandler.addQueue(monitorObject);
         return true;
     }
