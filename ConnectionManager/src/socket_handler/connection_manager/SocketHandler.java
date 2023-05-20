@@ -5,6 +5,7 @@ import chain.connection_manager.ChainProcessOutGoingRequest;
 import memorable.ConnectionManager;
 import socket_handler.SocketWrapper;
 import com.google.gson.JsonObject;
+import system_monitor.MonitorHandler;
 
 import java.io.IOException;
 
@@ -37,6 +38,10 @@ public class SocketHandler extends socket_handler.SocketHandler {
     }
 
     public void cleanup(){
+        JsonObject monitorObject = new JsonObject();
+        monitorObject.addProperty("status", false);
+        monitorObject.addProperty("notification", "Mất kết nối với DataStream");
+        MonitorHandler.addQueue(monitorObject);
         System.exit(1);
     }
 }
