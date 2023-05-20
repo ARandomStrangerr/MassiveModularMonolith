@@ -117,7 +117,14 @@ img{
 	background-image: url(./edit.png);
 	background-size: contain;
 }
-
+.upload-button{
+	background-image: url(./upload.png);
+	background-size: contain;
+}
+.download-button{
+	background-image: url(./download.png);
+	background-size: contain;
+}
 .major-pane{
 }
 
@@ -141,9 +148,7 @@ img{
 }
 .float-div-right{
 	right: 0em;
-}
-.float-div-right > div{
-	min-width: 10em;
+	white-space: nowrap;
 }
 .float-div-inactive {
 	height: 0px;
@@ -196,7 +201,10 @@ img{
 	display: flex;
 	padding: 0px;
 }
-
+#notification > .button {
+	background-image: url(./bell.png);
+	background-size: contain;
+}
 #notification-container {
 	position: fixed;
 	display: flex;

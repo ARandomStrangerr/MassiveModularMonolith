@@ -10,20 +10,28 @@
 	<title></title>
 </head>
 <body>
-	<div class="dropdown hide-on-click" id="menu"> <!-- selection pane menu -->
-		<a class="button"> <div></div><div></div><div></div> </a>
-		<div class="float-div float-div-inactive">
-			<div class="toggle-pane-button" id="smtp-mail">SMTP Mail</div>
-			<div class="toggle-pane-button" id="public-finance">Tài Chính Công</div>
-			<div class="toggle-pane-button" id="setting">Cài đặt</div>
+	<div class="header">
+		<div class="dropdown hide-on-click" id="menu"> <!-- selection pane menu -->
+			<a class="trigger-element button"> <div></div><div></div><div></div> </a>
+			<div class="react-element float-div float-div-inactive">
+				<div class="toggle-pane-button" id="smtp-mail">SMTP Mail</div>
+				<div class="toggle-pane-button" id="invoice">Hóa Điện tử</div>
+				<div class="toggle-pane-button" id="setting">Cài đặt</div>
+			</div>
+		</div>
+		<div class="dropdown" id="notification">
+			<a class="button trigger-element"></a>
+			<div class="react-element float-div float-div-right float-div-inactive">
+
+			</div>
 		</div>
 	</div>
 	<div class="major-pane float-div-inactive" id="smtp-mail-pane"> <!-- SMTP mail pane -->
 		<div class="header"> <!-- header -->
 			<h1>SMTP Mail</h1> <!-- pane title -->
 			<div class="dropdown"> <!-- config area -->
-				<a class="button config-button" id="smtp-setting-button"></a>
-				<div class="float-div float-div-right float-div-inactive" id="smtp-setting-div">
+				<a class="trigger-element button config-button" id="smtp-setting-button"></a>
+				<div class="react-element float-div float-div-right float-div-inactive" id="smtp-setting-div">
 					<div>
 						Tên người dùng <br>
 						<input class="setting-input" id="smtp-username">
@@ -56,8 +64,8 @@
 				<div>
 					<a id="smtp-send-button" class="button"><img src="message.png"></a>
 					<div class="dropdown hide-on-click">
-						<a class="button green-button">+</a>
-						<div class="float-div float-div-right float-div-inactive">
+						<a class="trigger-element button green-button">+</a>
+						<div class="react-element float-div float-div-right float-div-inactive">
 							<div id="add-email-button">Thêm một email</div>
 							<div id="add-email-excel">Thêm từ tệp tin excel</div>
 						</div>
@@ -68,54 +76,43 @@
 			</ul>
 		</div>
 	</div>
-	<div class="major-pane float-div-inactive" id="public-finance-pane"> <!-- public finance pane -->
-		<div class="header"> <!-- header -->
-			<h1>Phần Mềm Kêt Nối Và Tích Hợp Vào Hệ Thóng Dịch Vụ Công Trực Tuyến KBNN</h1> <!-- title pane -->
-			<div class="dropdown"> <!-- config area -->
-				<a class="button config-button" id="public-finance-setting-button"></a>
-				<div class="float-div float-div-right float-div-inactive" id="public-finance-setting-div">
+	<div class="major-pane float-div-inactive" id="invoice-pane"> <!-- e-invoice -->
+		<div class="header">
+			Hóa đơn điện tử
+			<div class="dropdown">
+				<a class="trigger-element button config-button"></a>
+				<div class="react-element float-div float-div-inactive float-div-right" id="invoice-setting">
 					<div>
 						Tên người dùng<br>
-						<input class="setting-input" id="public-finance-username">
+						<input class="setting-input" id="invoice-username">
 					</div>
 					<div>
 						Mật khẩu<br>
-						<input class="setting-input" id="public-finance-password">
-					</div>
-					<div>
-						Mã quan hệ ngân sách<br>
-						<input class="setting-input" id="public-finance-budeget-code">
+						<input class="setting-input" id="invoice-password">
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="three-view"> <!-- body -->
+		<div>
 			<div class="header">
-				Danh Sách Thông Tin
-				<div>
-					<a id="public-finance-send-button" class="button"><img src="message.png"></a>
-					<div class="dropdown hide-on-click">
-						<a class="button green-button">+</a>
-						<div class="float-div float-div-right float-div-inactive">
-							<div id="public-finance-form-1">Mẫu Chứng Từ 16a1 (C2-02a/NS)</div>
-							<div id="public-finance-form-2">Mẫu Chứng Từ 16a2 (C2-02b/NS)</div>
-							<div id="public-finance-form-3">Hạch Toán 16a1 (C2-02a/NS) hoặc 16a2 (C2-02b/NS)</div>
-							<div id="public-finance-form-4">Mẫu Chứng Từ 16c1 (C4-02a/KB)</div>
-							<div id="public-finance-form-5">Mẫu Chứng Từ 16c3 (C4-02c/KB)</div>
-							<div id="public-finance-form-6">Hạch Toán 16c1 (C4-02a/KB)</div>
-							<div id="public-finance-form-7">Hạch Toán 16c3 (C4-02c/KB)</div>
-							<div id="public-finance-form-8">Bảng Kê 07 (M01)</div>
-							<div id="public-finance-form-9">Chi Tiết bản kê 07 (M01)</div>
-							<div id="public-finance-form-10">Mẫu Chứng Từ 05a (C2-03/NS)</div>
-							<div id="public-finance-form-11">Hạch Toán 05a (C2-03/NS)</div>
-							<div id="public-finance-form-12">Mẫu Chứng Từ 06 (C2-05a/NS)</div>
-							<div id="public-finance-form-13">Hạch Toán 06 (C2-05a/NS)</div>
-						</div>
-					</div>
-				</div>
+				Tạo Hóa Đơn Từ Tệp Tin Excel
+				<a class="button upload-button" id="upload-invoice-button"></a>
 			</div>
-			<ul class="tree-view" id="public-finance-list">
-			</ul>
+			<input class="file-input" id="excel-invoice-input" placeholder="Địa chỉ tệp tin excel">
+		</div>
+		<div>
+			<div class="header">
+				Tải hóa đơn về
+				<a class="button download-button" id="download-invoice-button"></a>
+			</div>
+			<div>
+				Số bắt đầu
+				<input type="text" id="start-invoice-number-input">
+			</div>
+			<div>
+				Số kết thúc
+				<input type="text" id="end-invoice-number-input">
+			</div>
 		</div>
 	</div>
 	<div class="major-pane float-div-inactive" id="setting-pane"> <!-- setting pane and sources credit -->
@@ -124,8 +121,6 @@
 		Cổng
 		<input type="number" class="setting-input" id="home-port">
 		<a href="https://www.flaticon.com/free-icon/message_3062634?term=send+mail&page=1&position=14&origin=tag&related_id=3062634">send mail icon</a>
-	</div>
-	<div id="notification-container"> <!-- notification container -->
 	</div>
 </body>
 </html>
