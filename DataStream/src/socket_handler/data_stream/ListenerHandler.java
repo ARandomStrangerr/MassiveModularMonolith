@@ -80,7 +80,7 @@ public class ListenerHandler extends socket_handler.ListenerHandler {
                 // print out the socket accepted
                 JsonObject monitorObject = new JsonObject();
                 monitorObject.addProperty("status", true);
-                monitorObject.addProperty("notification", "accepted a socket from module with name of " + socket.getName());
+                monitorObject.addProperty("notification",socket.getName() + " kết nối đến máy chủ");
                 MonitorHandler.addQueue(monitorObject);
                 return true;
             }
@@ -90,7 +90,7 @@ public class ListenerHandler extends socket_handler.ListenerHandler {
                     DataStream.getInstance().getListener().removeSocket(socket.getName());
                     JsonObject monitorObject = new JsonObject();
                     monitorObject.addProperty("status", true);
-                    monitorObject.addProperty("notification", "instance socket from module with name of " + socket.getName() + " is closed and removed");
+                    monitorObject.addProperty("notification", socket.getName() + " ngắt kết nối đến máy chủ");
                     MonitorHandler.addQueue(monitorObject);
                 }
             }
