@@ -5,6 +5,7 @@ import chain.viettel_einvoice.ChainHandleFailure;
 import chain.viettel_einvoice.ChainHandleRequest;
 import com.google.gson.JsonObject;
 import socket_handler.SocketWrapper;
+import system_monitor.MonitorHandler;
 
 import java.io.IOException;
 
@@ -39,6 +40,10 @@ public class SocketHandler extends socket_handler.SocketHandler {
 
     @Override
     public void cleanup() {
+        JsonObject monitorObject = new JsonObject();
+        monitorObject .addProperty("status", false);
+        monitorObject.addProperty("notification", "mất kêt nối với " + socket.getName());
+        MonitorHandler.addQueue(monitorObject);
         System.exit(1);
     }
 }
