@@ -6,8 +6,7 @@ import com.google.gson.JsonObject;
 public class ChainHandleRequest extends Chain {
     public ChainHandleRequest(JsonObject processObject) {
         super(processObject);
-        super.addLink(new LinkMaterializeExcelFile(this),
-            new LinkReadExcelFile(this),
-            new LinkSendInvoice(this));
+        super.addLink(new LinkGetAuthenticate(this),
+			new LinkExtendChain(this));
     }
 }
