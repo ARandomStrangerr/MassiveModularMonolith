@@ -46,17 +46,29 @@ html{
 	height: 100%;
 }
 body{
+	user-select: none;
 	padding: 2em;
-	font: 24px 'Roboto', sans-serif;
+	font: 24px 'Montserrat', sans-serif;
 }
 h1{
 	display: inline;
 }
 input{
-	font: 24px 'Roboto', sans-serif;
+	font: 24px 'Montserrat', sans-serif;
+	border-style: solid;
+	border-color:#e9ecef;
+	border-width: 1px;
+	padding: .2em;
+	width: 100%;
+}
+input:hover{
+	box-shadow: inset 0em 0em .2em #dee2e6;
+}
+input:focus{
+	outline:none;
 }
 textarea{
-	font: 24px 'Roboto', sans-serif;
+	font: 24px 'Montserrat', sans-serif;
 	width: 100%;
 	height: 6em;
 }
@@ -78,7 +90,6 @@ img{
 	display: flex;
 	flex-direction: row;
 }
-
 .button {
 	display: flex;
 	width: 2em;
@@ -92,7 +103,7 @@ img{
 	background-color: #f8f9fa;
 }
 .button-active{
-	background-color:#dee2e6;
+	background-color:#e9ecef;
 }
 .button:hover{
 	background-color:#e9ecef;
@@ -133,11 +144,16 @@ img{
 	padding: 0px;
 }
 .float-div {
+	max-height: 10em;
+	border-style: solid;
+	border-color: #e9ecef;
+	border-width: 1px;
+	border-radius: 0.5em;
+	background-color: white;
 	top: 3em;
+	white-space: nowrap;
 	position: absolute;
 	padding: 0.5em;
-	background-color: #dee2e6;
-	border-radius: 0.5em;
 	transition: 0.2s;
 	overflow-y: hidden;
 	box-shadow: 0.5em 0.5em 1em #dee2e6;
@@ -145,13 +161,25 @@ img{
 }
 .float-div > div {
 	padding: 0.5em;
+	cursor: pointer;
+	transition: .2s;
+	border-radius: .5em;
+	margin-bottom: 0.5em;
+
+}
+.float-div > div:last-child {
+	margin-bottom: 0em;
+}
+
+.float-div > div:hover {
+	background-color: #e9ecef;
 }
 .float-div-right{
 	right: 0em;
-	white-space: nowrap;
 }
 .float-div-inactive {
-	height: 0px;
+	border-width: 0px;
+	max-height: 0px;
 	padding: 0px;
 	overflow-y:hidden;
 }
@@ -217,6 +245,16 @@ img{
 	bottom: 1em;
 	padding:0em;
 }
+.alert::after{
+	content: "";
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	width:.5em;
+	height:.5em;
+	border-radius:50%;
+	background-color:#ee6055;
+}
 .notification {
 	margin-top: 1em;
 	border-radius: 05em;
@@ -240,4 +278,20 @@ img{
 	width: 1em;
 	border-radius: 50%;
 	background-color: black;
+}
+
+.connected-input {
+	display:flex;
+	border-style: solid;
+	border-color:#e9ecef;
+	border-width: 1px;
+	padding: 0px;
+	align-items: center;
+	width: auto;
+}
+.connected-input > input{
+	border-style: none;
+}
+.connected-input > * {
+	width: calc(100%/3);
 }

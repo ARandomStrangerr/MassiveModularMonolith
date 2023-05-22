@@ -34,6 +34,7 @@ function addNotification(style, msg){
 	let notification = document.createElement("div");
 	notification.classList.add(style);
 	notification.innerText = msg;
+	document.querySelector("#notification > .trigger-element").classList.add("alert");
 	document.querySelector("#notification > .react-element").appendChild(notification);
 }
 function addValidNotification(msg){
@@ -43,12 +44,26 @@ function addInvalidNotification(msg){
 	addNotification("red-notification", msg);
 }
 
+// remove notification on bell click
+document.querySelector("#notification > .trigger-element").addEventListener("click", () => document.querySelector("#notification > .trigger-element").classList.remove("alert"))
+
+// file input behaviour
 document.querySelectorAll(".file-input").forEach(e => {
 	e.readOnly = true;
 	e.addEventListener("click", () => {
 		let input = document.createElement("input");
 		input.type = "file";
 		input.onchange = () => e.value = input.files[0].path;
+		input.click();
+	});
+});
+
+// folder input behaviour
+document.querySelectorAll(".folder-input").forEach(e => {
+	e.readOnly = true;
+	e.addEventListener("click", () => {
+		let input = document.createElement("input");
+		input.type = "directory";
 		input.click();
 	});
 });
@@ -69,6 +84,15 @@ document.querySelectorAll(".expand").forEach(e => {
 	const reactElement = e.querySelector(".react-element");
 });
 
+// selection input behaviour
+document.querySelectorAll(".selection-input").forEach(e => {
+	let triggerElement = e.querySelector(".trigger-element");
+	e.querySelector(".react-element").querySelectorAll("div").forEach(e1 => {
+		// console.log(e1);
+		e1.addEventListener("click", () => triggerElement.innerText = e1.innerText);
+	});
+});
+
 // selecting pane behaviours
 let currentDisplayPane;
 document.querySelectorAll(".toggle-pane-button").forEach(e => {
@@ -82,8 +106,8 @@ document.querySelectorAll(".toggle-pane-button").forEach(e => {
 
 // hide on click pane behaviours
 document.querySelectorAll(".hide-on-click").forEach(e => {
-	const toggleBtn = e.querySelector(".button");
-	const toggleEle = e.querySelector(".float-div");
+	const toggleBtn = e.querySelector(".trigger-element");
+	const toggleEle = e.querySelector(".react-element");
 	toggleEle.addEventListener("click", () => {
 		toggleBtn.classList.toggle("button-active");
 		toggleEle.classList.toggle("float-div-inactive");

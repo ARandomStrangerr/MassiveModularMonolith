@@ -41,8 +41,11 @@ class SocketOperation {
 		const writeData = {
 			macAddress: this.#getMacAddress()
 		};
-		this.#socket.on("data", (data) => console.log(data));
 		this.#socket.write(`${JSON.stringify(writeData)}\n`);;
+	}
+
+	onData(fcn){
+		this.#socket.on("data", (data) => fcn(data));
 	}
 
 	write(data){

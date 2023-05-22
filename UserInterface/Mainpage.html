@@ -5,7 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<title></title>
 </head>
@@ -21,9 +21,7 @@
 		</div>
 		<div class="dropdown" id="notification">
 			<a class="button trigger-element"></a>
-			<div class="react-element float-div float-div-right float-div-inactive">
-
-			</div>
+			<div class="react-element float-div float-div-right float-div-inactive"></div>
 		</div>
 	</div>
 	<div class="major-pane float-div-inactive" id="smtp-mail-pane"> <!-- SMTP mail pane -->
@@ -106,12 +104,33 @@
 				<a class="button download-button" id="download-invoice-button"></a>
 			</div>
 			<div>
-				Số bắt đầu
-				<input type="text" id="start-invoice-number-input">
+				Thư mục chứa hóa đơn tải về<br>
+				<input type="text" id="invoice-download-folder" placeholder="Thư mục Download mặc định">
 			</div>
 			<div>
-				Số kết thúc
-				<input type="text" id="end-invoice-number-input">
+				Ký hiệu mẫu hóa đơn
+				<div class="connected-input">
+					<div class="dropdown hide-on-click selection-input" id="template-code-input">
+						<a class="trigger-element">Ký hiệu loại hóa đơn</a>
+						<div class="react-element float-div float-div-inactive">
+							<div>01GTKT</div>
+							<div>02GTTT</div>
+							<div>07KPTQ</div>
+							<div>03XKNB</div>
+							<div>04HGDL</div>
+						</div>
+					</div>
+					<span>0/</span>
+					<input type="number" placeholder="Số mẫu hóa đơn" id="template-number-input">
+				</div>
+			</div>
+			<div>
+				Số hóa đơn tải về
+				<div class="connected-input">
+					<input type="text" placeholder="Kí hiệu hóa đơn" id="invoice-series-input">
+					<input type="number" id="start-invoice-number-input" placeholder="Số bắt đầu" pattern="[0-9]{8}">
+					<input type="number" id="end-invoice-number-input" placeholder="Số kết thúc">
+				</div>
 			</div>
 		</div>
 	</div>
