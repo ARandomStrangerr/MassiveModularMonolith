@@ -4,8 +4,8 @@ import chain.Chain;
 import chain.Link;
 import com.google.gson.JsonObject;
 
-public class LinkFormatSuccessGetInvoiceRequest extends Link {
-	public LinkFormatSuccessGetInvoiceRequest(Chain chain) {
+public class LinkFormatSuccessDownloadInvoiceRequest extends Link {
+	public LinkFormatSuccessDownloadInvoiceRequest(Chain chain) {
 		super(chain);
 	}
 

@@ -7,12 +7,13 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import memorable.ViettelEInvoice;
 import socket_handler.RESTRequest;
+import system_monitor.MonitorHandler;
 
 import java.io.IOException;
 import java.util.HashMap;
 
-public class LinkGetInvoice extends Link {
-	public LinkGetInvoice(Chain chain) {
+public class LinkDownloadInvoice extends Link {
+	public LinkDownloadInvoice(Chain chain) {
 		super(chain);
 	}
 
@@ -33,11 +34,15 @@ public class LinkGetInvoice extends Link {
 		JsonObject updateObject = new JsonObject();
 		updateObject.add("header", chain.getProcessObject().get("header")); // this is passed by ref. therefore the next step remove and change also change the processing json
 		updateObject.get("header").getAsJsonObject().add("to", updateObject.get("header").getAsJsonObject().remove("from"));
+		// Gson to convert data to JsonObject
+		Gson gson = new Gson();
+		String clientTaxCode = chain.getProcessObject().get("body").getAsJsonObject().get("username").getAsString();
 		for (int i = chain.getProcessObject().get("body").getAsJsonObject().get("start").getAsInt(); i <= chain.getProcessObject().get("body").getAsJsonObject().get("end").getAsInt(); i++) {
-			sendObject.addProperty("invoiceNo", String.format("%s%07d", invoiceSeries, i));
+			String invoiceNumber = String.format("%s%07d", invoiceSeries, i);
+			sendObject.addProperty("invoiceNo", invoiceNumber);
 			JsonObject returnObject;
 			try {
-				returnObject = new Gson().fromJson(RESTRequest.post(Url.DownloadInvoice.path, sendObject.toString(), maps), JsonObject.class);
+				returnObject = gson.fromJson(RESTRequest.post(Url.DownloadInvoice.path, sendObject.toString(), maps), JsonObject.class);
 			} catch (IOException e) {
 				chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "Không tìm thấy hóa đơn" + sendObject.get("invoiceNo").getAsString());
 				return false;
@@ -55,6 +60,10 @@ public class LinkGetInvoice extends Link {
 				e.printStackTrace();
 				return false;
 			}
+			JsonObject monitorObject = new JsonObject();
+			monitorObject.addProperty("status", true);
+			monitorObject.addProperty("notification", String.format("Đơn vi với mã số thuế %s lấy hóa đơn %s", clientTaxCode, invoiceNumber));
+			MonitorHandler.addQueue(monitorObject);
 		}
 		return true;
 	}
