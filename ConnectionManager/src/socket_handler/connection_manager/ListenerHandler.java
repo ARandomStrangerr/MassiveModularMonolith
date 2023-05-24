@@ -107,14 +107,14 @@ public class ListenerHandler extends socket_handler.ListenerHandler {
                 }
                 if (ConnectionManager.getInstance().listenerWrapper.getSocket(key) != null) {
                     try {
-                        socket.write("{error: \"Có kết nối khác đã được thiết lập với máy chủ\"}");
+                        socket.write("{\"error\": \"Có kết nối khác đã được thiết lập với máy chủ\"}");
                     } catch (IOException e) {
                         e.printStackTrace();
                         return false;
                     }
                     JsonObject monitorObj = new JsonObject();
                     monitorObj.addProperty("status", false);
-                    monitorObj.addProperty("notification", String.format("Đã có kết nối %s thiết lập với máy chủ", socket.getName()));
+                    monitorObj.addProperty("notification", String.format("Đã có kết nối %s thiết lập với máy chủ", key));
                     MonitorHandler.addQueue(monitorObj);
                     return false;
                 }
