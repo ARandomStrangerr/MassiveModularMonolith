@@ -8,11 +8,10 @@ import java.net.URL;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.util.HashMap;
 import java.util.Map;
 
 public class RESTRequest {
-    public static String untrustPost(String uri, String body, HashMap<String, String> header) throws IOException {
+    public static String untrustPost(String uri, String body, Map<String, String> header) throws IOException {
         TrustManager[] trustAllCerts = new TrustManager[] {
             new X509ExtendedTrustManager() {
                 @Override
@@ -65,7 +64,7 @@ public class RESTRequest {
         BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
         return reader.readLine();
     }
-    public static String post(String uri, String body, HashMap<String, String> header) throws IOException {
+    public static String post(String uri, String body, Map<String, String> header) throws IOException {
         HttpURLConnection con = (HttpURLConnection) new URL(uri).openConnection();
         con.setDoOutput(true);
         con.setRequestMethod("POST");
