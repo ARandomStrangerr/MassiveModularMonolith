@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 public class ChainHandleRequest extends Chain {
     public ChainHandleRequest(JsonObject processObject) {
         super(processObject);
-        super.addLink(new LinkGetAuthenticate(this),
-			new LinkExtendChain(this));
+        super.addLink(new LinkChooseChain(this),
+			new LinkReturnRequest(this));
     }
 }
