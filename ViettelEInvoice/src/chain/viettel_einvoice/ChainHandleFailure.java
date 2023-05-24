@@ -8,6 +8,6 @@ public class ChainHandleFailure extends Chain {
         super(processObject);
         super.addLink(new LinkLogFalseRequest(this),
             new LinkFormatFalseRequest(this),
-            new LinkSendRequest(this));
+            new LinkReturnRequest(this));
     }
 }

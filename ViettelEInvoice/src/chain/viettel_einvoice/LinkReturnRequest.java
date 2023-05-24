@@ -6,13 +6,16 @@ import memorable.ViettelEInvoice;
 
 import java.io.IOException;
 
-public class LinkSendRequest extends Link {
-    public LinkSendRequest(Chain chain) {
+public class LinkReturnRequest extends Link {
+    public LinkReturnRequest(Chain chain) {
         super(chain);
     }
 
     @Override
     public boolean execute() {
+		try {
+			Thread.sleep(2000);
+		} catch (Exception ignore){}
         try{
             ViettelEInvoice.socketToDataStream.write(chain.getProcessObject().toString());
         } catch (IOException e){
