@@ -21,15 +21,14 @@ public class LinkGetAuthenticate extends Link {
         sendObject.add("password", chain.getProcessObject().get("body").getAsJsonObject().get("password"));
         HashMap<String, String> maps = new HashMap<>();
         maps.put("Content-Type", "application/json");
-        String returnString;
+		JsonObject returnJson;
         try {
-            returnString = RESTRequest.post(Url.Authenticate.path, sendObject.toString(), maps);
+			returnJson = new Gson().fromJson(RESTRequest.post(Url.Authenticate.path, sendObject.toString(), maps), JsonObject.class);
         } catch (IOException e) {
             chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "Không thể đăng nhập vào máy chủ Viettel");
             return false;
         }
-        JsonObject returnJson = new Gson().fromJson(returnString, JsonObject.class);
-		chain.getProcessObject().get("body").getAsJsonObject().add("cookies", returnJson.get("access_token"));
+		chain.getProcessObject().get("body").getAsJsonObject().add("accessToken", returnJson.get("access_token"));
         return true;
     }
 }
