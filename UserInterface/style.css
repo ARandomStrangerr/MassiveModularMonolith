@@ -155,7 +155,7 @@ img{
 	position: absolute;
 	padding: 0.5em;
 	transition: 0.2s;
-	overflow-y: hidden;
+	overflow-y: scroll;
 	box-shadow: 0.5em 0.5em 1em #dee2e6;
 	z-index: 10;
 }

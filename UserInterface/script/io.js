@@ -38,10 +38,14 @@ class SocketOperation {
 		this.#socket = tls.connect(port, address, option, () => {
 			this.#socket.setEncoding("utf8");
 		});
+		this.#socket.on("error",(e) => {
+			console.log(e);
+			addInvalidNotification("Không kết nối được đến máy chủ")
+		});
 		const writeData = {
 			macAddress: this.#getMacAddress()
 		};
-		this.#socket.write(`${JSON.stringify(writeData)}\n`);;
+		this.#socket.write(`${JSON.stringify(writeData)}\n`);
 	}
 
 	onData(fcn){

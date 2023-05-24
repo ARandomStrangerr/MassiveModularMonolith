@@ -115,7 +115,7 @@ document.querySelectorAll(".hide-on-click").forEach(e => {
 });
 
 // SMTP Mail pane behaviour class
-new (require("./script/SMTPMail.js"))(addValidNotification, addInvalidNotification);
+new (require("./script/SMTPMail.js"))();
 
 // E-Invoive pane behaviour class
-new (require("./script/EInvoice.js"))(addValidNotification, addInvalidNotification);
+new (require("./script/EInvoice.js"))();
