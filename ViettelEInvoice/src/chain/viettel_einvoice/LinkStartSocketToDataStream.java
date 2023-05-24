@@ -27,7 +27,10 @@ public class LinkStartSocketToDataStream extends Link {
             ViettelEInvoice.socketToDataStream = socket;
             new Thread(new SocketHandler(socket, moduleName)).start();
         } catch (Exception e){
-            e.printStackTrace();
+			JsonObject monitorObject = new JsonObject();
+			monitorObject.addProperty("status", false);
+			monitorObject.addProperty("notification", "kết nối đến Data Stream module bị từ chối");
+			MonitorHandler.addQueue(monitorObject);
             return false;
         }
         JsonObject monitorObject = new JsonObject();
