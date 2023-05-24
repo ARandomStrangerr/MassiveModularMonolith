@@ -20,7 +20,6 @@ class LinkSendToModule extends Link {
         // get the socket which the end module associated to
         SocketWrapper toSocket = DataStream.getInstance().getListener().getSocket(header.get("to").getAsString());
         if (toSocket == null) {
-
             String msg = String.format("Dịch vụ %s hiện tại không hoạt động", chain.getProcessObject().get("header").getAsJsonObject().get("to").getAsString());
             chain.getProcessObject().addProperty("error", msg);
             return false;
