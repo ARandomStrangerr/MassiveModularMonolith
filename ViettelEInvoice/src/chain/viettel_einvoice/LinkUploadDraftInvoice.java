@@ -25,14 +25,14 @@ public class LinkUploadDraftInvoice extends Link {
 		Gson gson = new Gson();
 		// loop send data
 		for (JsonElement ele : chain.getProcessObject().get("body").getAsJsonObject().get("sendData").getAsJsonArray()) {
-			JsonObject returnObject;
-			try {
-				returnObject = gson.fromJson(RESTRequest.post(Url.UploadDraftInvoice.path, ele.toString(), map), JsonObject.class);
-			} catch (IOException e) {
-				e.printStackTrace();
-				continue;
-			}
-			System.out.println(returnObject);
+//			JsonObject returnObject;
+//			try {
+//				returnObject = gson.fromJson(RESTRequest.post(Url.UploadDraftInvoice.path, ele.toString(), map), JsonObject.class);
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//				continue;
+//			}
+			System.out.println(ele);
 		}
 		return true;
 	}

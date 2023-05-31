@@ -58,16 +58,6 @@ document.querySelectorAll(".file-input").forEach(e => {
 	});
 });
 
-// folder input behaviour
-document.querySelectorAll(".folder-input").forEach(e => {
-	e.readOnly = true;
-	e.addEventListener("click", () => {
-		let input = document.createElement("input");
-		input.type = "directory";
-		input.click();
-	});
-});
-
 // dropdowns behaviours
 document.querySelectorAll(".dropdown").forEach(e => {
 	const toggleBtn = e.querySelector(".trigger-element");

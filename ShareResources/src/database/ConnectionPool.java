@@ -15,6 +15,9 @@ public abstract class ConnectionPool {
         }
     }
 
+	/*
+	todo improve the use of prepared statement so that the statement is reusable instead of creating new prepared request every time
+	 */
     protected ResultSet executePreparedStatement(PrepareStatementInterface prepareStatementInterface) throws SQLException, InterruptedException {
         // remove a connection from the pool
         Connection con = getConnection();

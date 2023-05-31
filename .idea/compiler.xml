@@ -4,6 +4,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="ConnectionManager" options="--add-modules java.sql" />
       <module name="ShareResources" options="--add-modules java.sql" />
+      <module name="ViettelEInvoice" options="--add-modules java.sql" />
     </option>
   </component>
 </project>

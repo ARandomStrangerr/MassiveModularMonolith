@@ -17,16 +17,16 @@ public class LinkMaterializeExcelFile extends Link {
     @Override
     public boolean execute() {
         String fileName = String.format("%s %s.xlsx",
-            LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
-            chain.getProcessObject().get("header").getAsJsonObject().get("clientId").getAsString());
-        chain.getProcessObject().get("body").getAsJsonObject().addProperty("fileName", fileName);
+            LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")),
+            chain.getProcessObject().get("body").getAsJsonObject().get("username").getAsString());
         byte[] decodedContent = Base64.getDecoder().decode(chain.getProcessObject().get("body").getAsJsonObject().remove("file").getAsString().getBytes());
         try (FileOutputStream fos = new FileOutputStream(fileName)){
             fos.write(decodedContent);
         } catch (IOException e){
-            chain.getProcessObject().addProperty("error", "Không ghi chép lại được tệp tin Excel truyền lên");
+            chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "Không ghi chép lại được tệp tin Excel truyền lên");
             return false;
         }
+		chain.getProcessObject().get("body").getAsJsonObject().addProperty("fileName", fileName);
         return true;
     }
 }
