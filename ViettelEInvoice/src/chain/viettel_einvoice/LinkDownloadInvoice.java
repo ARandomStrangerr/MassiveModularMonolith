@@ -32,7 +32,7 @@ public class LinkDownloadInvoice extends Link {
 		String invoiceSeries = chain.getProcessObject().get("body").getAsJsonObject().get("invoiceSeries").getAsString();
 		// create update json template
 		JsonObject updateObject = new JsonObject();
-		updateObject.add("header", chain.getProcessObject().get("header")); // this is passed by ref. therefore the next step remove and change also change the processing json
+		updateObject.add("header", chain.getProcessObject().get("header").deepCopy());
 		updateObject.get("header").getAsJsonObject().add("to", updateObject.get("header").getAsJsonObject().remove("from"));
 		// Gson to convert data to JsonObject
 		Gson gson = new Gson();
