@@ -15,7 +15,7 @@ public class LinkLogFalseRequest extends Link {
         JsonObject monitorObject = new JsonObject();
         monitorObject.addProperty("status", false);
         monitorObject.add("notification", chain.getProcessObject().get("body").getAsJsonObject().get("error"));
-        monitorObject.add("request", chain.getProcessObject());
+        monitorObject.add("request", chain.getProcessObject().deepCopy());
         MonitorHandler.addQueue(monitorObject);
         return true;
     }

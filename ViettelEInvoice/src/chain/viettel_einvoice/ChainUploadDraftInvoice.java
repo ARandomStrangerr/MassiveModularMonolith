@@ -10,6 +10,7 @@ public class ChainUploadDraftInvoice extends Chain {
 			new LinkReadFromExcel(this),
 			new LinkGetAuthenticate(this),
 			new LinkUploadDraftInvoice(this),
+			new LinkLogSuccessUploadDraftInvoiceRequest(this),
 			new LinkFormatSuccessUploadDraftInvoiceRequest(this));
 	}
 }

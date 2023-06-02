@@ -13,6 +13,9 @@ public class LinkFormatSuccessUploadDraftInvoiceRequest extends Link {
 	public boolean execute() {
 		JsonObject body = new JsonObject();
 		body.addProperty("success", String.format("Thành công tạo %d hóa đơn nháp", chain.getProcessObject().get("body").getAsJsonObject().get("sendData").getAsJsonArray().size()));
+		chain.getProcessObject().add("body", body); // update the body
+		chain.getProcessObject().get("header").getAsJsonObject().addProperty("status", false); // change status to false so the connection manager close the socket
+		chain.getProcessObject().get("header").getAsJsonObject().add("to", chain.getProcessObject().get("header").getAsJsonObject().remove("from")); // send back the request where it comes from
 		return true;
 	}
 }

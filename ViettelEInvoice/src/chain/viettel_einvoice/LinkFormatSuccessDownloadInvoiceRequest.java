@@ -16,7 +16,8 @@ public class LinkFormatSuccessDownloadInvoiceRequest extends Link {
 		String msg = String.format("Thành công lấy hóa đơn về từ số %d - %d", chain.getProcessObject().get("body").getAsJsonObject().get("start").getAsInt(), chain.getProcessObject().get("body").getAsJsonObject().get("end").getAsInt());
 		body.addProperty("success", msg);
 		chain.getProcessObject().add("body", body);
-		// does not need to change the header to anymore since the pass-by-ref change in GetInvoice:34 already did the job
+		// send the request back to where it comes from
+		chain.getProcessObject().get("header").getAsJsonObject().add("to", chain.getProcessObject().get("header").getAsJsonObject().remove("from"));
 		// change the status of the request to false, so that the socket will close after this msg
 		chain.getProcessObject().get("header").getAsJsonObject().addProperty("status", false);
 		return true;
