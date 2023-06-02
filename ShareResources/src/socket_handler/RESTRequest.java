@@ -74,7 +74,12 @@ public class RESTRequest {
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(con.getOutputStream()));
         writer.write(body);
         writer.flush();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        BufferedReader reader;
+        try {
+            reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        } catch (IOException e) {
+            reader = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+        }
         String returnString =  reader.readLine();
         writer.close();
         reader.close();
