@@ -33,7 +33,7 @@ module.exports = class {
 		}
 		let sendData = {
 			job: "ViettelEInvoice",
-			subJob: document.querySelector("#create-draft-invoice").check ? "uploadDraftInvoice" : "uploadInvoice",
+			subJob: document.querySelector("#upload-draft-invoice").check ? "uploadDraftInvoice" : "uploadInvoice",
 			invoiceData: (require("./io.js")).readFileBase64(excelFilePath),
 			username: username,
 			password: password

@@ -31,7 +31,7 @@ async function readExcelFile(path){
 class SocketOperation {
 	#socket; // the socket itself
 	#cache; // incoming data
-	#isAlive;
+	#isAlive = true; // the socket is alive or not
 
 	constructor (certificatePath, keyPath, address, port){
 		process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
@@ -43,7 +43,6 @@ class SocketOperation {
 		};
 		this.#cache = [];
 		let lock = false;
-		this.#isAlive = true;
 		this.#socket = tls.connect(port, address, option, () => {
 			this.#socket.setEncoding("utf8");
 		});
@@ -96,6 +95,10 @@ class SocketOperation {
 			if (returnData) return returnData;
 		}
 		throw "The socket is closed";
+	}
+
+	isAlive() {
+		return this.#isAlve;
 	}
 
 	close() {
