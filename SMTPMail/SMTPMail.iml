@@ -9,7 +9,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="ShareResources" exported="" />
     <orderEntry type="library" exported="" name="gson-2.8.2" level="application" />
-    <orderEntry type="library" exported="" name="postgresql-42.5.1" level="application" />
     <orderEntry type="library" exported="" name="java-mail" level="project" />
   </component>
 </module>
