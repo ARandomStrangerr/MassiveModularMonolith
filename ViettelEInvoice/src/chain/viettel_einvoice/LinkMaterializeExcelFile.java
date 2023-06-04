@@ -17,20 +17,23 @@ public class LinkMaterializeExcelFile extends Link {
     @Override
     public boolean execute() {
         String fileName = String.format("%s %s.xlsx",
-            LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")),
-            chain.getProcessObject().get("body").getAsJsonObject().get("username").getAsString());
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")),
+                chain.getProcessObject().get("body").getAsJsonObject().get("username").getAsString());
         byte[] decodedContent = null;
-        try{
-            decodedContent= Base64.getDecoder().decode(chain.getProcessObject().get("body").getAsJsonObject().remove("file").getAsString().getBytes());
-        }catch (NullPointerException ignore){}
-        try (FileOutputStream fos = new FileOutputStream(fileName)){
+        try {
+            decodedContent = Base64.getDecoder().decode(chain.getProcessObject().get("body").getAsJsonObject().remove("file").getAsString().getBytes());
+        } catch (NullPointerException e) {
+            chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "Trường thông tin tệp tin excel không tồn tại");
+            return false;
+        }
+        try (FileOutputStream fos = new FileOutputStream(fileName)) {
             assert decodedContent != null;
             fos.write(decodedContent);
-        } catch (IOException e){
+        } catch (IOException e) {
             chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "Không ghi chép lại được tệp tin Excel truyền lên");
             return false;
         }
-		chain.getProcessObject().get("body").getAsJsonObject().addProperty("fileName", fileName);
+        chain.getProcessObject().get("body").getAsJsonObject().addProperty("fileName", fileName);
         return true;
     }
 }
