@@ -51,6 +51,7 @@ module.exports = class {
 			data = JSON.parse(data);
 			if (data.hasOwnProperty("error")) addInvalidNotification(data.error);
 			else if (data.hasOwnProperty("success")) addValidNotification(data.success);
+			else if (data.hasOwnProperty("update")) addValidNotification(data.update);
 		}
 	}
 
@@ -65,19 +66,9 @@ module.exports = class {
 			addInvalidNotification("Số hóa đơn kết thúc chưa được điền");
 			return;
 		}
-		let invoiceSeries = document.querySelector("#invoice-series-input").value.trim();
-		if (invoiceSeries === ""){
-			addInvalidNotification("Kí hiệu hóa đơn chưa được điền");
-			return;
-		}
-		let templateNumber = document.querySelector("#template-number-input").value.trim();
-		if (templateNumber === ""){
-			addInvalidNotification("Số mẫu hóa đơn chưa được điền");
-			return;
-		}
-		let templateCode = document.querySelector("#template-code-input > a").innerText;
-		if (templateCode === "Ký hiệu loại hóa đơn"){
-			addInvalidNotification("Mẫu hóa đơn chưa được chọn");
+		let templateCode = document.querySelector("#template-code-input > a").value.trim();
+		if (templateCode === ""){
+			addInvalidNotification("Ký hiệu hóa đơn chưa được điền");
 			return;
 		}
 		let username = document.querySelector("#invoice-username").value.trim();
@@ -106,7 +97,7 @@ module.exports = class {
 			start: Number(startNum),
 			end: Number(endNum),
 			invoiceSeries: invoiceSeries,
-			templateCode: templateCode + "0/" + ("000"+templateNumber).slice(-3),
+			templateCode: templateCode,
 			username: username,
 			password: password
 		};

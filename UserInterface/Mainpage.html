@@ -110,27 +110,10 @@
 				<a class="button download-button" id="download-invoice-button"></a>
 			</div>
 			<div>
-				Ký hiệu mẫu hóa đơn
-				<div class="connected-input">
-					<div class="dropdown hide-on-click selection-input" id="template-code-input">
-						<a class="trigger-element">Ký hiệu loại hóa đơn</a>
-						<div class="react-element float-div float-div-inactive">
-							<div>01GTKT</div>
-							<div>02GTTT</div>
-							<div>07KPTQ</div>
-							<div>03XKNB</div>
-							<div>04HGDL</div>
-							<div>CTT56</div>
-						</div>
-					</div>
-					<span>0/</span>
-					<input type="number" placeholder="Số mẫu hóa đơn" id="template-number-input">
-				</div>
-			</div>
-			<div>
 				Số hóa đơn tải về
 				<div class="connected-input">
-					<input type="text" placeholder="Kí hiệu hóa đơn" id="invoice-series-input">
+					<input type="text" id="template-code-input" placeholder="Mẫu hóa đơn">
+					<input type="text" id="invoice-series-input" placeholder="Kí hiệu hóa đơn">
 					<input type="number" id="start-invoice-number-input" placeholder="Số bắt đầu" pattern="[0-9]{8}">
 					<input type="number" id="end-invoice-number-input" placeholder="Số kết thúc">
 				</div>
