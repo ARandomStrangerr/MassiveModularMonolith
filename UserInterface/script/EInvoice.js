@@ -34,12 +34,11 @@ module.exports = class {
 		let sendData = {
 			job: "ViettelEInvoice",
 			subJob: document.querySelector("#create-draft-invoice").check ? "uploadDraftInvoice" : "uploadInvoice",
-			invoiceData: (require("./io.js")).readFileBase64(excelFilePath),
+			file: (require("./io.js")).readFileBase64(excelFilePath),
 			username: username,
 			password: password
 		};
 		let socket = new (require("./io.js")).socket("./certificate.pem", "./key.pem", serverAddress, serverPort);
-		socket.onData(onData);
 		socket.write(JSON.stringify(sendData));
 		while (true) {
 			let data;
