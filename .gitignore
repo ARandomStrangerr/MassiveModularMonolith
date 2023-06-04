@@ -2,6 +2,7 @@
 *.iml
 /out/
 UserInterface/node_modules
+UserInterface/Downloads
 ServerUserInterface/node_modules
 *.pem
 *.txt
