@@ -43,6 +43,9 @@ function addValidNotification(msg){
 function addInvalidNotification(msg){
 	addNotification("red-notification", msg);
 }
+function addPendingNotification(msg){
+	addNotification("yellow-notification", msg)
+}
 
 // remove notification on bell click
 document.querySelector("#notification > .trigger-element").addEventListener("click", () => document.querySelector("#notification > .trigger-element").classList.remove("alert"))

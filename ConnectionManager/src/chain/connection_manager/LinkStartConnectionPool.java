@@ -23,7 +23,7 @@ class LinkStartConnectionPool extends Link {
         } catch (SQLException e) {
             JsonObject monitorObject = new JsonObject();
             monitorObject.addProperty("status", false);
-            monitorObject.addProperty("notification", "Lỗi khi kết nối đến cơ sở dữ liệu");
+            monitorObject.addProperty("notification", String.format("Lỗi %s khi kết nối đến cơ sở dữ liệu", e.getMessage()));
             MonitorHandler.addQueue(monitorObject);
             return false;
         }

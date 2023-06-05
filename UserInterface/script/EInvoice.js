@@ -33,7 +33,7 @@ module.exports = class {
 		}
 		let sendData = {
 			job: "ViettelEInvoice",
-			subJob: document.querySelector("#create-draft-invoice").check ? "uploadDraftInvoice" : "uploadInvoice",
+			subJob: document.querySelector("#upload-draft-invoice").checked ? "uploadDraftInvoice" : "uploadInvoice",
 			file: (require("./io.js")).readFileBase64(excelFilePath),
 			username: username,
 			password: password
@@ -48,9 +48,9 @@ module.exports = class {
 				break;
 			}
 			data = JSON.parse(data);
-			if (data.hasOwnProperty("error")) addInvalidNotification(data.error);
+			if (data.hasOwnProperty("update")) 
 			else if (data.hasOwnProperty("success")) addValidNotification(data.success);
-			else if (data.hasOwnProperty("update")) addValidNotification(data.update);
+			else if (data.hasOwnProperty("error")) addInvalidNotification(data.error);
 		}
 	}
 
@@ -65,9 +65,19 @@ module.exports = class {
 			addInvalidNotification("Số hóa đơn kết thúc chưa được điền");
 			return;
 		}
-		let templateCode = document.querySelector("#template-code-input > a").value.trim();
+		let invoiceSeries = document.querySelector("#invoice-series-input").value.trim();
+		if (invoiceSeries === ""){
+			addInvalidNotification("Kí hiệu hóa đơn chưa được điền");
+			return;
+		}
+		let templateNumber = document.querySelector("#template-number-input").value.trim();
+		if (templateNumber === ""){
+			addInvalidNotification("Số mẫu hóa đơn chưa được điền");
+			return;
+		}
+		let templateCode = document.querySelector("#template-code").value.trim();
 		if (templateCode === ""){
-			addInvalidNotification("Ký hiệu hóa đơn chưa được điền");
+			addInvalidNotification("Mẫu hóa đơn chưa được điền");
 			return;
 		}
 		let username = document.querySelector("#invoice-username").value.trim();
@@ -95,7 +105,6 @@ module.exports = class {
 			subJob: "downloadInvoice",
 			start: Number(startNum),
 			end: Number(endNum),
-			invoiceSeries: invoiceSeries,
 			templateCode: templateCode,
 			username: username,
 			password: password

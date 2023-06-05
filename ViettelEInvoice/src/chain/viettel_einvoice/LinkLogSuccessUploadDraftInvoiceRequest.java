@@ -16,6 +16,6 @@ public class LinkLogSuccessUploadDraftInvoiceRequest extends Link {
         monitorObj.addProperty("status", true);
         monitorObj.addProperty("notification", String.format("Đơn vị với mã số thuế %s thành công tải lên %d hoá đơn nháp", chain.getProcessObject().get("body").getAsJsonObject().get("username").getAsString(), chain.getProcessObject().get("body").getAsJsonObject().get("sendData").getAsJsonArray().size()));
         MonitorHandler.addQueue(monitorObj);
-        return false;
+        return true;
     }
 }

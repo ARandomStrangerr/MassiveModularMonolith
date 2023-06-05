@@ -28,6 +28,10 @@ public class LinkGetAuthenticate extends Link {
             chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "Không thể đăng nhập vào máy chủ Viettel");
             return false;
         }
+        if (returnJson.has("status") && returnJson.get("status").getAsInt() == 401) {
+            chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "Tên đăng nhập hoặc mật khẩu không chính xác");
+            return false;
+        }
 		chain.getProcessObject().get("body").getAsJsonObject().add("accessToken", returnJson.get("access_token"));
         return true;
     }

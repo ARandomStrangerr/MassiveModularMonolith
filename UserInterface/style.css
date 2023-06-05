@@ -265,6 +265,9 @@ img{
 .red-notification {
 	background-color:#FFE3E0;
 }
+.yellow-notification {
+	background-color: #fef9df;
+}
 
 #menu > a {
 	display: flex;

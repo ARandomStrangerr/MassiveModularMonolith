@@ -7,7 +7,6 @@ import com.google.gson.JsonObject;
 import org.apache.poi.ss.usermodel.*;
 
 import java.io.File;
-import java.io.IOException;
 
 public class LinkReadFromExcel extends Link {
     public LinkReadFromExcel(Chain chain) {
@@ -18,8 +17,7 @@ public class LinkReadFromExcel extends Link {
     public boolean execute() {
         JsonArray sendArray = new JsonArray();
         int line = 0;
-        try {
-            Workbook workbook = WorkbookFactory.create(new File(chain.getProcessObject().get("body").getAsJsonObject().get("fileName").getAsString()));
+        try (Workbook workbook = WorkbookFactory.create(new File(chain.getProcessObject().get("body").getAsJsonObject().get("fileName").getAsString()))){
             Sheet sheet = workbook.getSheetAt(0);
 //            sheet.removeRow(sheet.getRow(0)); // remove the first row, since the customer request so
             for (Row row : sheet) {
