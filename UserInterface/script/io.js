@@ -97,10 +97,6 @@ class SocketOperation {
 		throw "The socket is closed";
 	}
 
-	isAlive() {
-		return this.#isAlve;
-	}
-
 	close() {
 		this.#socket.destroy();
 	}
