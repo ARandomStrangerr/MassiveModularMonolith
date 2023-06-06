@@ -38,7 +38,7 @@ public class LinkDownloadInvoice extends Link {
 		Gson gson = new Gson();
 		String clientTaxCode = chain.getProcessObject().get("body").getAsJsonObject().get("username").getAsString();
 		for (int i = chain.getProcessObject().get("body").getAsJsonObject().get("start").getAsInt(); i <= chain.getProcessObject().get("body").getAsJsonObject().get("end").getAsInt(); i++) {
-			String invoiceNumber = String.format("%s%07d", invoiceSeries, i);
+			String invoiceNumber = String.format("%s%d", invoiceSeries, i);
 			sendObject.addProperty("invoiceNo", invoiceNumber);
 			JsonObject returnObject;
 			try {

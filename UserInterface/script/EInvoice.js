@@ -48,7 +48,7 @@ module.exports = class {
 				break;
 			}
 			data = JSON.parse(data);
-			if (data.hasOwnProperty("update")) 
+			if (data.hasOwnProperty("update")) addPendingNotification(data.update);
 			else if (data.hasOwnProperty("success")) addValidNotification(data.success);
 			else if (data.hasOwnProperty("error")) addInvalidNotification(data.error);
 		}
@@ -68,11 +68,6 @@ module.exports = class {
 		let invoiceSeries = document.querySelector("#invoice-series-input").value.trim();
 		if (invoiceSeries === ""){
 			addInvalidNotification("Kí hiệu hóa đơn chưa được điền");
-			return;
-		}
-		let templateNumber = document.querySelector("#template-number-input").value.trim();
-		if (templateNumber === ""){
-			addInvalidNotification("Số mẫu hóa đơn chưa được điền");
 			return;
 		}
 		let templateCode = document.querySelector("#template-code").value.trim();
@@ -105,6 +100,7 @@ module.exports = class {
 			subJob: "downloadInvoice",
 			start: Number(startNum),
 			end: Number(endNum),
+			invoiceSeries: invoiceSeries,
 			templateCode: templateCode,
 			username: username,
 			password: password
@@ -120,6 +116,7 @@ module.exports = class {
 			} catch (e){
 				break;
 			}
+			console.log(data);
 			data = JSON.parse(data);
 			if (data.hasOwnProperty("error")) addInvalidNotification(data.error);
 			else if (data.hasOwnProperty("success")) addValidNotification(data.success);

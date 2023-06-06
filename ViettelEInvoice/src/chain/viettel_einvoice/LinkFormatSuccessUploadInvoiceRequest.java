@@ -16,6 +16,6 @@ public class LinkFormatSuccessUploadInvoiceRequest extends Link {
         chain.getProcessObject().add("body", body); // setup the new body
         chain.getProcessObject().get("header").getAsJsonObject().addProperty("status", false); // set status to false so that the Conenction Manager will terminate the thread later on
         chain.getProcessObject().get("header").getAsJsonObject().add("to", chain.getProcessObject().get("header").getAsJsonObject().remove("from")); // send the request back to where it comes from
-        return false;
+        return true;
     }
 }

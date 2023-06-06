@@ -36,7 +36,7 @@ public class LinkUploadInvoice extends Link {
         String username = chain.getProcessObject().get("body").getAsJsonObject().get("username").getAsString();
         int index = 0;
         // loop send the invoice
-        for (JsonElement ele : chain.getProcessObject().get("body").getAsJsonObject().get("sendArray").getAsJsonArray()) {
+        for (JsonElement ele : chain.getProcessObject().get("body").getAsJsonObject().get("sendData").getAsJsonArray()) {
             index++;
             JsonObject returnObj;
             try { // upload the invoice

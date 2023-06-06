@@ -37,7 +37,7 @@ public class LinkReadFromExcel extends Link {
                 // buyer information
                 JsonObject buyerInfo = new JsonObject();
                 buyerInfo.addProperty("buyerName", row.getCell(7).getStringCellValue()); // tên người mua
-                buyerInfo.addProperty("buyerCode", row.getCell(8).getStringCellValue()); // mã khách hàng
+                buyerInfo.addProperty("buyerCode", new DataFormatter().formatCellValue(row.getCell(8))); // mã khách hàng
                 buyerInfo.addProperty("buyerAddressLine", row.getCell(9).getNumericCellValue()); // địa chỉ xuất hóa đơn
                 // payment method
                 JsonArray paymentMethod = new JsonArray();
@@ -65,6 +65,7 @@ public class LinkReadFromExcel extends Link {
                 sendArray.add(sendObject);
             }
         } catch (Exception e) {
+			e.printStackTrace();
             chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "tiệp tin excel bị lỗi tại giòng số " + line);
             return false;
         }
