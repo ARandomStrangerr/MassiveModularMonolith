@@ -10,7 +10,7 @@ public class ChainStartModule extends Chain {
         addLink(new LinkStartMonitorTool(this),
             new LinkSetInfo(this),
             new LinkStartConnectionPool(this),
-            new LinkStartSocket(this),
+            new LinkConnectToDataStream(this),
             new LinkStartListener(this));
     }
 }
