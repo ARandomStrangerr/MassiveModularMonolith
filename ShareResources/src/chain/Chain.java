@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import java.util.Collections;
 import java.util.LinkedList;
 
-public class Chain {
+public abstract class Chain {
     private final LinkedList<Link> chain;
     private boolean endEarly;
     private final JsonObject processObject;
