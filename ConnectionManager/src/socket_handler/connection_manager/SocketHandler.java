@@ -10,8 +10,10 @@ import system_monitor.MonitorHandler;
 import java.io.IOException;
 
 public class SocketHandler extends socket_handler.SocketHandler {
-    public SocketHandler(SocketWrapper socket) {
+	private final String moduleName;
+    public SocketHandler(SocketWrapper socket, String moduleName) {
         super(socket);
+		this.moduleName = moduleName;
     }
 
     @Override
@@ -28,7 +30,7 @@ public class SocketHandler extends socket_handler.SocketHandler {
     public boolean handleAuthentication() {
         // write the name of this module to the DataStream module
         try {
-            socket.write("{moduleName:\"" + ConnectionManager.getInstance().moduleName + "\"}");
+            socket.write("{moduleName:\"" + moduleName + "\"}");
         } catch (IOException e) {
             e.printStackTrace();
             return false;

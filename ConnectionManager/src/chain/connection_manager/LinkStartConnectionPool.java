@@ -27,7 +27,7 @@ class LinkStartConnectionPool extends Link {
             MonitorHandler.addQueue(monitorObject);
             return false;
         }
-        memorable.ConnectionManager.getInstance().database = connectionPool;
+        memorable.ConnectionManager.connectionPool = connectionPool;
         JsonObject monitorObj = new JsonObject();
         monitorObj.addProperty("status", true);
         monitorObj.addProperty("notification", "Thành cồng kết nối đến cơ sở dữ liệu");

@@ -17,7 +17,7 @@ public class LinkSendToClient extends Link {
     @Override
     public boolean execute() {
         String socketName = chain.getProcessObject().get("header").getAsJsonObject().get("clientId").getAsString();
-        SocketWrapper soc = ConnectionManager.getInstance().listenerWrapper.getSocket(socketName);
+        SocketWrapper soc = ConnectionManager.listener.getSocket(socketName);
         try {
             soc.write(chain.getProcessObject().get("body").toString());
         } catch (IOException e) {

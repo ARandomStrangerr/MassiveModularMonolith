@@ -12,7 +12,7 @@ class LinkOpenListener extends chain.LinkOpenListener {
 
 	@Override
 	protected void saveListener(ListenerWrapper listener) {
-		ConnectionManager.getInstance().listenerWrapper = listener;
+		ConnectionManager.listener = listener;
 	}
 
 	@Override

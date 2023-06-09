@@ -15,7 +15,7 @@ public class LinkTerminateSocketFromClient extends Link {
     public boolean execute() {
         if (!chain.getProcessObject().get("header").getAsJsonObject().get("status").getAsBoolean()) {
             try {
-                ConnectionManager.getInstance().listenerWrapper.removeSocket(chain.getProcessObject().get("header").getAsJsonObject().get("clientId").getAsString()).close();
+                ConnectionManager.listener.removeSocket(chain.getProcessObject().get("header").getAsJsonObject().get("clientId").getAsString()).close();
             } catch (IOException | NullPointerException ignore) {
             }
         }

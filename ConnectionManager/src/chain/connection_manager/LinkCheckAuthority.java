@@ -15,7 +15,7 @@ public class LinkCheckAuthority extends Link {
     @Override
     public boolean execute() {
         try {
-            if (!ConnectionManager.getInstance().database.getLoginInfo(chain.getProcessObject().get("header").getAsJsonObject().get("clientId").getAsString(), chain.getProcessObject().get("header").getAsJsonObject().get("to").getAsString().toLowerCase()))
+            if (!ConnectionManager.connectionPool.getLoginInfo(chain.getProcessObject().get("header").getAsJsonObject().get("clientId").getAsString(), chain.getProcessObject().get("header").getAsJsonObject().get("to").getAsString().toLowerCase()))
                 throw new Exception("client has no privilege");
         } catch (SQLException e) {
             chain.getProcessObject().addProperty("error", "Phần mềm gặp vấn đề, vui lòng liên hệ với người lập trình để được giải quyết");

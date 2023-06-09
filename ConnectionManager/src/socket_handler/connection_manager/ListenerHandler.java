@@ -105,7 +105,7 @@ public class ListenerHandler extends socket_handler.ListenerHandler {
                     MonitorHandler.addQueue(monitorObj);
                     return false;
                 }
-                if (ConnectionManager.getInstance().listenerWrapper.getSocket(key) != null) {
+                if (ConnectionManager.listener.getSocket(key) != null) {
                     try {
                         socket.write("{\"error\": \"Có kết nối khác đã được thiết lập với máy chủ\"}");
                     } catch (IOException e) {
@@ -121,7 +121,7 @@ public class ListenerHandler extends socket_handler.ListenerHandler {
                 // set the name of the socket
                 socket.setName(authenticationJson.get("macAddress").getAsString());
                 // put socket into the storage
-                ConnectionManager.getInstance().listenerWrapper.putSocket(socket.getName(), socket);
+                ConnectionManager.listener.putSocket(socket.getName(), socket);
                 // print out message
                 JsonObject monitorObj = new JsonObject();
                 monitorObj.addProperty("status", true);
@@ -132,7 +132,7 @@ public class ListenerHandler extends socket_handler.ListenerHandler {
 
             public void cleanup() {
                 if (socket.getName() != null) {
-                    ConnectionManager.getInstance().listenerWrapper.removeSocket(socket.getName());
+                    ConnectionManager.listener.removeSocket(socket.getName());
                     JsonObject monitorObj = new JsonObject();
                     monitorObj.addProperty("status", false);
                     monitorObj.addProperty("notification", String.format("Máy tính với địa chỉ MAC %s ngắt kết nối đến máy chủ", socket.getName()));

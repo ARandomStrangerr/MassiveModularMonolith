@@ -8,7 +8,6 @@ public class ChainStartModule extends Chain {
     public ChainStartModule(JsonObject processObject) {
         super(processObject);
         addLink(new LinkStartMonitorTool(this),
-            new LinkSetInfo(this),
             new LinkStartConnectionPool(this),
             new LinkConnectToDataStream(this),
             new LinkOpenListener(this));

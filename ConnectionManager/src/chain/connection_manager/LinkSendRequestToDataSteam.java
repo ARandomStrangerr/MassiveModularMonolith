@@ -14,7 +14,7 @@ public class LinkSendRequestToDataSteam extends Link {
     @Override
     public boolean execute() {
         try {
-            ConnectionManager.getInstance().socket.write(chain.getProcessObject().toString());
+            ConnectionManager.socketToDataStream.write(chain.getProcessObject().toString());
         } catch (IOException e){
             chain.getProcessObject().addProperty("error", "Không thể chuyển dữ liệu đến Stream");
             return false;

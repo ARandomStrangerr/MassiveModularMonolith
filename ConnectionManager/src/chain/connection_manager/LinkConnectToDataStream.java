@@ -12,12 +12,12 @@ class LinkConnectToDataStream extends chain.LinkConnectToDataStream {
 
 	@Override
 	protected void saveSocket(SocketWrapper socket) {
-		ConnectionManager.getInstance().socket = socket;
+		ConnectionManager.socketToDataStream = socket;
 	}
 
 	@Override
 	protected Runnable getSocketHandler(SocketWrapper socket) {
-		return new SocketHandler(socket);
+		return new SocketHandler(socket, chain.getProcessObject().get("moduleName").getAsString());
 	}
 
 }
