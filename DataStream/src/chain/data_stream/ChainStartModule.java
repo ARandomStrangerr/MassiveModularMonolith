@@ -8,6 +8,6 @@ public class ChainStartModule extends Chain {
         super(processObject);
         addLink(new LinkStartSystemMonitor(this),
             new LinkSetInfo(this),
-            new LinkStartListener(this));
+            new LinkOpenListener(this));
     }
 }

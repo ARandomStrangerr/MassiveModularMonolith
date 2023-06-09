@@ -11,6 +11,6 @@ public class ChainStartModule extends Chain {
             new LinkSetInfo(this),
             new LinkStartConnectionPool(this),
             new LinkConnectToDataStream(this),
-            new LinkStartListener(this));
+            new LinkOpenListener(this));
     }
 }
