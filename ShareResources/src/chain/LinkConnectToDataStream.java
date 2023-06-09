@@ -49,7 +49,7 @@ public abstract class LinkConnectToDataStream extends Link {
 		} catch (NullPointerException e) {
 			JsonObject monitorObject = new JsonObject();
 			monitorObject.addProperty("status", false);
-			monitorObject.addProperty("notification", "Thiếu đường dẫn đễn tệp tin JKS để kết nối đến DataStream");
+			monitorObject.addProperty("notification", "Thiếu mật khẩu tệp tin JKS để kết nối đến DataStream");
 			MonitorHandler.addQueue(monitorObject);
 			return false;
 		}
