@@ -51,8 +51,12 @@ public class LinkDownloadInvoice extends Link {
 				return false;
 			}
 			JsonObject bodyUpdateObject = new JsonObject();
-			bodyUpdateObject.add("fileName", returnObject.remove("fileName"));
-			bodyUpdateObject.add("fileToBytes", returnObject.remove("fileToBytes"));
+			if (returnObject.get("filename").isJsonNull()){
+				bodyUpdateObject.addProperty("error", "Không tìm thấy hóa đơn " + invoiceNumber);
+			} else {
+				bodyUpdateObject.add("fileName", returnObject.remove("fileName"));
+				bodyUpdateObject.add("fileToBytes", returnObject.remove("fileToBytes"));
+			}
 			updateObject.add("body", bodyUpdateObject);
 			try {
 				ViettelEInvoice.socketToDataStream.write(updateObject.toString());

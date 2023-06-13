@@ -49,18 +49,24 @@ public class LinkUploadInvoice extends Link {
                 chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", String.format("Tại giòng số %d trong tệp tin tải lên, %s", index, returnObj.get("data")));
                 return false;
             }
+			// send an update information to the client
+			try {
+				bodyUpdateObject.addProperty("update", "Thành công tải lên hoá đơn với mã số " + returnObj.get("result").getAsJsonObject().get("invoiceNo").getAsString());
+			} catch (NullPointerException e){
+				e.printStackTrace();
+				chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "Viettel gởi về thông tin " + returnObj.toString());
+				return false;
+			}
+			try {
+				ViettelEInvoice.socketToDataStream.write(updateObject.toString());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
             // print out an update
             JsonObject monitorObject = new JsonObject();
             monitorObject.addProperty("status", true);
             monitorObject.addProperty("notification", String.format("Đơn vị với mã số thuế %s thành công tải lên hoá đơn với số %s", username, returnObj.get("result").getAsJsonObject().get("invoiceNo").getAsString()));
             MonitorHandler.addQueue(monitorObject);
-            // send an update information to the client
-            bodyUpdateObject.addProperty("update", "Thành công tải lên hoá đơn với mã số " + returnObj.get("result").getAsJsonObject().get("invoiceNo").getAsString());
-            try {
-                ViettelEInvoice.socketToDataStream.write(updateObject.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
         return true;
     }
