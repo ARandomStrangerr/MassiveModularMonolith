@@ -44,18 +44,24 @@ public class LinkDownloadInvoice extends Link {
 			try {
 				returnObject = gson.fromJson(RESTRequest.post(Url.DownloadInvoice.path, sendObject.toString(), maps), JsonObject.class);
 			} catch (IOException e) {
-				chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "Không tìm thấy hóa đơn" + sendObject.get("invoiceNo").getAsString());
+				chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "Không kết nối được đến máy chủ Viettel");
 				return false;
 			} catch (JsonSyntaxException e) {
 				e.printStackTrace();
+				chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "Định dạng thông tin gửi về từ Viettel không chính xác");
 				return false;
 			}
 			JsonObject bodyUpdateObject = new JsonObject();
-			if (returnObject.get("filename").isJsonNull()){
+			JsonObject monitorObject = new JsonObject();
+			if (returnObject.has("code")){
 				bodyUpdateObject.addProperty("error", "Không tìm thấy hóa đơn " + invoiceNumber);
+				monitorObject.addProperty("status", false);
+				monitorObject.addProperty("notification", String.format("Đơn vi với mã số thuế %s không tìm thấy hóa đơn %s", clientTaxCode, invoiceNumber));
 			} else {
 				bodyUpdateObject.add("fileName", returnObject.remove("fileName"));
 				bodyUpdateObject.add("fileToBytes", returnObject.remove("fileToBytes"));
+				monitorObject.addProperty("status", true);
+				monitorObject.addProperty("notification", String.format("Đơn vi với mã số thuế %s lấy hóa đơn %s", clientTaxCode, invoiceNumber));
 			}
 			updateObject.add("body", bodyUpdateObject);
 			try {
@@ -64,9 +70,6 @@ public class LinkDownloadInvoice extends Link {
 				e.printStackTrace();
 				return false;
 			}
-			JsonObject monitorObject = new JsonObject();
-			monitorObject.addProperty("status", true);
-			monitorObject.addProperty("notification", String.format("Đơn vi với mã số thuế %s lấy hóa đơn %s", clientTaxCode, invoiceNumber));
 			MonitorHandler.addQueue(monitorObject);
 		}
 		return true;
