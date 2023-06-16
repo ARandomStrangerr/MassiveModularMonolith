@@ -53,7 +53,6 @@ public class LinkUploadInvoice extends Link {
 			try {
 				bodyUpdateObject.addProperty("update", "Thành công tải lên hoá đơn với mã số " + returnObj.get("result").getAsJsonObject().get("invoiceNo").getAsString());
 			} catch (NullPointerException e){
-				e.printStackTrace();
 				chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "Viettel gởi về thông tin " + returnObj.toString());
 				return false;
 			}
