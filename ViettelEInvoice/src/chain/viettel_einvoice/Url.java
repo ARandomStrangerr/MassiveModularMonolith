@@ -4,7 +4,8 @@ public enum Url {
     Authenticate("https://api-vinvoice.viettel.vn/auth/login/"),
     UploadInvoice("https://api-vinvoice.viettel.vn/services/einvoiceapplication/api/InvoiceAPI/InvoiceWS/createInvoice/"),
     UploadDraftInvoice("https://api-vinvoice.viettel.vn/services/einvoiceapplication/api/InvoiceAPI/InvoiceWS/createOrUpdateInvoiceDraft/"),
-    DownloadInvoice("https://api-vinvoice.viettel.vn/services/einvoiceapplication/api/InvoiceAPI/InvoiceUtilsWS/getInvoiceRepresentationFile/");
+    DownloadInvoice("https://api-vinvoice.viettel.vn/services/einvoiceapplication/api/InvoiceAPI/InvoiceUtilsWS/getInvoiceRepresentationFile/"),
+	SearchInvoice("https://api-vinvoice.viettel.vn/services/einvoiceapplication/api/InvoiceAPI/InvoiceUtilsWS/getInvoices/");
     public final String path;
 
     Url(String path) {
