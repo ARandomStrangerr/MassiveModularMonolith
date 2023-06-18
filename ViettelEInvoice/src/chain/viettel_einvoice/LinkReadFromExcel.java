@@ -18,7 +18,6 @@ public class LinkReadFromExcel extends Link {
 		JsonArray sendArray = new JsonArray();
 		int rowIndex = 0;
 		DataFormatter dataFormatter = new DataFormatter();
-		JsonArray adjustInvoiceLocation = new JsonArray();
 		try (Workbook workbook = WorkbookFactory.create(new File(chain.getProcessObject().get("body").getAsJsonObject().get("fileName").getAsString()))) {
 			Sheet sheet = workbook.getSheetAt(0);
 //            sheet.removeRow(sheet.getRow(0)); // remove the first row, since the customer request so
@@ -29,19 +28,7 @@ public class LinkReadFromExcel extends Link {
 				generalInvoiceInfo.addProperty("templateCode", dataFormatter.formatCellValue(row.getCell(2))); // ký hiệu mẫu hóa đơn
 				generalInvoiceInfo.addProperty("invoiceSeries", dataFormatter.formatCellValue(row.getCell(3))); // ký hiệu hóa đơn
 				generalInvoiceInfo.addProperty("currencyCode", dataFormatter.formatCellValue(row.getCell(4))); // mã tiền tệ
-				// trạng thái điều chỉnh hóa đơn
-				int adjustmentType;
-				try {
-					adjustmentType = Integer.parseInt(dataFormatter.formatCellValue(row.getCell(5)));
-				} catch (Exception e) {
-					adjustmentType = 1;
-				}
-				if (adjustmentType == 5) adjustInvoiceLocation.add(rowIndex);
-				generalInvoiceInfo.addProperty("adjustmentType", adjustmentType);
-				generalInvoiceInfo.addProperty("adjustmentInvoiceType", dataFormatter.formatCellValue(row.getCell(6))); // loại hóa đơn điều chỉnh
-				generalInvoiceInfo.addProperty("originalInvoiceId", dataFormatter.formatCellValue(row.getCell(7))); // Số hóa đơn gốc
-				generalInvoiceInfo.addProperty("originalInvoiceIssueDate", dataFormatter.formatCellValue(row.getCell(8))); // thời gian lập hóa đơn gốc
-				generalInvoiceInfo.addProperty("paymentStatus", dataFormatter.formatCellValue(row.getCell(9))); //Trạng thái thanh toán
+				generalInvoiceInfo.addProperty("paymentStatus", true);
 				// seller information
 				JsonObject sellerInfo = new JsonObject();
 				sellerInfo.addProperty("sellerLegalName", dataFormatter.formatCellValue(row.getCell(5))); // tên người bán
@@ -83,8 +70,6 @@ public class LinkReadFromExcel extends Link {
 			chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", String.format("Tiệp tin excel bị gặp vấn đề tại dòng số %d với lỗi %s", rowIndex + 1, e.getMessage()));
 			return false;
 		}
-		if (adjustInvoiceLocation.size() != 0)
-			chain.getProcessObject().get("body").getAsJsonObject().add("adjustInvoiceLocation", adjustInvoiceLocation);
 		chain.getProcessObject().get("body").getAsJsonObject().add("sendData", sendArray);
 		return true;
 	}
