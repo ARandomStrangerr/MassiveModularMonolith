@@ -37,34 +37,36 @@ public class LinkReadFromExcel extends Link {
 				}
 				generalInvoiceInfo.addProperty("adjustmentType", adjustmentType); // Trạng thái điều chỉnh hóa đơn
 				generalInvoiceInfo.addProperty("adjustmentInvoiceType", dataFormatter.formatCellValue(row.getCell(6))); // Loại điều chỉnh
-				generalInvoiceInfo.addProperty("originalInvoiceId", dataFormatter.formatCellValue(row.getCell(7))); // số hóa đơn gốc
-				// Thời gian lập hóa đơn gốc going to be in the next step
-				generalInvoiceInfo.addProperty("paymentStatus", dataFormatter.formatCellValue(row.getCell(9))); // trạng thái thanh toán
-				generalInvoiceInfo.addProperty("originalInvoiceType",dataFormatter.formatCellValue(row.getCell(10))); // loại hóa đơn gốc
+				generalInvoiceInfo.addProperty("originalInvoiceType", dataFormatter.formatCellValue(row.getCell(7))); // loại hóa đơn gốc
+				generalInvoiceInfo.addProperty("originalTemplateCode", dataFormatter.formatCellValue(row.getCell(8))); // mã loại hóa đơn gốc
+				generalInvoiceInfo.addProperty("originalInvoiceId", dataFormatter.formatCellValue(row.getCell(9))); // số hóa đơn gốc
+				// Thời gian lập hóa đơn gốc
+				generalInvoiceInfo.addProperty("paymentStatus", Boolean.parseBoolean(dataFormatter.formatCellValue(row.getCell(11)))); // trạng thái thanh toán
 				// seller information
 				JsonObject sellerInfo = new JsonObject();
-				sellerInfo.addProperty("sellerLegalName", dataFormatter.formatCellValue(row.getCell(11))); // tên người bán
+				sellerInfo.addProperty("sellerLegalName", dataFormatter.formatCellValue(row.getCell(12))); // tên người bán
 				sellerInfo.addProperty("sellerTaxCode", chain.getProcessObject().get("body").getAsJsonObject().get("username").getAsString()); // mã số thuế bên bán
-				sellerInfo.addProperty("sellerAddressLine", dataFormatter.formatCellValue(row.getCell(12))); // địa chỉ bên bán
+				sellerInfo.addProperty("sellerAddressLine", dataFormatter.formatCellValue(row.getCell(13))); // địa chỉ bên bán
 				// buyer information
 				JsonObject buyerInfo = new JsonObject();
-				buyerInfo.addProperty("buyerName", dataFormatter.formatCellValue(row.getCell(13))); // tên người mua
-				buyerInfo.addProperty("buyerCode", dataFormatter.formatCellValue(row.getCell(14))); // mã khách hàng
-				buyerInfo.addProperty("buyerAddressLine", dataFormatter.formatCellValue(row.getCell(15))); // địa chỉ xuất hóa đơn
+				buyerInfo.addProperty("buyerName", dataFormatter.formatCellValue(row.getCell(14))); // tên người mua
+				buyerInfo.addProperty("buyerCode", dataFormatter.formatCellValue(row.getCell(15))); // mã khách hàng
+				buyerInfo.addProperty("buyerAddressLine", dataFormatter.formatCellValue(row.getCell(16))); // địa chỉ xuất hóa đơn
 				// payment method
 				JsonArray paymentMethod = new JsonArray();
 				JsonObject paymentMethodObj = new JsonObject();
-				paymentMethodObj.addProperty("paymentMethodName", dataFormatter.formatCellValue(row.getCell(16))); // hình thức thanh toán
+				paymentMethodObj.addProperty("paymentMethodName", dataFormatter.formatCellValue(row.getCell(17))); // hình thức thanh toán
 				paymentMethod.add(paymentMethodObj);
 				// item information
 				JsonArray itemInfo = new JsonArray();
 				JsonObject item = new JsonObject();
-				for (int index = 17; !Objects.equals(dataFormatter.formatCellValue(row.getCell(index)), ""); index += 5, item = new JsonObject()) {
+				for (int index = 18; !Objects.equals(dataFormatter.formatCellValue(row.getCell(index)), ""); index += 6, item = new JsonObject()) {
 					item.addProperty("itemName", dataFormatter.formatCellValue(row.getCell(index))); // tên hàng hóa, dịch vụ
 					item.addProperty("unitName", dataFormatter.formatCellValue(row.getCell(index + 1))); // tên đơn vị tính
 					item.addProperty("unitPrice", Long.parseLong(dataFormatter.formatCellValue(row.getCell(index + 2)))); // đơn giá
 					item.addProperty("quantity", Integer.parseInt(dataFormatter.formatCellValue(row.getCell(index + 3)))); // số lượng
 					item.addProperty("taxPercentage", (int) row.getCell(index + 4).getNumericCellValue()); // thuế xuất
+					item.addProperty("isIncreaseItem", Boolean.parseBoolean(dataFormatter.formatCellValue(row.getCell(index + 5))));
 					item.addProperty("itemTotalAmountWithoutTax", row.getCell(index + 2).getNumericCellValue() * row.getCell(index + 3).getNumericCellValue()); //thành tiền
 					itemInfo.add(item);
 				}
