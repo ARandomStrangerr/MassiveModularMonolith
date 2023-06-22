@@ -64,6 +64,7 @@ public class RESTRequest {
         BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
         return reader.readLine();
     }
+	// todo: change this when it is error, throw an error with the return message rather than normally operating
     public static String post(String uri, String body, Map<String, String> header) throws IOException {
         HttpURLConnection con = (HttpURLConnection) new URL(uri).openConnection();
         con.setDoOutput(true);
