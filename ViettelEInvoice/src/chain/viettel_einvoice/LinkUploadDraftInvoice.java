@@ -3,6 +3,7 @@ package chain.viettel_einvoice;
 import chain.Chain;
 import chain.Link;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import memorable.ViettelEInvoice;
@@ -22,7 +23,7 @@ public class LinkUploadDraftInvoice extends Link {
         // http request header
         LinkedHashMap<String, String> map = new LinkedHashMap<>();
         map.put("Content-Type", "application/json");
-        map.put("Cookie", String.format("access_token=" + chain.getProcessObject().get("body").getAsJsonObject().get("accessToken").getAsString()));
+        map.put("Cookie", String.format("access_token=" + chain.getProcessObject().get("body").getAsJsonObject().remove("accessToken").getAsString()));
         // update object
         JsonObject updateObject = new JsonObject();
         JsonObject bodyUpdateObject = new JsonObject();
@@ -34,7 +35,8 @@ public class LinkUploadDraftInvoice extends Link {
         // loop send data
         int index = 0;
         String username = chain.getProcessObject().get("body").getAsJsonObject().get("username").getAsString();
-        for (JsonElement ele : chain.getProcessObject().get("body").getAsJsonObject().get("sendData").getAsJsonArray()) {
+		JsonArray sendArray = chain.getProcessObject().get("body").getAsJsonObject().remove("sendData").getAsJsonArray();
+        for (JsonElement ele : sendArray) {
             index++;
             JsonObject returnObject;
             try { // send the request

@@ -3,6 +3,7 @@ package chain.viettel_einvoice;
 import chain.Chain;
 import chain.Link;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import memorable.ViettelEInvoice;
@@ -23,7 +24,7 @@ public class LinkUploadInvoice extends Link {
         HashMap<String, String> maps = new HashMap<>();
         maps.put("Content-Type", "application/json");
         maps.put("Accept", "application/json");
-        maps.put("Cookie", String.format("access_token=%s", chain.getProcessObject().get("body").getAsJsonObject().get("accessToken").getAsString()));
+        maps.put("Cookie", String.format("access_token=%s", chain.getProcessObject().get("body").getAsJsonObject().remove("accessToken").getAsString()));
         // update object
         JsonObject updateObject = new JsonObject();
         JsonObject bodyUpdateObject = new JsonObject();
@@ -35,8 +36,9 @@ public class LinkUploadInvoice extends Link {
         // username
         String username = chain.getProcessObject().get("body").getAsJsonObject().get("username").getAsString();
         int index = 0;
+		JsonArray sendArray = chain.getProcessObject().get("body").getAsJsonObject().remove("sendData").getAsJsonArray();
         // loop send the invoice
-        for (JsonElement ele : chain.getProcessObject().get("body").getAsJsonObject().get("sendData").getAsJsonArray()) {
+        for (JsonElement ele : sendArray) {
             index++;
             JsonObject returnObj;
             try { // upload the invoice
@@ -53,7 +55,7 @@ public class LinkUploadInvoice extends Link {
 			try {
 				bodyUpdateObject.addProperty("update", "Thành công tải lên hoá đơn với mã số " + returnObj.get("result").getAsJsonObject().get("invoiceNo").getAsString());
 			} catch (NullPointerException e){
-				chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "Viettel gởi về thông tin " + returnObj.toString());
+				chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "Viettel gởi về thông tin " + returnObj);
 				return false;
 			}
 			try {
