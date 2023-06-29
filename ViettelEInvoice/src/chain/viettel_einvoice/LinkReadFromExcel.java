@@ -29,17 +29,19 @@ public class LinkReadFromExcel extends Link {
 				generalInvoiceInfo.addProperty("templateCode", dataFormatter.formatCellValue(row.getCell(2))); // ký hiệu mẫu hóa đơn
 				generalInvoiceInfo.addProperty("invoiceSeries", dataFormatter.formatCellValue(row.getCell(3))); // ký hiệu hóa đơn
 				generalInvoiceInfo.addProperty("currencyCode", dataFormatter.formatCellValue(row.getCell(4))); // mã tiền tệ
-				int adjustmentType;
+				int adjustmentType; // Trạng thái điều chỉnh hóa đơn
 				try {
 					adjustmentType = Integer.parseInt(dataFormatter.formatCellValue(row.getCell(5)));
 				} catch (Exception e){
 					adjustmentType = 1;
 				}
-				generalInvoiceInfo.addProperty("adjustmentType", adjustmentType); // Trạng thái điều chỉnh hóa đơn
-				generalInvoiceInfo.addProperty("adjustmentInvoiceType", dataFormatter.formatCellValue(row.getCell(6))); // Loại điều chỉnh
-				generalInvoiceInfo.addProperty("originalInvoiceType", dataFormatter.formatCellValue(row.getCell(7))); // loại hóa đơn gốc
-				generalInvoiceInfo.addProperty("originalTemplateCode", dataFormatter.formatCellValue(row.getCell(8))); // mã loại hóa đơn gốc
-				generalInvoiceInfo.addProperty("originalInvoiceId", dataFormatter.formatCellValue(row.getCell(9))); // số hóa đơn gốc
+				generalInvoiceInfo.addProperty("adjustmentType", adjustmentType);
+				if (adjustmentType == 5) {
+					generalInvoiceInfo.addProperty("adjustmentInvoiceType", dataFormatter.formatCellValue(row.getCell(6))); // Loại điều chỉnh
+					generalInvoiceInfo.addProperty("originalInvoiceType", dataFormatter.formatCellValue(row.getCell(7))); // loại hóa đơn gốc
+					generalInvoiceInfo.addProperty("originalTemplateCode", dataFormatter.formatCellValue(row.getCell(8))); // mã loại hóa đơn gốc
+					generalInvoiceInfo.addProperty("originalInvoiceId", dataFormatter.formatCellValue(row.getCell(9))); // số hóa đơn gốc
+				}
 				// Thời gian lập hóa đơn gốc
 				generalInvoiceInfo.addProperty("paymentStatus", Boolean.parseBoolean(dataFormatter.formatCellValue(row.getCell(11)))); // trạng thái thanh toán
 				// seller information
