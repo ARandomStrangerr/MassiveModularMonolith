@@ -1,13 +1,10 @@
 package socket_handler;
 
-import java.net.*;
 import javax.net.ssl.*;
 import java.io.*;
-import java.security.KeyManagementException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.security.*;
 import java.security.cert.CertificateException;
 
 // resources : http://www.java2s.com/Tutorial/Java/0490__Security/0860__SSL-Socket.htm
