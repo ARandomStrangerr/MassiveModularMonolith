@@ -23,7 +23,15 @@ public class LinkDownloadInvoice extends Link {
 		HashMap<String, String> maps = new HashMap<>();
 		maps.put("Content-Type", "application/json");
 		maps.put("Accept", "application/json");
-		maps.put("Cookie", "access_token=" + chain.getProcessObject().get("body").getAsJsonObject().get("accessToken").getAsString());
+		try {
+			maps.put("Cookie", "access_token=" + getToken());
+		} catch (IOException e) {
+			chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "Không thể đăng nhập vào máy chủ Viettel");
+			return false;
+		} catch (NullPointerException e) {
+			chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "Tên đăng nhập hoặc mật khẩu không chính xác");
+			return false;
+		}
 		// create send json template
 		JsonObject sendObject = new JsonObject();
 		sendObject.add("supplierTaxCode", chain.getProcessObject().get("body").getAsJsonObject().get("username"));
@@ -53,15 +61,24 @@ public class LinkDownloadInvoice extends Link {
 			}
 			JsonObject bodyUpdateObject = new JsonObject();
 			JsonObject monitorObject = new JsonObject();
-			if (returnObject.has("code")){
-				bodyUpdateObject.addProperty("error", "Không tìm thấy hóa đơn " + invoiceNumber);
-				monitorObject.addProperty("status", false);
-				monitorObject.addProperty("notification", String.format("Đơn vi với mã số thuế %s không tìm thấy hóa đơn %s", clientTaxCode, invoiceNumber));
-			} else {
+			if (returnObject.has("fileName") && returnObject.has("fileToBytes")) { // first case when nothing goes wrong
 				bodyUpdateObject.add("fileName", returnObject.remove("fileName"));
 				bodyUpdateObject.add("fileToBytes", returnObject.remove("fileToBytes"));
 				monitorObject.addProperty("status", true);
 				monitorObject.addProperty("notification", String.format("Đơn vi với mã số thuế %s lấy hóa đơn %s", clientTaxCode, invoiceNumber));
+			} else if (returnObject.has("code")) { // second case when the invoice could not be found
+				bodyUpdateObject.addProperty("error", "Không tìm thấy hóa đơn " + invoiceNumber);
+				monitorObject.addProperty("status", false);
+				monitorObject.addProperty("notification", String.format("Đơn vi với mã số thuế %s không tìm thấy hóa đơn %s", clientTaxCode, invoiceNumber));
+			} else if (returnObject.has("status") && returnObject.get("status").getAsInt() == 500) { // third case when the oauth is expired
+				try {
+					maps.put("Cookie", "access_token=" + getToken());
+				} catch (IOException e) {
+					chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "Không thể đăng nhập vào máy chủ Viettel");
+					return false;
+				}
+				i--;
+				continue;
 			}
 			updateObject.add("body", bodyUpdateObject);
 			try {
@@ -73,5 +90,15 @@ public class LinkDownloadInvoice extends Link {
 			MonitorHandler.addQueue(monitorObject);
 		}
 		return true;
+	}
+
+	private String getToken() throws IOException {
+		HashMap<String, String> property = new HashMap<>();
+		property.put("Content-Type", "application/json");
+		String sendData = String.format("{\"username\":\"%s\",\"password\":\"%s\"}",
+			chain.getProcessObject().get("body").getAsJsonObject().get("username").getAsString(),
+			chain.getProcessObject().get("body").getAsJsonObject().get("password").getAsString());
+		String temp = RESTRequest.post(Url.Authenticate.path, sendData, property);
+		return new Gson().fromJson(temp, JsonObject.class).get("access_token").getAsString();
 	}
 }
