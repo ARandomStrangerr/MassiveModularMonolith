@@ -71,6 +71,7 @@ public class LinkDownloadInvoice extends Link {
 				monitorObject.addProperty("status", false);
 				monitorObject.addProperty("notification", String.format("Đơn vi với mã số thuế %s không tìm thấy hóa đơn %s", clientTaxCode, invoiceNumber));
 			} else if (returnObject.has("status") && returnObject.get("status").getAsInt() == 500) { // third case when the oauth is expired
+				System.out.println("Cookies is expired");
 				try {
 					maps.put("Cookie", "access_token=" + getToken());
 				} catch (IOException e) {
@@ -79,6 +80,8 @@ public class LinkDownloadInvoice extends Link {
 				}
 				i--;
 				continue;
+			} else {
+				System.out.println(returnObject);
 			}
 			updateObject.add("body", bodyUpdateObject);
 			try {
