@@ -114,15 +114,20 @@ module.exports = class {
 			try{
 				data = await socket.read();
 			} catch (e){
+				addInvalidNotification(e);
 				break;
 			}
-			console.log(data);
 			data = JSON.parse(data);
 			if (data.hasOwnProperty("error")) addInvalidNotification(data.error);
 			else if (data.hasOwnProperty("success")) addValidNotification(data.success);
 			else{
 				addValidNotification(`Tải về hóa đơn ${data.fileName}`);
-				ioFile.writeBase64(`.${separator}Downloads${separator}${data.fileName}`,data.fileToBytes);
+				try {
+					ioFile.writeBase64(`.${separator}Downloads${separator}${data.fileName}`,data.fileToBytes);
+				} catch (e) {
+					console.log(e);
+					console.log(data);
+				}
 			}
 		}
 	}
