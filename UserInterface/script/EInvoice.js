@@ -114,7 +114,7 @@ module.exports = class {
 			try{
 				data = await socket.read();
 			} catch (e){
-				addInvalidNotification(e);
+				console.log(e);
 				break;
 			}
 			data = JSON.parse(data);
