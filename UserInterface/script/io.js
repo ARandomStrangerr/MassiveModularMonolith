@@ -90,7 +90,7 @@ class SocketOperation {
 				}, 1000);
 			});
 		};
-		while (this.#isAlive && this.#cache.length != 0){
+		while (this.#isAlive || this.#cache.length != 0){
 			let returnData = await readLine();
 			if (returnData) return returnData;
 		}
