@@ -66,12 +66,7 @@ public class LinkDownloadInvoice extends Link {
 				bodyUpdateObject.add("fileToBytes", returnObject.remove("fileToBytes"));
 				monitorObject.addProperty("status", true);
 				monitorObject.addProperty("notification", String.format("Đơn vi với mã số thuế %s lấy hóa đơn %s", clientTaxCode, invoiceNumber));
-			} else if (returnObject.has("code")) { // second case when the invoice could not be found
-				bodyUpdateObject.addProperty("error", "Không tìm thấy hóa đơn " + invoiceNumber);
-				monitorObject.addProperty("status", false);
-				monitorObject.addProperty("notification", String.format("Đơn vi với mã số thuế %s không tìm thấy hóa đơn %s", clientTaxCode, invoiceNumber));
 			} else if (returnObject.has("status") && returnObject.get("status").getAsInt() == 500) { // third case when the oauth is expired
-				System.out.println("Cookies is expired");
 				try {
 					maps.put("Cookie", "access_token=" + getToken());
 				} catch (IOException e) {
@@ -80,6 +75,10 @@ public class LinkDownloadInvoice extends Link {
 				}
 				i--;
 				continue;
+			} else if (returnObject.has("code")) { // second case when the invoice could not be found
+				bodyUpdateObject.addProperty("error", "Không tìm thấy hóa đơn " + invoiceNumber);
+				monitorObject.addProperty("status", false);
+				monitorObject.addProperty("notification", String.format("Đơn vi với mã số thuế %s không tìm thấy hóa đơn %s", clientTaxCode, invoiceNumber));
 			} else {
 				System.out.println(returnObject);
 			}

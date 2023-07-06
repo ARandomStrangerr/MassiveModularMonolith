@@ -8,7 +8,6 @@ public class ChainUploadInvoice extends Chain {
 		super(processObject);
 		super.addLink(new LinkMaterializeExcelFile(this),
 			new LinkReadFromExcel(this),
-			new LinkGetAuthenticate(this),
 			new LinkUploadInvoice(this),
 			new LinkLogSuccessUploadInvoiceRequest(this),
 			new LinkFormatSuccessUploadInvoiceRequest(this));
