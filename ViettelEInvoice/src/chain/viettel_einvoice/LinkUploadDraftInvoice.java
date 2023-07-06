@@ -11,6 +11,8 @@ import socket_handler.RESTRequest;
 import system_monitor.MonitorHandler;
 
 import java.io.IOException;
+import java.nio.file.OpenOption;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 public class LinkUploadDraftInvoice extends Link {
@@ -23,6 +25,15 @@ public class LinkUploadDraftInvoice extends Link {
 		// http request header
 		LinkedHashMap<String, String> map = new LinkedHashMap<>();
 		map.put("Content-Type", "application/json");
+		try {
+			map.put("Cookie", String.format("access_token=" + getToken()));
+		} catch (IOException e) {
+			chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "Không thể đăng nhập vào máy chủ Viettel");
+			return false;
+		} catch (NullPointerException e) {
+			chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "Tên đăng nhập hoặc mật khẩu không chính xác");
+			return false;
+		}
 		map.put("Cookie", String.format("access_token=" + chain.getProcessObject().get("body").getAsJsonObject().remove("accessToken").getAsString()));
 		// update object
 		JsonObject updateObject = new JsonObject();
@@ -47,7 +58,20 @@ public class LinkUploadDraftInvoice extends Link {
 				continue;
 			}
 			// check if the return message is an error
-			if (returnObject.has("code")) {
+			if (returnObject.has("status") && returnObject.get("status").getAsInt() == 500) { // when the oauth is expired
+				try {
+					map.put("Cookie", "access_token=" + getToken());
+				} catch (IOException e) {
+					chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "Không thể đăng nhập vào máy chủ Viettel");
+					return false;
+				}
+				try {
+					returnObject = gson.fromJson(RESTRequest.post(address, ele.toString(), map), JsonObject.class);
+				} catch (IOException e) {
+					e.printStackTrace();
+					continue;
+				}
+			} else if (returnObject.has("code")) { // when the program is invalid
 				chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", String.format("Tại dòng số %d trong tệp tin tải lên, %s", index, returnObject.get("data").getAsString()));
 				return false;
 			}
@@ -66,5 +90,15 @@ public class LinkUploadDraftInvoice extends Link {
 		}
 		chain.getProcessObject().get("body").getAsJsonObject().addProperty("totalNumber", index);
 		return true;
+	}
+
+	private String getToken() throws IOException {
+		HashMap<String, String> property = new HashMap<>();
+		property.put("Content-Type", "application/json");
+		String sendData = String.format("{\"username\":\"%s\",\"password\":\"%s\"}",
+			chain.getProcessObject().get("body").getAsJsonObject().get("username").getAsString(),
+			chain.getProcessObject().get("body").getAsJsonObject().get("password").getAsString());
+		String temp = RESTRequest.post(Url.Authenticate.path, sendData, property);
+		return new Gson().fromJson(temp, JsonObject.class).get("access_token").getAsString();
 	}
 }
