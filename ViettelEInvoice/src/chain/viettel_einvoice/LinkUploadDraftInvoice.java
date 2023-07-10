@@ -11,7 +11,6 @@ import socket_handler.RESTRequest;
 import system_monitor.MonitorHandler;
 
 import java.io.IOException;
-import java.nio.file.OpenOption;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -34,7 +33,6 @@ public class LinkUploadDraftInvoice extends Link {
 			chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "Tên đăng nhập hoặc mật khẩu không chính xác");
 			return false;
 		}
-		map.put("Cookie", String.format("access_token=" + chain.getProcessObject().get("body").getAsJsonObject().remove("accessToken").getAsString()));
 		// update object
 		JsonObject updateObject = new JsonObject();
 		JsonObject bodyUpdateObject = new JsonObject();
@@ -68,8 +66,8 @@ public class LinkUploadDraftInvoice extends Link {
 				try {
 					returnObject = gson.fromJson(RESTRequest.post(address, ele.toString(), map), JsonObject.class);
 				} catch (IOException e) {
-					e.printStackTrace();
-					continue;
+					chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", String.format("Tại dòng số %d trong tệp tin tải lên, %s", index, returnObject.get("data").getAsString()));
+					return false;
 				}
 			} else if (returnObject.has("code")) { // when the program is invalid
 				chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", String.format("Tại dòng số %d trong tệp tin tải lên, %s", index, returnObject.get("data").getAsString()));
