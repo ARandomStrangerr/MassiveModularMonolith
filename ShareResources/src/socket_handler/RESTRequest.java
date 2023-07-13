@@ -2,6 +2,7 @@ package socket_handler;
 
 import javax.net.ssl.*;
 import java.io.*;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.Socket;
 import java.net.URL;
@@ -64,8 +65,17 @@ public class RESTRequest {
         BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
         return reader.readLine();
     }
-	// todo: change this when it is error, throw an error with the return message rather than normally operating
-    public static String post(String uri, String body, Map<String, String> header) throws IOException {
+
+	/**
+	 *
+	 * @param uri address to connect
+	 * @param body data to send to the address
+	 * @param header header of the html request
+	 * @return the data responded by the post request
+	 * @throws IOException when cannot read / write to the address
+	 * @throws RuntimeException when the address response an error code
+	 */
+    public static String post(String uri, String body, Map<String, String> header) throws RuntimeException, IOException {
         HttpURLConnection con = (HttpURLConnection) new URL(uri).openConnection();
         con.setDoOutput(true);
         con.setRequestMethod("POST");
@@ -75,17 +85,14 @@ public class RESTRequest {
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(con.getOutputStream()));
         writer.write(body);
         writer.flush();
-        BufferedReader reader;
+		writer.close();
         try {
-            reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            return new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
         } catch (IOException e) {
-            reader = new BufferedReader(new InputStreamReader(con.getErrorStream()));
-        }
-        String returnString =  reader.readLine();
-        writer.close();
-        reader.close();
-        con.disconnect();
-        return returnString;
+			throw new RuntimeException(new BufferedReader(new InputStreamReader(con.getErrorStream())).readLine());
+        } finally {
+			con.disconnect();
+		}
     }
 
     public static String get(String uri) throws IOException {
