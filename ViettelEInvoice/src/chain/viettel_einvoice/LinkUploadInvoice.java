@@ -20,16 +20,32 @@ public class LinkUploadInvoice extends Link {
 
 	@Override
 	public boolean execute() {
+		// get username
+		String username;
+		try {
+			username = chain.getProcessObject().get("body").getAsJsonObject().get("username").getAsString();
+		} catch (NullPointerException e) {
+			chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "Không tìm thấy trường dữ liệu tên đăng nhập");
+			return false;
+		}
+		// get password
+		String password;
+		try {
+			password = chain.getProcessObject().get("body").getAsJsonObject().get("password").getAsString();
+		} catch (NullPointerException e) {
+			chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "Không tìm thấy trường dữ liệu mật khẩu đăng nhập");
+			return false;
+		}
 		// create params for header
 		HashMap<String, String> maps = new HashMap<>();
 		maps.put("Content-Type", "application/json");
 		maps.put("Accept", "application/json");
 		try {
-			maps.put("Cookie", String.format("access_token=%s", getToken()));
+			maps.put("Cookie", String.format("access_token=%s", getToken(username, password)));
 		} catch (IOException e) {
 			chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "Không thể đăng nhập vào máy chủ Viettel");
 			return false;
-		} catch (NullPointerException e) {
+		} catch (RuntimeException e) {
 			chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "Tên đăng nhập hoặc mật khẩu không chính xác");
 			return false;
 		}
@@ -41,7 +57,6 @@ public class LinkUploadInvoice extends Link {
 		updateObject.add("body", bodyUpdateObject);
 		// loop send the invoice
 		Gson gson = new Gson(); // gson to convert
-		String username = chain.getProcessObject().get("body").getAsJsonObject().get("username").getAsString(); // tax code
 		String address = Url.UploadInvoice.path + username; // address to send the post request
 		int index = 0; // index of the current sending invoice
 		JsonArray sendArray = chain.getProcessObject().get("body").getAsJsonObject().remove("sendData").getAsJsonArray();  // the data actually being sent, remove this one so when logging out, it would not create a long message
@@ -51,16 +66,19 @@ public class LinkUploadInvoice extends Link {
 			// upload the invoice
 			try {
 				returnObj = gson.fromJson(RESTRequest.post(address, ele.toString(), maps), JsonObject.class);
+			} catch (RuntimeException e) {
+				returnObj = gson.fromJson(e.getMessage(), JsonObject.class);
+				chain.getProcessObject().get("body").getAsJsonObject().add("error", returnObj.remove("data"));
+				return false;
 			} catch (IOException e) {
 				chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "Không thành công kết nối với máy chủ Viettel ở giòng số " + index);
 				return false;
 			}
 			// check the return message
-			if (returnObj.has("result")) { // case when nothing happened
-			} else if (returnObj.has("status") && returnObj.get("status").getAsInt() == 500) { // when the oauth is expired
+			if (returnObj.has("status") && returnObj.get("status").getAsInt() == 500) { // when the oauth is expired
 				// re-obtain the token
 				try {
-					maps.put("Cookie", "access_token=" + getToken());
+					maps.put("Cookie", "access_token=" + getToken(username, password));
 				} catch (IOException e) {
 					chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "Không thể đăng nhập vào máy chủ Viettel");
 					return false;
@@ -68,13 +86,14 @@ public class LinkUploadInvoice extends Link {
 				// send the data again
 				try {
 					returnObj = gson.fromJson(RESTRequest.post(address, ele.toString(), maps), JsonObject.class);
+				} catch (RuntimeException e) {
+					returnObj = gson.fromJson(e.getMessage(), JsonObject.class);
+					chain.getProcessObject().get("body").getAsJsonObject().add("error", returnObj.remove("data"));
+					return false;
 				} catch (IOException e) {
 					chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "Không thành công kết nối với máy chủ Viettel ở giòng số " + index);
 					return false;
 				}
-			} else if (returnObj.has("code")) { // check if the response is error code
-				chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", String.format("Tại giòng số %d trong tệp tin tải lên, %s", index, returnObj.get("data")));
-				return false;
 			}
 			// notify on server about the uploaded invoice
 			JsonObject monitorObject = new JsonObject();
@@ -93,12 +112,10 @@ public class LinkUploadInvoice extends Link {
 		return true;
 	}
 
-	private String getToken() throws IOException {
+	private String getToken(String username, String password) throws IOException, RuntimeException {
 		HashMap<String, String> property = new HashMap<>();
 		property.put("Content-Type", "application/json");
-		String sendData = String.format("{\"username\":\"%s\",\"password\":\"%s\"}",
-			chain.getProcessObject().get("body").getAsJsonObject().get("username").getAsString(),
-			chain.getProcessObject().get("body").getAsJsonObject().get("password").getAsString());
+		String sendData = String.format("{\"username\":\"%s\",\"password\":\"%s\"}", username, password);
 		String temp = RESTRequest.post(Url.Authenticate.path, sendData, property);
 		return new Gson().fromJson(temp, JsonObject.class).get("access_token").getAsString();
 	}

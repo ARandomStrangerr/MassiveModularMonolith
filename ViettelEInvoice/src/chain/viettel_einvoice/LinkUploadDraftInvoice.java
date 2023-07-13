@@ -21,11 +21,25 @@ public class LinkUploadDraftInvoice extends Link {
 
 	@Override
 	public boolean execute() {
+		String username;
+		try {
+			username = chain.getProcessObject().get("body").getAsJsonObject().get("username").getAsString();
+		} catch (NullPointerException e) {
+			chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "Thiếu trường thông tin tên đăng nhập");
+			return false;
+		}
+		String password;
+		try {
+			password = chain.getProcessObject().get("body").getAsJsonObject().get("password").getAsString();
+		} catch (NullPointerException e) {
+			chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "Thiếu trường thông tin mật khẩu đăng nhập đăng nhập");
+			return false;
+		}
 		// http request header
 		LinkedHashMap<String, String> map = new LinkedHashMap<>();
 		map.put("Content-Type", "application/json");
 		try {
-			map.put("Cookie", String.format("access_token=" + getToken()));
+			map.put("Cookie", String.format("access_token=" + getToken(username, password)));
 		} catch (IOException e) {
 			chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "Không thể đăng nhập vào máy chủ Viettel");
 			return false;
@@ -42,7 +56,6 @@ public class LinkUploadDraftInvoice extends Link {
 		// loop send data
 		Gson gson = new Gson(); // gson to convert to Json
 		int index = 0; // index of current sending invoice
-		String username = chain.getProcessObject().get("body").getAsJsonObject().get("username").getAsString(); // tax code
 		String address = Url.UploadDraftInvoice.path + username; // address which to be used to send the invoice
 		JsonArray sendArray = chain.getProcessObject().get("body").getAsJsonObject().remove("sendData").getAsJsonArray(); // the data actually being sent, remove this one so when logging out, it would not create a long message
 		for (JsonElement ele : sendArray) {
@@ -51,14 +64,18 @@ public class LinkUploadDraftInvoice extends Link {
 			// send the request
 			try {
 				returnObject = gson.fromJson(RESTRequest.post(address, ele.toString(), map), JsonObject.class);
+			} catch (RuntimeException e) {
+				returnObject = gson.fromJson(e.getMessage(), JsonObject.class);
+				chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", String.format("Tại dòng số %d trong tệp tin tải lên, %s", index, returnObject.get("data").getAsString()));
+				return false;
 			} catch (IOException e) {
-				e.printStackTrace();
-				continue;
+				chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", String.format("Tại dòng số %d trong tệp tin tải lên, %s", index, e.getMessage()));
+				return false;
 			}
 			// check if the return message is an error
 			if (returnObject.has("status") && returnObject.get("status").getAsInt() == 500) { // when the oauth is expired
 				try {
-					map.put("Cookie", "access_token=" + getToken());
+					map.put("Cookie", "access_token=" + getToken(username, password));
 				} catch (IOException e) {
 					chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "Không thể đăng nhập vào máy chủ Viettel");
 					return false;
@@ -69,9 +86,6 @@ public class LinkUploadDraftInvoice extends Link {
 					chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", String.format("Tại dòng số %d trong tệp tin tải lên, %s", index, returnObject.get("data").getAsString()));
 					return false;
 				}
-			} else if (returnObject.has("code")) { // when the program is invalid
-				chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", String.format("Tại dòng số %d trong tệp tin tải lên, %s", index, returnObject.get("data").getAsString()));
-				return false;
 			}
 			// print out update message on the server side
 			JsonObject monitorObject = new JsonObject();
@@ -90,12 +104,10 @@ public class LinkUploadDraftInvoice extends Link {
 		return true;
 	}
 
-	private String getToken() throws IOException {
+	private String getToken(String username, String password) throws IOException {
 		HashMap<String, String> property = new HashMap<>();
 		property.put("Content-Type", "application/json");
-		String sendData = String.format("{\"username\":\"%s\",\"password\":\"%s\"}",
-			chain.getProcessObject().get("body").getAsJsonObject().get("username").getAsString(),
-			chain.getProcessObject().get("body").getAsJsonObject().get("password").getAsString());
+		String sendData = String.format("{\"username\":\"%s\",\"password\":\"%s\"}", username, password);
 		String temp = RESTRequest.post(Url.Authenticate.path, sendData, property);
 		return new Gson().fromJson(temp, JsonObject.class).get("access_token").getAsString();
 	}
