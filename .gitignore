@@ -1,5 +1,4 @@
 # Project exclude paths
-*.iml
 /out/
 UserInterface/node_modules
 UserInterface/Downloads
