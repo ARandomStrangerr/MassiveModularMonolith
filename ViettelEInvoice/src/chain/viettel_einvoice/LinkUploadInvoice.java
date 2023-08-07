@@ -63,19 +63,45 @@ public class LinkUploadInvoice extends Link {
 		for (JsonElement ele : sendArray) {
 			index++;
 			JsonObject returnObj;
+			JsonObject monitorObject = new JsonObject();
 			// upload the invoice
 			try {
 				returnObj = gson.fromJson(RESTRequest.post(address, ele.toString(), maps), JsonObject.class);
+				monitorObject.addProperty("status", true);
+				monitorObject.addProperty("notification", String.format("Đơn vị với mã số thuế %s thành công tải lên hoá đơn với số %s", username, returnObj.get("result").getAsJsonObject().get("invoiceNo").getAsString()));
+				bodyUpdateObject.addProperty("update", "Thành công tải lên hoá đơn với mã số " + returnObj.get("result").getAsJsonObject().get("invoiceNo").getAsString());
 			} catch (RuntimeException e) {
 				returnObj = gson.fromJson(e.getMessage(), JsonObject.class);
-				chain.getProcessObject().get("body").getAsJsonObject().add("error", returnObj.remove("data"));
-				return false;
+				String errorMsg;
+				if (returnObj.has("data"))
+					errorMsg = String.format("Tại dòng số %d Viettel trả lại lỗi: %s", index, returnObj.remove("data").getAsString());
+				else
+					errorMsg = String.format("Tại dòng số %d Viettel trả lại lỗi: %s", index, returnObj.remove("message").getAsString());
+				monitorObject.addProperty("status", false);
+				monitorObject.addProperty("notification", String.format("Đơn vị với mã số thuế %s %s", username, errorMsg));
+				bodyUpdateObject.addProperty("error", errorMsg);
+				// notify on server about the uploaded invoice
+				MonitorHandler.addQueue(monitorObject);
+				// send an update information to the client
+				try {
+					ViettelEInvoice.socketToDataStream.write(updateObject.toString());
+				} catch (IOException e1) {
+					e.printStackTrace();
+				}
+				continue;
+				/*
+				this design and duplication of code due to dumb ass Viettel making the:
+				1. token expired error code
+				2. NullPointerException error code (case when original invoice not found)
+				3. General error code
+				all return as error code 500, and there is nothing that I can do about.
+				 */
 			} catch (IOException e) {
-				chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "Không thành công kết nối với máy chủ Viettel ở giòng số " + index);
+				chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "Không thành công kết nối với máy chủ Viettel tại dòng số " + index);
 				return false;
 			}
-			// check the return message
-			if (returnObj.has("status") && returnObj.get("status").getAsInt() == 500) { // when the oauth is expired
+			// check the return message when the oauth is expired
+			if (returnObj.has("message") && returnObj.get("status").getAsInt() == 500) {
 				// re-obtain the token
 				try {
 					maps.put("Cookie", "access_token=" + getToken(username, password));
@@ -86,6 +112,9 @@ public class LinkUploadInvoice extends Link {
 				// send the data again
 				try {
 					returnObj = gson.fromJson(RESTRequest.post(address, ele.toString(), maps), JsonObject.class);
+					monitorObject.addProperty("status", true);
+					monitorObject.addProperty("notification", String.format("Đơn vị với mã số thuế %s thành công tải lên hoá đơn với số %s", username, returnObj.get("result").getAsJsonObject().get("invoiceNo").getAsString()));
+					bodyUpdateObject.addProperty("update", "Thành công tải lên hoá đơn với mã số " + returnObj.get("result").getAsJsonObject().get("invoiceNo").getAsString());
 				} catch (RuntimeException e) {
 					returnObj = gson.fromJson(e.getMessage(), JsonObject.class);
 					chain.getProcessObject().get("body").getAsJsonObject().add("error", returnObj.remove("data"));
@@ -96,12 +125,8 @@ public class LinkUploadInvoice extends Link {
 				}
 			}
 			// notify on server about the uploaded invoice
-			JsonObject monitorObject = new JsonObject();
-			monitorObject.addProperty("status", true);
-			monitorObject.addProperty("notification", String.format("Đơn vị với mã số thuế %s thành công tải lên hoá đơn với số %s", username, returnObj.get("result").getAsJsonObject().get("invoiceNo").getAsString()));
 			MonitorHandler.addQueue(monitorObject);
 			// send an update information to the client
-			bodyUpdateObject.addProperty("update", "Thành công tải lên hoá đơn với mã số " + returnObj.get("result").getAsJsonObject().get("invoiceNo").getAsString());
 			try {
 				ViettelEInvoice.socketToDataStream.write(updateObject.toString());
 			} catch (IOException e) {
