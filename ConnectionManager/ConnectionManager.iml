@@ -9,6 +9,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="ShareResources" exported="" />
     <orderEntry type="library" name="postgresql" level="application" />
-    <orderEntry type="library" name="gson-2.10.1" level="application" />
+    <orderEntry type="library" name="gson-2.8.2" level="application" />
   </component>
 </module>
