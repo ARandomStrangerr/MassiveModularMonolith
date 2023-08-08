@@ -108,7 +108,7 @@ public class LinkUploadInvoice extends Link {
 					}
 					case default -> { // other errors. this class will be return in this case
 						monitorObject.addProperty("status", false);
-						monitorObject.addProperty("notification", String.format("Đơn vị với mã số thuế tại dòng số %d lỗi: %s", errorMsg));
+						monitorObject.addProperty("notification", String.format("Đơn vị với mã số thuế tại dòng số %d lỗi: %s", index, errorMsg));
 						MonitorHandler.addQueue(monitorObject); // hand out the print message before return
 						chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", String.format("Tại dòng số %d gặp lỗi: %s", index, errorMsg));
 						return false;
