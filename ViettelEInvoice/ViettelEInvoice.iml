@@ -10,5 +10,6 @@
     <orderEntry type="library" name="ooxml" level="application" />
     <orderEntry type="library" name="gson-2.8.2" level="application" />
     <orderEntry type="library" name="apache.poi" level="application" />
+    <orderEntry type="module" module-name="ShareResources" />
   </component>
 </module>
