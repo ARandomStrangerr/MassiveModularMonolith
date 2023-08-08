@@ -70,59 +70,53 @@ public class LinkUploadInvoice extends Link {
 				monitorObject.addProperty("status", true);
 				monitorObject.addProperty("notification", String.format("Đơn vị với mã số thuế %s thành công tải lên hoá đơn với số %s", username, returnObj.get("result").getAsJsonObject().get("invoiceNo").getAsString()));
 				bodyUpdateObject.addProperty("update", "Thành công tải lên hoá đơn với mã số " + returnObj.get("result").getAsJsonObject().get("invoiceNo").getAsString());
-			} catch (RuntimeException e) {
+			} catch (RuntimeException e) { // case when the REST request return an error code
 				returnObj = gson.fromJson(e.getMessage(), JsonObject.class);
 				String errorMsg;
 				if (returnObj.has("data"))
-					errorMsg = String.format("Tại dòng số %d Viettel trả lại lỗi: %s", index, returnObj.remove("data").getAsString());
+					errorMsg = String.format("Lỗi tại dòng số %d với thông tin trả về: %s", index, returnObj.remove("data").getAsString());
 				else
-					errorMsg = String.format("Tại dòng số %d Viettel trả lại lỗi: %s", index, returnObj.remove("message").getAsString());
-				monitorObject.addProperty("status", false);
-				monitorObject.addProperty("notification", String.format("Đơn vị với mã số thuế %s %s", username, errorMsg));
-				bodyUpdateObject.addProperty("error", errorMsg);
-				// notify on server about the uploaded invoice
-				MonitorHandler.addQueue(monitorObject);
-				// send an update information to the client
-				try {
-					ViettelEInvoice.socketToDataStream.write(updateObject.toString());
-				} catch (IOException e1) {
-					e.printStackTrace();
+					errorMsg = String.format("Lỗi tại dòng số %d với thông tin trả về: %s", index, returnObj.remove("message").getAsString());
+				switch (errorMsg) {
+					case " GENERAL" -> { // when the token is expired
+						// re-obtain the token
+						try { // no longer need the RunTimeException since the username and password is already correct
+							maps.put("Cookie", String.format("access_token=%s", getToken(username, password)));
+						} catch (IOException e1) {
+							chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "Không thể đăng nhập vào máy chủ Viettel");
+							return false;
+						}
+						// send the data again
+						try {
+							returnObj = gson.fromJson(RESTRequest.post(address, ele.toString(), maps), JsonObject.class);
+						} catch (RuntimeException e1) {
+							returnObj = gson.fromJson(e.getMessage(), JsonObject.class);
+							chain.getProcessObject().get("body").getAsJsonObject().add("error", returnObj.remove("data"));
+							return false;
+						} catch (IOException e1) {
+							chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "Không thành công kết nối với máy chủ Viettel ở giòng số " + index);
+							return false;
+						}
+						monitorObject.addProperty("status", true);
+						monitorObject.addProperty("notification", String.format("Đơn vị với mã số thuế %s thành công tải lên hoá đơn với số %s", username, returnObj.get("result").getAsJsonObject().get("invoiceNo").getAsString()));
+						bodyUpdateObject.addProperty("update", "Thành công tải lên hoá đơn với mã số " + returnObj.get("result").getAsJsonObject().get("invoiceNo").getAsString());
+					}
+					case "Request processing failed; nested exception is java.lang.NullPointerException" -> { // cannot find original invoice, the invoice will be skipped
+						monitorObject.addProperty("status", false);
+						monitorObject.addProperty("notification", String.format("Đơn vị với mã số thuế %s tại dòng số %d không tìm thấy hóa đơn gốc", username, index));
+						bodyUpdateObject.addProperty("error", String.format("Tại dòng số %d không tìm thấy hóa đơn gốc", index));
+					}
+					case default -> { // other errors. this class will be return in this case
+						monitorObject.addProperty("status", false);
+						monitorObject.addProperty("notification", String.format("Đơn vị với mã số thuế tại dòng số %d lỗi: %s", errorMsg));
+						MonitorHandler.addQueue(monitorObject); // hand out the print message before return
+						chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", String.format("Tại dòng số %d gặp lỗi: %s", index, errorMsg));
+						return false;
+					}
 				}
-				continue;
-				/*
-				this design and duplication of code due to dumb ass Viettel making the:
-				1. token expired error code
-				2. NullPointerException error code (case when original invoice not found)
-				3. General error code
-				all return as error code 500, and there is nothing that I can do about.
-				 */
 			} catch (IOException e) {
 				chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "Không thành công kết nối với máy chủ Viettel tại dòng số " + index);
 				return false;
-			}
-			// check the return message when the oauth is expired
-			if (returnObj.has("message") && returnObj.get("status").getAsInt() == 500) {
-				// re-obtain the token
-				try {
-					maps.put("Cookie", "access_token=" + getToken(username, password));
-				} catch (IOException e) {
-					chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "Không thể đăng nhập vào máy chủ Viettel");
-					return false;
-				}
-				// send the data again
-				try {
-					returnObj = gson.fromJson(RESTRequest.post(address, ele.toString(), maps), JsonObject.class);
-					monitorObject.addProperty("status", true);
-					monitorObject.addProperty("notification", String.format("Đơn vị với mã số thuế %s thành công tải lên hoá đơn với số %s", username, returnObj.get("result").getAsJsonObject().get("invoiceNo").getAsString()));
-					bodyUpdateObject.addProperty("update", "Thành công tải lên hoá đơn với mã số " + returnObj.get("result").getAsJsonObject().get("invoiceNo").getAsString());
-				} catch (RuntimeException e) {
-					returnObj = gson.fromJson(e.getMessage(), JsonObject.class);
-					chain.getProcessObject().get("body").getAsJsonObject().add("error", returnObj.remove("data"));
-					return false;
-				} catch (IOException e) {
-					chain.getProcessObject().get("body").getAsJsonObject().addProperty("error", "Không thành công kết nối với máy chủ Viettel ở giòng số " + index);
-					return false;
-				}
 			}
 			// notify on server about the uploaded invoice
 			MonitorHandler.addQueue(monitorObject);
