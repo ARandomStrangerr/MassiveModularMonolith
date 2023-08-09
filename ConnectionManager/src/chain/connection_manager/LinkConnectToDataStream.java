@@ -19,5 +19,4 @@ class LinkConnectToDataStream extends chain.LinkConnectToDataStream {
 	protected Runnable getSocketHandler(SocketWrapper socket) {
 		return new SocketHandler(socket, chain.getProcessObject().get("moduleName").getAsString());
 	}
-
 }
