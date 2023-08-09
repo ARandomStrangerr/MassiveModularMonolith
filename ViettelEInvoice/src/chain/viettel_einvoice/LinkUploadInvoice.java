@@ -74,11 +74,12 @@ public class LinkUploadInvoice extends Link {
 				returnObj = gson.fromJson(e.getMessage(), JsonObject.class);
 				String errorMsg;
 				if (returnObj.has("data"))
-					errorMsg = String.format("Lỗi tại dòng số %d với thông tin trả về: %s", index, returnObj.remove("data").getAsString());
+					errorMsg = returnObj.remove("data").getAsString().trim();
 				else
-					errorMsg = String.format("Lỗi tại dòng số %d với thông tin trả về: %s", index, returnObj.remove("message").getAsString());
+					errorMsg = returnObj.remove("message").getAsString().trim();
 				switch (errorMsg) {
-					case " GENERAL" -> { // when the token is expired
+					case "GENERAL" -> { // when the token is expired
+						System.out.println("Token expired");
 						// re-obtain the token
 						try { // no longer need the RunTimeException since the username and password is already correct
 							maps.put("Cookie", String.format("access_token=%s", getToken(username, password)));
