@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import org.apache.poi.ss.usermodel.*;
 
 import java.io.File;
+import java.util.Date;
 import java.util.Objects;
 
 public class LinkReadFromExcel extends Link {
@@ -41,6 +42,7 @@ public class LinkReadFromExcel extends Link {
 					generalInvoiceInfo.addProperty("originalInvoiceType", dataFormatter.formatCellValue(row.getCell(7))); // loại hóa đơn gốc
 					generalInvoiceInfo.addProperty("originalTemplateCode", dataFormatter.formatCellValue(row.getCell(8))); // mã loại hóa đơn gốc
 					generalInvoiceInfo.addProperty("originalInvoiceId", dataFormatter.formatCellValue(row.getCell(9))); // số hóa đơn gốc
+					generalInvoiceInfo.addProperty("originalInvoiceIssueDate", new Date(dataFormatter.formatCellValue(row.getCell(10))).getTime()); // thời gian lập hóa đơn gốc
 				}
 				// Thời gian lập hóa đơn gốc
 				generalInvoiceInfo.addProperty("paymentStatus", Boolean.parseBoolean(dataFormatter.formatCellValue(row.getCell(11)))); // trạng thái thanh toán
