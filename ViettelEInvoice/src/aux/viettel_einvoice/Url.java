@@ -1,4 +1,4 @@
-package chain.viettel_einvoice;
+package aux.viettel_einvoice;
 
 public enum Url {
     Authenticate("https://api-vinvoice.viettel.vn/auth/login/"),

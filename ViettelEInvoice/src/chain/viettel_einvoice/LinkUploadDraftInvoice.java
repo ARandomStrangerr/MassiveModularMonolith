@@ -1,5 +1,6 @@
 package chain.viettel_einvoice;
 
+import aux.viettel_einvoice.Url;
 import chain.Chain;
 import chain.Link;
 import com.google.gson.Gson;
